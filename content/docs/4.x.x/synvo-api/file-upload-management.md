@@ -34,12 +34,56 @@ Creates a virtual directory in Azure Blob Storage by uploading a .keep marker fi
 
 ### Example Request
 
+<Tabs items={["cURL", "Python", "JavaScript"]}>
+  <Tab value="cURL">
+
 ```bash
 curl -X POST "https://api.synvo.ai/file/create_dir" \
   -H "X-API-Key: ${API-KEY}" \
   -H "Content-Type: application/x-www-form-urlencoded" \
   --data-urlencode "path=/docs"
 ```
+
+  </Tab>
+  <Tab value="Python">
+
+```python
+import requests
+
+token = "<BEARER_TOKEN>"
+url = "https://api.synvo.ai/file/create_dir"
+data = {"path": "/docs"}
+headers = {"X-API-Key": f"{token}"}
+
+response = requests.post(url, data=data, headers=headers, timeout=30)
+response.raise_for_status()
+print(response.json())
+```
+
+  </Tab>
+  <Tab value="JavaScript">
+
+```javascript
+const token = "<BEARER_TOKEN>";
+const params = new URLSearchParams({ path: "/docs" });
+
+const response = await fetch("https://api.synvo.ai/file/create_dir", {
+  method: "POST",
+  headers: {
+    "X-API-Key": `${token}`,
+  },
+  body: params,
+});
+
+if (!response.ok) {
+  throw new Error(`Request failed: ${response.status}`);
+}
+
+console.log(await response.json());
+```
+
+  </Tab>
+</Tabs>
 
 ### Example Response
 
@@ -71,10 +115,56 @@ Lists files and directories at a given path, optionally recursive with version t
 
 ### Example Request
 
+<Tabs items={["cURL", "Python", "JavaScript"]}>
+  <Tab value="cURL">
+
 ```bash
 curl -X GET "https://api.synvo.ai/file/list?path=/project&recursive=true" \
   -H "X-API-Key: ${API-KEY}"
 ```
+
+  </Tab>
+  <Tab value="Python">
+
+```python
+import requests
+
+token = "<BEARER_TOKEN>"
+url = "https://api.synvo.ai/file/list"
+params = {"path": "/project", "recursive": True}
+headers = {"X-API-Key": f"{token}"}
+
+response = requests.get(url, params=params, headers=headers, timeout=30)
+response.raise_for_status()
+print(response.json())
+```
+
+  </Tab>
+  <Tab value="JavaScript">
+
+```javascript
+const token = "<BEARER_TOKEN>";
+const params = new URLSearchParams({
+  path: "/project",
+  recursive: "true"
+});
+
+const response = await fetch(`https://api.synvo.ai/file/list?${params}`, {
+  method: "GET",
+  headers: {
+    "X-API-Key": `${token}`,
+  },
+});
+
+if (!response.ok) {
+  throw new Error(`Request failed: ${response.status}`);
+}
+
+console.log(await response.json());
+```
+
+  </Tab>
+</Tabs>
 
 ### Example Response
 
@@ -130,6 +220,9 @@ Uploads a file to the specified path, builds memory index if requested, and stor
 
 ### Example Request
 
+<Tabs items={["cURL", "Python", "JavaScript"]}>
+  <Tab value="cURL">
+
 ```bash
 curl -X POST "https://api.synvo.ai/file/upload" \
   -H "X-API-Key: ${API-KEY}" \
@@ -138,6 +231,61 @@ curl -X POST "https://api.synvo.ai/file/upload" \
   -F "build_memory=true" \
   -F "disable_lazy_metadata=false"
 ```
+
+  </Tab>
+  <Tab value="Python">
+
+```python
+import requests
+
+token = "<BEARER_TOKEN>"
+url = "https://api.synvo.ai/file/upload"
+headers = {"X-API-Key": f"{token}"}
+
+with open("/path/to/document.pdf", "rb") as f:
+    files = {"file": f}
+    data = {
+        "path": "/",
+        "build_memory": "true",
+        "disable_lazy_metadata": "false"
+    }
+    response = requests.post(url, files=files, data=data, headers=headers, timeout=60)
+
+response.raise_for_status()
+print(response.json())
+```
+
+  </Tab>
+  <Tab value="JavaScript">
+
+```javascript
+const token = "<BEARER_TOKEN>";
+const fileInput = document.querySelector('input[type="file"]');
+const file = fileInput.files[0];
+
+const formData = new FormData();
+formData.append("file", file);
+formData.append("path", "/");
+formData.append("build_memory", "true");
+formData.append("disable_lazy_metadata", "false");
+
+const response = await fetch("https://api.synvo.ai/file/upload", {
+  method: "POST",
+  headers: {
+    "X-API-Key": `${token}`,
+  },
+  body: formData,
+});
+
+if (!response.ok) {
+  throw new Error(`Request failed: ${response.status}`);
+}
+
+console.log(await response.json());
+```
+
+  </Tab>
+</Tabs>
 
 ### Example Response
 
@@ -171,10 +319,65 @@ Returns a signed URL for downloading the file from Azure Blob Storage.
 
 ### Example Request
 
+<Tabs items={["cURL", "Python", "JavaScript"]}>
+  <Tab value="cURL">
+
 ```bash
 curl -X GET "https://api.synvo.ai/file/download?file_id=abc123xyz" \
   -H "X-API-Key: ${API-KEY}"
 ```
+
+  </Tab>
+  <Tab value="Python">
+
+```python
+import requests
+
+token = "<BEARER_TOKEN>"
+file_id = "abc123xyz"
+url = "https://api.synvo.ai/file/download"
+params = {"file_id": file_id}
+headers = {"X-API-Key": f"{token}"}
+
+response = requests.get(url, params=params, headers=headers, timeout=30)
+response.raise_for_status()
+
+# Get the signed URL and download the file
+data = response.json()
+download_url = data["url"]
+file_response = requests.get(download_url, timeout=60)
+
+with open(data["name"], "wb") as f:
+    f.write(file_response.content)
+```
+
+  </Tab>
+  <Tab value="JavaScript">
+
+```javascript
+const token = "<BEARER_TOKEN>";
+const fileId = "abc123xyz";
+
+const response = await fetch(`https://api.synvo.ai/file/download?file_id=${fileId}`, {
+  method: "GET",
+  headers: {
+    "X-API-Key": `${token}`,
+  },
+});
+
+if (!response.ok) {
+  throw new Error(`Request failed: ${response.status}`);
+}
+
+const data = await response.json();
+console.log("Download URL:", data.url);
+
+// Open the download URL in a new window
+window.open(data.url, "_blank");
+```
+
+  </Tab>
+</Tabs>
 
 ### Example Response
 
@@ -207,10 +410,53 @@ Deletes a file or directory and removes it from the vector database.
 
 ### Example Request
 
+<Tabs items={["cURL", "Python", "JavaScript"]}>
+  <Tab value="cURL">
+
 ```bash
 curl -X DELETE "https://api.synvo.ai/file/delete/abc123xyz" \
   -H "X-API-Key: ${API-KEY}"
 ```
+
+  </Tab>
+  <Tab value="Python">
+
+```python
+import requests
+
+token = "<BEARER_TOKEN>"
+file_id = "abc123xyz"
+url = f"https://api.synvo.ai/file/delete/{file_id}"
+headers = {"X-API-Key": f"{token}"}
+
+response = requests.delete(url, headers=headers, timeout=30)
+response.raise_for_status()
+print(response.json())
+```
+
+  </Tab>
+  <Tab value="JavaScript">
+
+```javascript
+const token = "<BEARER_TOKEN>";
+const fileId = "abc123xyz";
+
+const response = await fetch(`https://api.synvo.ai/file/delete/${fileId}`, {
+  method: "DELETE",
+  headers: {
+    "X-API-Key": `${token}`,
+  },
+});
+
+if (!response.ok) {
+  throw new Error(`Request failed: ${response.status}`);
+}
+
+console.log(await response.json());
+```
+
+  </Tab>
+</Tabs>
 
 ### Example Response
 
@@ -243,6 +489,9 @@ Moves a file or directory to a new location and updates all database references.
 
 ### Example Request
 
+<Tabs items={["cURL", "Python", "JavaScript"]}>
+  <Tab value="cURL">
+
 ```bash
 curl -X POST "https://api.synvo.ai/file/move" \
   -H "X-API-Key: ${API-KEY}" \
@@ -250,6 +499,53 @@ curl -X POST "https://api.synvo.ai/file/move" \
   --data-urlencode "src=/project/report.pdf" \
   --data-urlencode "dest=/archive/report.pdf"
 ```
+
+  </Tab>
+  <Tab value="Python">
+
+```python
+import requests
+
+token = "<BEARER_TOKEN>"
+url = "https://api.synvo.ai/file/move"
+data = {
+    "src": "/project/report.pdf",
+    "dest": "/archive/report.pdf"
+}
+headers = {"X-API-Key": f"{token}"}
+
+response = requests.post(url, data=data, headers=headers, timeout=30)
+response.raise_for_status()
+print(response.json())
+```
+
+  </Tab>
+  <Tab value="JavaScript">
+
+```javascript
+const token = "<BEARER_TOKEN>";
+const params = new URLSearchParams({
+  src: "/project/report.pdf",
+  dest: "/archive/report.pdf"
+});
+
+const response = await fetch("https://api.synvo.ai/file/move", {
+  method: "POST",
+  headers: {
+    "X-API-Key": `${token}`,
+  },
+  body: params,
+});
+
+if (!response.ok) {
+  throw new Error(`Request failed: ${response.status}`);
+}
+
+console.log(await response.json());
+```
+
+  </Tab>
+</Tabs>
 
 ### Example Response
 
@@ -284,11 +580,67 @@ Returns a thumbnail image for supported file types (images, PDFs, videos).
 
 ### Example Request
 
+<Tabs items={["cURL", "Python", "JavaScript"]}>
+  <Tab value="cURL">
+
 ```bash
 curl -X GET "https://api.synvo.ai/file/thumbnail?file_id=abc123xyz&max_size=200" \
   -H "X-API-Key: ${API-KEY}" \
   -o thumbnail.jpg
 ```
+
+  </Tab>
+  <Tab value="Python">
+
+```python
+import requests
+
+token = "<BEARER_TOKEN>"
+file_id = "abc123xyz"
+url = "https://api.synvo.ai/file/thumbnail"
+params = {"file_id": file_id, "max_size": 200}
+headers = {"X-API-Key": f"{token}"}
+
+response = requests.get(url, params=params, headers=headers, timeout=30)
+response.raise_for_status()
+
+with open("thumbnail.jpg", "wb") as f:
+    f.write(response.content)
+```
+
+  </Tab>
+  <Tab value="JavaScript">
+
+```javascript
+const token = "<BEARER_TOKEN>";
+const fileId = "abc123xyz";
+const params = new URLSearchParams({
+  file_id: fileId,
+  max_size: "200"
+});
+
+const response = await fetch(`https://api.synvo.ai/file/thumbnail?${params}`, {
+  method: "GET",
+  headers: {
+    "X-API-Key": `${token}`,
+  },
+});
+
+if (!response.ok) {
+  throw new Error(`Request failed: ${response.status}`);
+}
+
+const blob = await response.blob();
+const imageUrl = URL.createObjectURL(blob);
+
+// Display thumbnail in an img element
+const img = document.createElement("img");
+img.src = imageUrl;
+document.body.appendChild(img);
+```
+
+  </Tab>
+</Tabs>
 
 ### Response Codes
 
@@ -310,10 +662,53 @@ Returns the current processing status of a file (PENDING, COMPLETED, FAILED).
 
 ### Example Request
 
+<Tabs items={["cURL", "Python", "JavaScript"]}>
+  <Tab value="cURL">
+
 ```bash
 curl -X GET "https://api.synvo.ai/file/status/abc123xyz" \
   -H "X-API-Key: ${API-KEY}"
 ```
+
+  </Tab>
+  <Tab value="Python">
+
+```python
+import requests
+
+token = "<BEARER_TOKEN>"
+file_id = "abc123xyz"
+url = f"https://api.synvo.ai/file/status/{file_id}"
+headers = {"X-API-Key": f"{token}"}
+
+response = requests.get(url, headers=headers, timeout=30)
+response.raise_for_status()
+print(response.json())
+```
+
+  </Tab>
+  <Tab value="JavaScript">
+
+```javascript
+const token = "<BEARER_TOKEN>";
+const fileId = "abc123xyz";
+
+const response = await fetch(`https://api.synvo.ai/file/status/${fileId}`, {
+  method: "GET",
+  headers: {
+    "X-API-Key": `${token}`,
+  },
+});
+
+if (!response.ok) {
+  throw new Error(`Request failed: ${response.status}`);
+}
+
+console.log(await response.json());
+```
+
+  </Tab>
+</Tabs>
 
 ### Example Response
 
@@ -357,6 +752,9 @@ Crawls and indexes a webpage as a document.
 
 ### Example Request
 
+<Tabs items={["cURL", "Python", "JavaScript"]}>
+  <Tab value="cURL">
+
 ```bash
 curl -X POST "https://api.synvo.ai/webpage/add" \
   -H "X-API-Key: ${API-KEY}" \
@@ -366,6 +764,57 @@ curl -X POST "https://api.synvo.ai/webpage/add" \
   --data-urlencode "name=Example Article" \
   --data-urlencode "build_memory=true"
 ```
+
+  </Tab>
+  <Tab value="Python">
+
+```python
+import requests
+
+token = "<BEARER_TOKEN>"
+url = "https://api.synvo.ai/webpage/add"
+data = {
+    "url": "https://example.com/article",
+    "path": "/web",
+    "name": "Example Article",
+    "build_memory": True
+}
+headers = {"X-API-Key": f"{token}"}
+
+response = requests.post(url, data=data, headers=headers, timeout=60)
+response.raise_for_status()
+print(response.json())
+```
+
+  </Tab>
+  <Tab value="JavaScript">
+
+```javascript
+const token = "<BEARER_TOKEN>";
+const params = new URLSearchParams({
+  url: "https://example.com/article",
+  path: "/web",
+  name: "Example Article",
+  build_memory: "true"
+});
+
+const response = await fetch("https://api.synvo.ai/webpage/add", {
+  method: "POST",
+  headers: {
+    "X-API-Key": `${token}`,
+  },
+  body: params,
+});
+
+if (!response.ok) {
+  throw new Error(`Request failed: ${response.status}`);
+}
+
+console.log(await response.json());
+```
+
+  </Tab>
+</Tabs>
 
 ### Example Response
 
@@ -384,63 +833,6 @@ curl -X POST "https://api.synvo.ai/webpage/add" \
 - `400` - Bad request
 - `401` - Unauthorized
 
-## Code Examples
-
-### Python
-
-```python
-import requests
-
-token = "<BEARER_TOKEN>"
-headers = {"X-API-Key": f"{token}"}
-
-# Upload a file
-with open("/path/to/document.pdf", "rb") as f:
-    files = {"file": f}
-    data = {
-        "path": "/",
-        "build_memory": "true",
-        "disable_lazy_metadata": "false"
-    }
-    response = requests.post(
-        "https://api.synvo.ai/file/upload", 
-        files=files, 
-        data=data, 
-        headers=headers, 
-        timeout=60
-    )
-
-response.raise_for_status()
-print(response.json())
-```
-
-### JavaScript
-
-```javascript
-const token = "<BEARER_TOKEN>";
-const fileInput = document.querySelector('input[type="file"]');
-const file = fileInput.files[0];
-
-const formData = new FormData();
-formData.append("file", file);
-formData.append("path", "/");
-formData.append("build_memory", "true");
-formData.append("disable_lazy_metadata", "false");
-
-const response = await fetch("https://api.synvo.ai/file/upload", {
-  method: "POST",
-  headers: {
-    "X-API-Key": `${token}`,
-  },
-  body: formData,
-});
-
-if (!response.ok) {
-  throw new Error(`Request failed: ${response.status}`);
-}
-
-console.log(await response.json());
-```
 
 ## Error Handling
 
