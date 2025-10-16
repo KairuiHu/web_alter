@@ -1,0 +1,764 @@
+---
+id: file-metadata
+title: File Metadata
+slug: /synvo-api/file-metadata
+---
+
+The Synvo API automatically extracts and stores rich metadata from uploaded files. This includes file information, content analysis, tags, summaries, and other extracted data that helps with search and organization.
+
+## Authentication
+
+All endpoints require authentication via either:
+- **Bearer Token**: `Authorization: Bearer <token>`
+- **API Key**: `X-API-Key: <api_key>`
+
+## Base URL
+
+```
+https://api.synvo.ai
+```
+
+## Get File Metadata
+
+Returns comprehensive file information and extracted metadata including tags, summary, content analysis, and processing details.
+
+**Endpoint:** `GET /metadata/{file_id}`
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `file_id` | string | Yes | File identifier |
+
+### Example Request
+
+<Tabs items={["cURL", "Python", "JavaScript"]}>
+  <Tab value="cURL">
+
+```bash
+curl -X GET "https://api.synvo.ai/metadata/abc123xyz" \
+  -H "X-API-Key: ${API-KEY}"
+```
+
+  </Tab>
+  <Tab value="Python">
+
+```python
+import requests
+
+token = "<BEARER_TOKEN>"
+file_id = "abc123xyz"
+url = f"https://api.synvo.ai/metadata/{file_id}"
+headers = {"X-API-Key": f"{token}"}
+
+response = requests.get(url, headers=headers, timeout=30)
+response.raise_for_status()
+print(response.json())
+```
+
+  </Tab>
+  <Tab value="JavaScript">
+
+```javascript
+const token = "<BEARER_TOKEN>";
+const fileId = "abc123xyz";
+
+const response = await fetch(`https://api.synvo.ai/metadata/${fileId}`, {
+  method: "GET",
+  headers: {
+    "X-API-Key": `${token}`,
+  },
+});
+
+if (!response.ok) {
+  throw new Error(`Request failed: ${response.status}`);
+}
+
+console.log(await response.json());
+```
+
+  </Tab>
+</Tabs>
+
+### Example Response
+
+```json
+{
+  "file_info": {
+    "file_id": "abc123xyz",
+    "file_path": "/documents/quarterly-report.pdf",
+    "file_type": "application/pdf",
+    "file_name": "quarterly-report.pdf",
+    "created_at": "2024-01-15T10:30:00Z",
+    "size": 2048576,
+    "status": "COMPLETED"
+  },
+  "metadata": {
+    "title": "Q4 2023 Financial Report",
+    "summary": "Comprehensive quarterly financial analysis showing 15% revenue growth and improved operational efficiency across all business units.",
+    "tags": [
+      "financial",
+      "quarterly",
+      "revenue",
+      "Q4",
+      "2023",
+      "growth",
+      "analysis"
+    ],
+    "content_type": "financial_report",
+    "language": "en",
+    "page_count": 24,
+    "word_count": 8450,
+    "key_topics": [
+      "Revenue Analysis",
+      "Operational Efficiency",
+      "Market Performance",
+      "Future Projections"
+    ],
+    "entities": [
+      {
+        "type": "organization",
+        "name": "Synvo Corporation",
+        "confidence": 0.95
+      },
+      {
+        "type": "date",
+        "name": "Q4 2023",
+        "confidence": 0.98
+      },
+      {
+        "type": "percentage",
+        "name": "15%",
+        "confidence": 0.92
+      }
+    ],
+    "extracted_data": {
+      "author": "Finance Department",
+      "creation_date": "2024-01-10",
+      "last_modified": "2024-01-12",
+      "subject": "Quarterly Financial Analysis",
+      "keywords": "finance, quarterly, revenue, growth"
+    },
+    "processing_info": {
+      "processed_at": "2024-01-15T10:32:15Z",
+      "processing_time_ms": 4250,
+      "ocr_applied": false,
+      "text_extraction_method": "native_pdf"
+    }
+  }
+}
+```
+
+### Metadata Structure
+
+The metadata object contains various fields depending on the file type:
+
+#### Common Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `title` | string | Extracted or inferred document title |
+| `summary` | string | AI-generated content summary |
+| `tags` | array | Automatically extracted tags |
+| `content_type` | string | Classified content type |
+| `language` | string | Detected language (ISO 639-1) |
+| `key_topics` | array | Main topics identified in content |
+
+#### Document-Specific Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `page_count` | number | Number of pages (PDFs, documents) |
+| `word_count` | number | Estimated word count |
+| `author` | string | Document author if available |
+| `creation_date` | string | Original creation date |
+| `subject` | string | Document subject/topic |
+
+#### Image-Specific Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `dimensions` | object | Width and height in pixels |
+| `format` | string | Image format (JPEG, PNG, etc.) |
+| `color_profile` | string | Color space information |
+| `camera_info` | object | EXIF camera data if available |
+| `location` | object | GPS coordinates if available |
+
+#### Video-Specific Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `duration` | number | Video duration in seconds |
+| `resolution` | object | Video resolution |
+| `frame_rate` | number | Frames per second |
+| `codec` | string | Video codec used |
+| `audio_info` | object | Audio track information |
+
+#### Web Page Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `url` | string | Original webpage URL |
+| `domain` | string | Website domain |
+| `crawl_date` | string | When the page was crawled |
+| `meta_description` | string | Page meta description |
+| `headings` | array | Extracted headings (H1, H2, etc.) |
+
+### Response Codes
+
+- `200` - Metadata retrieved successfully
+- `401` - Unauthorized
+- `404` - File not found
+
+## Metadata Analysis
+
+### Metadata Analyzer Class
+
+<Tabs items={["Python", "JavaScript"]}>
+  <Tab value="Python">
+
+```python
+import requests
+from datetime import datetime
+from typing import Dict, List, Optional
+
+class FileMetadataAnalyzer:
+    def __init__(self, api_key):
+        self.api_key = api_key
+        self.base_url = "https://api.synvo.ai"
+        self.headers = {"X-API-Key": api_key}
+    
+    def get_metadata(self, file_id: str) -> Dict:
+        """Get complete metadata for a file"""
+        response = requests.get(
+            f"{self.base_url}/metadata/{file_id}",
+            headers=self.headers
+        )
+        response.raise_for_status()
+        return response.json()
+    
+    def get_file_summary(self, file_id: str) -> str:
+        """Get just the summary from metadata"""
+        metadata = self.get_metadata(file_id)
+        return metadata.get("metadata", {}).get("summary", "No summary available")
+    
+    def get_file_tags(self, file_id: str) -> List[str]:
+        """Get extracted tags for a file"""
+        metadata = self.get_metadata(file_id)
+        return metadata.get("metadata", {}).get("tags", [])
+    
+    def get_file_topics(self, file_id: str) -> List[str]:
+        """Get key topics from a file"""
+        metadata = self.get_metadata(file_id)
+        return metadata.get("metadata", {}).get("key_topics", [])
+    
+    def analyze_content_type(self, file_id: str) -> Dict:
+        """Analyze and categorize file content"""
+        metadata = self.get_metadata(file_id)
+        file_info = metadata.get("file_info", {})
+        meta = metadata.get("metadata", {})
+        
+        return {
+            "file_type": file_info.get("file_type"),
+            "content_type": meta.get("content_type"),
+            "language": meta.get("language"),
+            "estimated_reading_time": self._calculate_reading_time(meta.get("word_count", 0)),
+            "complexity_score": self._calculate_complexity(meta)
+        }
+    
+    def extract_entities(self, file_id: str) -> List[Dict]:
+        """Get extracted entities (people, organizations, dates, etc.)"""
+        metadata = self.get_metadata(file_id)
+        return metadata.get("metadata", {}).get("entities", [])
+    
+    def get_processing_info(self, file_id: str) -> Dict:
+        """Get information about how the file was processed"""
+        metadata = self.get_metadata(file_id)
+        return metadata.get("metadata", {}).get("processing_info", {})
+    
+    def compare_files(self, file_id1: str, file_id2: str) -> Dict:
+        """Compare metadata between two files"""
+        meta1 = self.get_metadata(file_id1)
+        meta2 = self.get_metadata(file_id2)
+        
+        return {
+            "similarity_score": self._calculate_similarity(meta1, meta2),
+            "common_tags": self._get_common_tags(meta1, meta2),
+            "common_topics": self._get_common_topics(meta1, meta2),
+            "size_comparison": {
+                "file1_size": meta1["file_info"]["size"],
+                "file2_size": meta2["file_info"]["size"],
+                "size_ratio": meta1["file_info"]["size"] / meta2["file_info"]["size"]
+            }
+        }
+    
+    def search_by_metadata(self, files: List[str], **criteria) -> List[str]:
+        """Search files by metadata criteria"""
+        matching_files = []
+        
+        for file_id in files:
+            try:
+                metadata = self.get_metadata(file_id)
+                meta = metadata.get("metadata", {})
+                
+                # Check each criterion
+                matches = True
+                
+                if "content_type" in criteria:
+                    if meta.get("content_type") != criteria["content_type"]:
+                        matches = False
+                
+                if "language" in criteria:
+                    if meta.get("language") != criteria["language"]:
+                        matches = False
+                
+                if "min_word_count" in criteria:
+                    if meta.get("word_count", 0) < criteria["min_word_count"]:
+                        matches = False
+                
+                if "tags" in criteria:
+                    file_tags = set(meta.get("tags", []))
+                    required_tags = set(criteria["tags"])
+                    if not required_tags.issubset(file_tags):
+                        matches = False
+                
+                if matches:
+                    matching_files.append(file_id)
+                    
+            except Exception as e:
+                print(f"Error processing file {file_id}: {e}")
+                continue
+        
+        return matching_files
+    
+    def _calculate_reading_time(self, word_count: int) -> int:
+        """Calculate estimated reading time in minutes (250 words/minute)"""
+        if word_count <= 0:
+            return 0
+        return max(1, round(word_count / 250))
+    
+    def _calculate_complexity(self, metadata: Dict) -> float:
+        """Calculate content complexity score (0-1)"""
+        # Simple heuristic based on word count, topics, and entities
+        word_count = metadata.get("word_count", 0)
+        topic_count = len(metadata.get("key_topics", []))
+        entity_count = len(metadata.get("entities", []))
+        
+        # Normalize and combine factors
+        word_factor = min(word_count / 10000, 1.0)  # Normalize to 10k words
+        topic_factor = min(topic_count / 10, 1.0)   # Normalize to 10 topics
+        entity_factor = min(entity_count / 20, 1.0) # Normalize to 20 entities
+        
+        return (word_factor + topic_factor + entity_factor) / 3
+    
+    def _calculate_similarity(self, meta1: Dict, meta2: Dict) -> float:
+        """Calculate similarity score between two files"""
+        tags1 = set(meta1.get("metadata", {}).get("tags", []))
+        tags2 = set(meta2.get("metadata", {}).get("tags", []))
+        
+        if not tags1 and not tags2:
+            return 0.0
+        
+        intersection = len(tags1.intersection(tags2))
+        union = len(tags1.union(tags2))
+        
+        return intersection / union if union > 0 else 0.0
+    
+    def _get_common_tags(self, meta1: Dict, meta2: Dict) -> List[str]:
+        """Get common tags between two files"""
+        tags1 = set(meta1.get("metadata", {}).get("tags", []))
+        tags2 = set(meta2.get("metadata", {}).get("tags", []))
+        return list(tags1.intersection(tags2))
+    
+    def _get_common_topics(self, meta1: Dict, meta2: Dict) -> List[str]:
+        """Get common topics between two files"""
+        topics1 = set(meta1.get("metadata", {}).get("key_topics", []))
+        topics2 = set(meta2.get("metadata", {}).get("key_topics", []))
+        return list(topics1.intersection(topics2))
+
+# Usage example
+analyzer = FileMetadataAnalyzer("your-api-key")
+
+# Get complete metadata
+metadata = analyzer.get_metadata("abc123xyz")
+print(f"File: {metadata['file_info']['file_name']}")
+print(f"Summary: {metadata['metadata']['summary']}")
+
+# Analyze content
+content_analysis = analyzer.analyze_content_type("abc123xyz")
+print(f"Content type: {content_analysis['content_type']}")
+print(f"Reading time: {content_analysis['estimated_reading_time']} minutes")
+
+# Search files by criteria
+file_list = ["file1", "file2", "file3"]
+financial_docs = analyzer.search_by_metadata(
+    file_list,
+    content_type="financial_report",
+    language="en",
+    min_word_count=1000
+)
+print(f"Found {len(financial_docs)} financial documents")
+```
+
+  </Tab>
+  <Tab value="JavaScript">
+
+```javascript
+class FileMetadataAnalyzer {
+  constructor(apiKey) {
+    this.apiKey = apiKey;
+    this.baseUrl = "https://api.synvo.ai";
+    this.headers = {
+      "X-API-Key": apiKey
+    };
+  }
+  
+  async getMetadata(fileId) {
+    const response = await fetch(`${this.baseUrl}/metadata/${fileId}`, {
+      method: "GET",
+      headers: this.headers
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to get metadata: ${response.status}`);
+    }
+    
+    return await response.json();
+  }
+  
+  async getFileSummary(fileId) {
+    const metadata = await this.getMetadata(fileId);
+    return metadata.metadata?.summary || "No summary available";
+  }
+  
+  async getFileTags(fileId) {
+    const metadata = await this.getMetadata(fileId);
+    return metadata.metadata?.tags || [];
+  }
+  
+  async getFileTopics(fileId) {
+    const metadata = await this.getMetadata(fileId);
+    return metadata.metadata?.key_topics || [];
+  }
+  
+  async analyzeContentType(fileId) {
+    const metadata = await this.getMetadata(fileId);
+    const fileInfo = metadata.file_info || {};
+    const meta = metadata.metadata || {};
+    
+    return {
+      file_type: fileInfo.file_type,
+      content_type: meta.content_type,
+      language: meta.language,
+      estimated_reading_time: this._calculateReadingTime(meta.word_count || 0),
+      complexity_score: this._calculateComplexity(meta)
+    };
+  }
+  
+  async extractEntities(fileId) {
+    const metadata = await this.getMetadata(fileId);
+    return metadata.metadata?.entities || [];
+  }
+  
+  async getProcessingInfo(fileId) {
+    const metadata = await this.getMetadata(fileId);
+    return metadata.metadata?.processing_info || {};
+  }
+  
+  async compareFiles(fileId1, fileId2) {
+    const [meta1, meta2] = await Promise.all([
+      this.getMetadata(fileId1),
+      this.getMetadata(fileId2)
+    ]);
+    
+    return {
+      similarity_score: this._calculateSimilarity(meta1, meta2),
+      common_tags: this._getCommonTags(meta1, meta2),
+      common_topics: this._getCommonTopics(meta1, meta2),
+      size_comparison: {
+        file1_size: meta1.file_info.size,
+        file2_size: meta2.file_info.size,
+        size_ratio: meta1.file_info.size / meta2.file_info.size
+      }
+    };
+  }
+  
+  async searchByMetadata(files, criteria) {
+    const matchingFiles = [];
+    
+    for (const fileId of files) {
+      try {
+        const metadata = await this.getMetadata(fileId);
+        const meta = metadata.metadata || {};
+        
+        let matches = true;
+        
+        if (criteria.content_type && meta.content_type !== criteria.content_type) {
+          matches = false;
+        }
+        
+        if (criteria.language && meta.language !== criteria.language) {
+          matches = false;
+        }
+        
+        if (criteria.min_word_count && (meta.word_count || 0) < criteria.min_word_count) {
+          matches = false;
+        }
+        
+        if (criteria.tags) {
+          const fileTags = new Set(meta.tags || []);
+          const requiredTags = new Set(criteria.tags);
+          const hasAllTags = [...requiredTags].every(tag => fileTags.has(tag));
+          if (!hasAllTags) {
+            matches = false;
+          }
+        }
+        
+        if (matches) {
+          matchingFiles.push(fileId);
+        }
+      } catch (error) {
+        console.log(`Error processing file ${fileId}: ${error.message}`);
+        continue;
+      }
+    }
+    
+    return matchingFiles;
+  }
+  
+  _calculateReadingTime(wordCount) {
+    if (wordCount <= 0) return 0;
+    return Math.max(1, Math.round(wordCount / 250));
+  }
+  
+  _calculateComplexity(metadata) {
+    const wordCount = metadata.word_count || 0;
+    const topicCount = (metadata.key_topics || []).length;
+    const entityCount = (metadata.entities || []).length;
+    
+    const wordFactor = Math.min(wordCount / 10000, 1.0);
+    const topicFactor = Math.min(topicCount / 10, 1.0);
+    const entityFactor = Math.min(entityCount / 20, 1.0);
+    
+    return (wordFactor + topicFactor + entityFactor) / 3;
+  }
+  
+  _calculateSimilarity(meta1, meta2) {
+    const tags1 = new Set(meta1.metadata?.tags || []);
+    const tags2 = new Set(meta2.metadata?.tags || []);
+    
+    if (tags1.size === 0 && tags2.size === 0) return 0.0;
+    
+    const intersection = new Set([...tags1].filter(x => tags2.has(x)));
+    const union = new Set([...tags1, ...tags2]);
+    
+    return union.size > 0 ? intersection.size / union.size : 0.0;
+  }
+  
+  _getCommonTags(meta1, meta2) {
+    const tags1 = new Set(meta1.metadata?.tags || []);
+    const tags2 = new Set(meta2.metadata?.tags || []);
+    return [...tags1].filter(x => tags2.has(x));
+  }
+  
+  _getCommonTopics(meta1, meta2) {
+    const topics1 = new Set(meta1.metadata?.key_topics || []);
+    const topics2 = new Set(meta2.metadata?.key_topics || []);
+    return [...topics1].filter(x => topics2.has(x));
+  }
+}
+
+// Usage example
+const analyzer = new FileMetadataAnalyzer("your-api-key");
+
+// Get complete metadata
+const metadata = await analyzer.getMetadata("abc123xyz");
+console.log(`File: ${metadata.file_info.file_name}`);
+console.log(`Summary: ${metadata.metadata.summary}`);
+
+// Analyze content
+const contentAnalysis = await analyzer.analyzeContentType("abc123xyz");
+console.log(`Content type: ${contentAnalysis.content_type}`);
+console.log(`Reading time: ${contentAnalysis.estimated_reading_time} minutes`);
+
+// Search files by criteria
+const fileList = ["file1", "file2", "file3"];
+const financialDocs = await analyzer.searchByMetadata(fileList, {
+  content_type: "financial_report",
+  language: "en",
+  min_word_count: 1000
+});
+console.log(`Found ${financialDocs.length} financial documents`);
+```
+
+  </Tab>
+</Tabs>
+
+## Use Cases
+
+### Content Organization
+
+Use metadata to automatically organize and categorize your files:
+
+- **Tag-based Filing**: Automatically sort files by extracted tags
+- **Content Type Grouping**: Group similar document types together
+- **Language Separation**: Organize multilingual content
+- **Topic Clustering**: Group files by key topics
+
+### Search Enhancement
+
+Leverage metadata for more accurate search results:
+
+- **Semantic Search**: Use summaries and topics for better matching
+- **Faceted Search**: Filter by content type, language, or tags
+- **Entity Search**: Find documents mentioning specific people, organizations, or dates
+- **Similar Document Discovery**: Find related content automatically
+
+### Content Analysis
+
+Analyze your document collection:
+
+- **Content Audit**: Understand what types of content you have
+- **Language Distribution**: See language breakdown of your files
+- **Topic Analysis**: Identify main themes across your documents
+- **Quality Assessment**: Use complexity scores to identify detailed vs. simple content
+
+### Workflow Automation
+
+Automate processes based on metadata:
+
+- **Auto-tagging**: Apply consistent tags based on content analysis
+- **Content Routing**: Route documents to appropriate teams based on content type
+- **Quality Control**: Flag documents that may need review
+- **Duplicate Detection**: Identify similar or duplicate content
+
+## Best Practices
+
+### Metadata Utilization
+
+1. **Regular Analysis**: Periodically analyze your file collection to understand content patterns
+2. **Tag Consistency**: Use metadata tags to maintain consistent categorization
+3. **Search Optimization**: Leverage extracted entities and topics for better search experiences
+4. **Content Curation**: Use similarity scores to find and organize related content
+
+### Performance Optimization
+
+1. **Caching**: Cache frequently accessed metadata to reduce API calls
+2. **Batch Processing**: Process multiple files in parallel when analyzing collections
+3. **Selective Fields**: Only request metadata fields you actually need
+4. **Lazy Loading**: Load detailed metadata only when needed
+
+### Integration Tips
+
+1. **Database Storage**: Consider storing frequently used metadata in your own database
+2. **Search Indexing**: Index metadata in your search system for faster queries
+3. **UI Enhancement**: Use metadata to enhance file browsing and search interfaces
+4. **Analytics**: Track metadata patterns to understand user content preferences
+
+## Error Handling
+
+### Common Error Responses
+
+```json
+{
+  "error": "File not found",
+  "code": "FILE_NOT_FOUND"
+}
+```
+
+```json
+{
+  "error": "Metadata not available",
+  "code": "METADATA_NOT_READY"
+}
+```
+
+### Error Codes
+
+- `FILE_NOT_FOUND` - The specified file does not exist
+- `METADATA_NOT_READY` - File is still being processed, metadata not yet available
+- `PROCESSING_ERROR` - Error occurred during metadata extraction
+- `UNSUPPORTED_FILE_TYPE` - File type not supported for metadata extraction
+
+### Handling Metadata Errors
+
+<Tabs items={["Python", "JavaScript"]}>
+  <Tab value="Python">
+
+```python
+def get_metadata_safely(analyzer, file_id, max_retries=3, retry_delay=5):
+    """Safely get metadata with retry logic for processing files"""
+    import time
+    
+    for attempt in range(max_retries):
+        try:
+            return analyzer.get_metadata(file_id)
+        except requests.exceptions.HTTPError as e:
+            if e.response.status_code == 404:
+                raise ValueError(f"File {file_id} not found")
+            elif e.response.status_code == 202:  # Still processing
+                if attempt < max_retries - 1:
+                    print(f"File still processing, waiting {retry_delay} seconds...")
+                    time.sleep(retry_delay)
+                    continue
+                else:
+                    raise ValueError(f"File {file_id} still processing after {max_retries} attempts")
+            else:
+                raise
+        except Exception as e:
+            if attempt < max_retries - 1:
+                print(f"Error getting metadata (attempt {attempt + 1}): {e}")
+                time.sleep(retry_delay)
+                continue
+            else:
+                raise
+
+# Usage
+try:
+    metadata = get_metadata_safely(analyzer, "abc123xyz")
+    print("Metadata retrieved successfully")
+except ValueError as e:
+    print(f"Metadata error: {e}")
+```
+
+  </Tab>
+  <Tab value="JavaScript">
+
+```javascript
+async function getMetadataSafely(analyzer, fileId, maxRetries = 3, retryDelay = 5000) {
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      return await analyzer.getMetadata(fileId);
+    } catch (error) {
+      if (error.message.includes("404")) {
+        throw new Error(`File ${fileId} not found`);
+      } else if (error.message.includes("202")) {
+        if (attempt < maxRetries - 1) {
+          console.log(`File still processing, waiting ${retryDelay / 1000} seconds...`);
+          await new Promise(resolve => setTimeout(resolve, retryDelay));
+          continue;
+        } else {
+          throw new Error(`File ${fileId} still processing after ${maxRetries} attempts`);
+        }
+      } else if (attempt < maxRetries - 1) {
+        console.log(`Error getting metadata (attempt ${attempt + 1}): ${error.message}`);
+        await new Promise(resolve => setTimeout(resolve, retryDelay));
+        continue;
+      } else {
+        throw error;
+      }
+    }
+  }
+}
+
+// Usage
+try {
+  const metadata = await getMetadataSafely(analyzer, "abc123xyz");
+  console.log("Metadata retrieved successfully");
+} catch (error) {
+  console.log(`Metadata error: ${error.message}`);
+}
+```
+
+  </Tab>
+</Tabs>
