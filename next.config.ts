@@ -18,33 +18,23 @@ const config: NextConfig = {
   },
   async redirects() {
     return [
-      // Root and version root redirects
+      // Root redirect to version 1.0
       {
         source: "/docs",
-        destination: "/docs/4.x.x/intro/quickstart",
+        destination: "/docs/1.0/intro/quickstart",
         permanent: false,
       },
       {
-        source: "/docs/2.x.x",
-        destination: "/docs/2.x.x/overview",
-        permanent: false,
-      },
-      {
-        source: "/docs/3.x.x",
-        destination: "/docs/3.x.x/intro/quickstart",
-        permanent: false,
-      },
-      {
-        source: "/docs/4.x.x",
-        destination: "/docs/4.x.x/intro/quickstart",
+        source: "/docs/1.0",
+        destination: "/docs/1.0/intro/quickstart",
         permanent: false,
       },
 
-      // Default missing version to 4.x.x for all nested paths (e.g., /docs/api/...)
-      // Exclude when the first segment is already a version like 2.x.x, 3.x.x, or 4.x.x
+      // Default missing version to 1.0 for all nested paths (e.g., /docs/api/...)
+      // Exclude when the first segment is already version 1.0
       {
-        source: "/docs/:first((?!2\\.x\\.x|3\\.x\\.x|4\\.x\\.x).*)/:path*",
-        destination: "/docs/4.x.x/:first/:path*",
+        source: "/docs/:first((?!1\\.0).*)/:path*",
+        destination: "/docs/1.0/:first/:path*",
         permanent: false,
       },
     ];
