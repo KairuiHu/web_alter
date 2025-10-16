@@ -1,0 +1,1427 @@
+---
+id: message-feedback
+title: Message Feedback
+slug: /synvo-api/message-feedback
+---
+
+The Synvo API allows users to provide feedback on AI responses through like/dislike ratings. This feedback helps improve the AI's performance and allows you to track user satisfaction with responses.
+
+## Authentication
+
+All endpoints require authentication via either:
+- **Bearer Token**: `Authorization: Bearer <token>`
+- **API Key**: `X-API-Key: <api_key>`
+
+## Base URL
+
+```
+https://api.synvo.ai
+```
+
+## Like Message
+
+Records positive feedback for an AI response message. Users can like messages they find helpful, accurate, or well-formatted.
+
+**Endpoint:** `POST /ai/like/{cuid}`
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `cuid` | string | Yes | Conversation message unique identifier |
+
+### Example Request
+
+<Tabs items={["cURL", "Python", "JavaScript"]}>
+  <Tab value="cURL">
+
+```bash
+curl -X POST "https://api.synvo.ai/ai/like/msg_abc123xyz" \
+  -H "X-API-Key: ${API-KEY}"
+```
+
+  </Tab>
+  <Tab value="Python">
+
+```python
+import requests
+
+token = "<BEARER_TOKEN>"
+cuid = "msg_abc123xyz"
+url = f"https://api.synvo.ai/ai/like/{cuid}"
+headers = {"X-API-Key": f"{token}"}
+
+response = requests.post(url, headers=headers, timeout=30)
+response.raise_for_status()
+print(response.json())
+```
+
+  </Tab>
+  <Tab value="JavaScript">
+
+```javascript
+const token = "<BEARER_TOKEN>";
+const cuid = "msg_abc123xyz";
+
+const response = await fetch(`https://api.synvo.ai/ai/like/${cuid}`, {
+  method: "POST",
+  headers: {
+    "X-API-Key": `${token}`,
+  },
+});
+
+if (!response.ok) {
+  throw new Error(`Request failed: ${response.status}`);
+}
+
+console.log(await response.json());
+```
+
+  </Tab>
+</Tabs>
+
+### Example Response
+
+```json
+{
+  "success": true,
+  "message": "Feedback recorded successfully",
+  "cuid": "msg_abc123xyz"
+}
+```
+
+### Response Codes
+
+- `200` - Feedback recorded successfully
+- `401` - Unauthorized
+- `404` - Message not found
+
+## Dislike Message
+
+Records negative feedback for an AI response message. Users can dislike messages they find unhelpful, inaccurate, or poorly formatted.
+
+**Endpoint:** `POST /ai/dislike/{cuid}`
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `cuid` | string | Yes | Conversation message unique identifier |
+
+### Example Request
+
+<Tabs items={["cURL", "Python", "JavaScript"]}>
+  <Tab value="cURL">
+
+```bash
+curl -X POST "https://api.synvo.ai/ai/dislike/msg_abc123xyz" \
+  -H "X-API-Key: ${API-KEY}"
+```
+
+  </Tab>
+  <Tab value="Python">
+
+```python
+import requests
+
+token = "<BEARER_TOKEN>"
+cuid = "msg_abc123xyz"
+url = f"https://api.synvo.ai/ai/dislike/{cuid}"
+headers = {"X-API-Key": f"{token}"}
+
+response = requests.post(url, headers=headers, timeout=30)
+response.raise_for_status()
+print(response.json())
+```
+
+  </Tab>
+  <Tab value="JavaScript">
+
+```javascript
+const token = "<BEARER_TOKEN>";
+const cuid = "msg_abc123xyz";
+
+const response = await fetch(`https://api.synvo.ai/ai/dislike/${cuid}`, {
+  method: "POST",
+  headers: {
+    "X-API-Key": `${token}`,
+  },
+});
+
+if (!response.ok) {
+  throw new Error(`Request failed: ${response.status}`);
+}
+
+console.log(await response.json());
+```
+
+  </Tab>
+</Tabs>
+
+### Example Response
+
+```json
+{
+  "success": true,
+  "message": "Feedback recorded successfully",
+  "cuid": "msg_abc123xyz"
+}
+```
+
+### Response Codes
+
+- `200` - Feedback recorded successfully
+- `401` - Unauthorized
+- `404` - Message not found
+
+## Get Message Feedback
+
+Retrieves the current feedback status for a specific message, showing whether it has been liked, disliked, or has no feedback.
+
+**Endpoint:** `GET /ai/feedback/{cuid}`
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `cuid` | string | Yes | Conversation message unique identifier |
+
+### Example Request
+
+<Tabs items={["cURL", "Python", "JavaScript"]}>
+  <Tab value="cURL">
+
+```bash
+curl -X GET "https://api.synvo.ai/ai/feedback/msg_abc123xyz" \
+  -H "X-API-Key: ${API-KEY}"
+```
+
+  </Tab>
+  <Tab value="Python">
+
+```python
+import requests
+
+token = "<BEARER_TOKEN>"
+cuid = "msg_abc123xyz"
+url = f"https://api.synvo.ai/ai/feedback/{cuid}"
+headers = {"X-API-Key": f"{token}"}
+
+response = requests.get(url, headers=headers, timeout=30)
+response.raise_for_status()
+print(response.json())
+```
+
+  </Tab>
+  <Tab value="JavaScript">
+
+```javascript
+const token = "<BEARER_TOKEN>";
+const cuid = "msg_abc123xyz";
+
+const response = await fetch(`https://api.synvo.ai/ai/feedback/${cuid}`, {
+  method: "GET",
+  headers: {
+    "X-API-Key": `${token}`,
+  },
+});
+
+if (!response.ok) {
+  throw new Error(`Request failed: ${response.status}`);
+}
+
+console.log(await response.json());
+```
+
+  </Tab>
+</Tabs>
+
+### Example Response (With Feedback)
+
+```json
+{
+  "success": true,
+  "cuid": "msg_abc123xyz",
+  "feedback": {
+    "feedback_type": "like",
+    "timestamp": "2024-01-15T10:35:00Z"
+  }
+}
+```
+
+### Example Response (No Feedback)
+
+```json
+{
+  "success": true,
+  "cuid": "msg_abc123xyz",
+  "feedback": {
+    "feedback_type": null,
+    "timestamp": null
+  }
+}
+```
+
+### Feedback Types
+
+- `like` - User liked the message
+- `dislike` - User disliked the message
+- `null` - No feedback provided
+
+### Response Codes
+
+- `200` - Feedback status retrieved successfully
+- `401` - Unauthorized
+- `404` - Message not found
+
+## Cancel Message Feedback
+
+Removes any existing feedback (like or dislike) from a message, returning it to a neutral state.
+
+**Endpoint:** `DELETE /ai/feedback/{cuid}`
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `cuid` | string | Yes | Conversation message unique identifier |
+
+### Example Request
+
+<Tabs items={["cURL", "Python", "JavaScript"]}>
+  <Tab value="cURL">
+
+```bash
+curl -X DELETE "https://api.synvo.ai/ai/feedback/msg_abc123xyz" \
+  -H "X-API-Key: ${API-KEY}"
+```
+
+  </Tab>
+  <Tab value="Python">
+
+```python
+import requests
+
+token = "<BEARER_TOKEN>"
+cuid = "msg_abc123xyz"
+url = f"https://api.synvo.ai/ai/feedback/{cuid}"
+headers = {"X-API-Key": f"{token}"}
+
+response = requests.delete(url, headers=headers, timeout=30)
+response.raise_for_status()
+print(response.json())
+```
+
+  </Tab>
+  <Tab value="JavaScript">
+
+```javascript
+const token = "<BEARER_TOKEN>";
+const cuid = "msg_abc123xyz";
+
+const response = await fetch(`https://api.synvo.ai/ai/feedback/${cuid}`, {
+  method: "DELETE",
+  headers: {
+    "X-API-Key": `${token}`,
+  },
+});
+
+if (!response.ok) {
+  throw new Error(`Request failed: ${response.status}`);
+}
+
+console.log(await response.json());
+```
+
+  </Tab>
+</Tabs>
+
+### Example Response
+
+```json
+{
+  "success": true,
+  "cuid": "msg_abc123xyz",
+  "message": "Feedback removed successfully"
+}
+```
+
+### Response Codes
+
+- `200` - Feedback removed successfully
+- `401` - Unauthorized
+- `404` - Message not found
+
+## Feedback Management
+
+### Feedback Manager Class
+
+<Tabs items={["Python", "JavaScript"]}>
+  <Tab value="Python">
+
+```python
+import requests
+from datetime import datetime
+from typing import Dict, List, Optional, Tuple
+from collections import defaultdict
+
+class FeedbackManager:
+    def __init__(self, api_key):
+        self.api_key = api_key
+        self.base_url = "https://api.synvo.ai"
+        self.headers = {"X-API-Key": api_key}
+    
+    def like_message(self, cuid: str) -> bool:
+        """Like a message"""
+        response = requests.post(
+            f"{self.base_url}/ai/like/{cuid}",
+            headers=self.headers
+        )
+        response.raise_for_status()
+        return response.json()["success"]
+    
+    def dislike_message(self, cuid: str) -> bool:
+        """Dislike a message"""
+        response = requests.post(
+            f"{self.base_url}/ai/dislike/{cuid}",
+            headers=self.headers
+        )
+        response.raise_for_status()
+        return response.json()["success"]
+    
+    def get_feedback(self, cuid: str) -> Dict:
+        """Get current feedback for a message"""
+        response = requests.get(
+            f"{self.base_url}/ai/feedback/{cuid}",
+            headers=self.headers
+        )
+        response.raise_for_status()
+        return response.json()["feedback"]
+    
+    def cancel_feedback(self, cuid: str) -> bool:
+        """Remove feedback from a message"""
+        response = requests.delete(
+            f"{self.base_url}/ai/feedback/{cuid}",
+            headers=self.headers
+        )
+        response.raise_for_status()
+        return response.json()["success"]
+    
+    def toggle_like(self, cuid: str) -> str:
+        """Toggle like status (like -> neutral, neutral -> like, dislike -> like)"""
+        current_feedback = self.get_feedback(cuid)
+        current_type = current_feedback.get("feedback_type")
+        
+        if current_type == "like":
+            self.cancel_feedback(cuid)
+            return "neutral"
+        else:
+            self.like_message(cuid)
+            return "like"
+    
+    def toggle_dislike(self, cuid: str) -> str:
+        """Toggle dislike status (dislike -> neutral, neutral -> dislike, like -> dislike)"""
+        current_feedback = self.get_feedback(cuid)
+        current_type = current_feedback.get("feedback_type")
+        
+        if current_type == "dislike":
+            self.cancel_feedback(cuid)
+            return "neutral"
+        else:
+            self.dislike_message(cuid)
+            return "dislike"
+    
+    def batch_get_feedback(self, cuids: List[str]) -> Dict[str, Dict]:
+        """Get feedback for multiple messages"""
+        feedback_data = {}
+        
+        for cuid in cuids:
+            try:
+                feedback_data[cuid] = self.get_feedback(cuid)
+            except Exception as e:
+                print(f"Error getting feedback for {cuid}: {e}")
+                feedback_data[cuid] = {"feedback_type": None, "timestamp": None}
+        
+        return feedback_data
+    
+    def analyze_session_feedback(self, session_messages: List[Dict]) -> Dict:
+        """Analyze feedback patterns for a conversation session"""
+        assistant_messages = [
+            msg for msg in session_messages 
+            if msg.get("role") == "assistant" and msg.get("cuid")
+        ]
+        
+        if not assistant_messages:
+            return {
+                "total_messages": 0,
+                "feedback_coverage": 0.0,
+                "like_rate": 0.0,
+                "dislike_rate": 0.0,
+                "feedback_timeline": []
+            }
+        
+        # Get feedback for all assistant messages
+        cuids = [msg["cuid"] for msg in assistant_messages]
+        feedback_data = self.batch_get_feedback(cuids)
+        
+        # Analyze feedback
+        total_messages = len(assistant_messages)
+        feedback_count = sum(
+            1 for feedback in feedback_data.values() 
+            if feedback.get("feedback_type") is not None
+        )
+        like_count = sum(
+            1 for feedback in feedback_data.values() 
+            if feedback.get("feedback_type") == "like"
+        )
+        dislike_count = sum(
+            1 for feedback in feedback_data.values() 
+            if feedback.get("feedback_type") == "dislike"
+        )
+        
+        # Create timeline
+        timeline = []
+        for msg in assistant_messages:
+            cuid = msg["cuid"]
+            feedback = feedback_data.get(cuid, {})
+            timeline.append({
+                "cuid": cuid,
+                "message_time": msg.get("created_at"),
+                "feedback_type": feedback.get("feedback_type"),
+                "feedback_time": feedback.get("timestamp")
+            })
+        
+        return {
+            "total_messages": total_messages,
+            "feedback_coverage": feedback_count / total_messages if total_messages > 0 else 0.0,
+            "like_rate": like_count / feedback_count if feedback_count > 0 else 0.0,
+            "dislike_rate": dislike_count / feedback_count if feedback_count > 0 else 0.0,
+            "feedback_timeline": timeline
+        }
+    
+    def get_feedback_statistics(self, message_cuids: List[str]) -> Dict:
+        """Get comprehensive feedback statistics"""
+        feedback_data = self.batch_get_feedback(message_cuids)
+        
+        stats = {
+            "total_messages": len(message_cuids),
+            "with_feedback": 0,
+            "likes": 0,
+            "dislikes": 0,
+            "neutral": 0,
+            "feedback_by_hour": defaultdict(int),
+            "feedback_by_day": defaultdict(int)
+        }
+        
+        for cuid, feedback in feedback_data.items():
+            feedback_type = feedback.get("feedback_type")
+            
+            if feedback_type is None:
+                stats["neutral"] += 1
+            else:
+                stats["with_feedback"] += 1
+                if feedback_type == "like":
+                    stats["likes"] += 1
+                elif feedback_type == "dislike":
+                    stats["dislikes"] += 1
+                
+                # Analyze timing if timestamp available
+                timestamp = feedback.get("timestamp")
+                if timestamp:
+                    try:
+                        dt = datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
+                        hour_key = dt.strftime("%H:00")
+                        day_key = dt.strftime("%Y-%m-%d")
+                        
+                        stats["feedback_by_hour"][hour_key] += 1
+                        stats["feedback_by_day"][day_key] += 1
+                    except Exception:
+                        pass
+        
+        # Calculate rates
+        total = stats["total_messages"]
+        with_feedback = stats["with_feedback"]
+        
+        stats["feedback_rate"] = with_feedback / total if total > 0 else 0.0
+        stats["satisfaction_rate"] = stats["likes"] / with_feedback if with_feedback > 0 else 0.0
+        
+        return stats
+    
+    def find_problematic_messages(self, message_cuids: List[str], threshold: float = 0.3) -> List[str]:
+        """Find messages with high dislike rates that may need attention"""
+        feedback_data = self.batch_get_feedback(message_cuids)
+        
+        problematic = []
+        for cuid, feedback in feedback_data.items():
+            if feedback.get("feedback_type") == "dislike":
+                problematic.append(cuid)
+        
+        return problematic
+    
+    def export_feedback_report(self, message_cuids: List[str]) -> str:
+        """Export a detailed feedback report"""
+        stats = self.get_feedback_statistics(message_cuids)
+        feedback_data = self.batch_get_feedback(message_cuids)
+        
+        report = "# Feedback Report\n\n"
+        report += f"**Total Messages:** {stats['total_messages']}\n"
+        report += f"**Messages with Feedback:** {stats['with_feedback']}\n"
+        report += f"**Feedback Rate:** {stats['feedback_rate']:.1%}\n"
+        report += f"**Satisfaction Rate:** {stats['satisfaction_rate']:.1%}\n\n"
+        
+        report += "## Feedback Breakdown\n\n"
+        report += f"- 👍 Likes: {stats['likes']}\n"
+        report += f"- 👎 Dislikes: {stats['dislikes']}\n"
+        report += f"- ⚪ Neutral: {stats['neutral']}\n\n"
+        
+        if stats["feedback_by_day"]:
+            report += "## Daily Feedback Activity\n\n"
+            for day, count in sorted(stats["feedback_by_day"].items()):
+                report += f"- {day}: {count} feedback events\n"
+            report += "\n"
+        
+        report += "## Message Details\n\n"
+        for cuid, feedback in feedback_data.items():
+            feedback_type = feedback.get("feedback_type", "neutral")
+            timestamp = feedback.get("timestamp", "N/A")
+            
+            emoji = {"like": "👍", "dislike": "👎", "neutral": "⚪"}[feedback_type]
+            report += f"- `{cuid}`: {emoji} {feedback_type} ({timestamp})\n"
+        
+        return report
+
+# Usage example
+manager = FeedbackManager("your-api-key")
+
+# Like a message
+success = manager.like_message("msg_abc123xyz")
+print(f"Like recorded: {success}")
+
+# Get current feedback
+feedback = manager.get_feedback("msg_abc123xyz")
+print(f"Current feedback: {feedback['feedback_type']}")
+
+# Toggle feedback
+new_state = manager.toggle_like("msg_abc123xyz")
+print(f"New state: {new_state}")
+
+# Analyze session feedback
+session_messages = [
+    {"role": "assistant", "cuid": "msg_1", "created_at": "2024-01-15T10:30:00Z"},
+    {"role": "assistant", "cuid": "msg_2", "created_at": "2024-01-15T10:32:00Z"}
+]
+analysis = manager.analyze_session_feedback(session_messages)
+print(f"Session feedback coverage: {analysis['feedback_coverage']:.1%}")
+
+# Get statistics
+message_list = ["msg_1", "msg_2", "msg_3"]
+stats = manager.get_feedback_statistics(message_list)
+print(f"Overall satisfaction rate: {stats['satisfaction_rate']:.1%}")
+```
+
+  </Tab>
+  <Tab value="JavaScript">
+
+```javascript
+class FeedbackManager {
+  constructor(apiKey) {
+    this.apiKey = apiKey;
+    this.baseUrl = "https://api.synvo.ai";
+    this.headers = {
+      "X-API-Key": apiKey
+    };
+  }
+  
+  async likeMessage(cuid) {
+    const response = await fetch(`${this.baseUrl}/ai/like/${cuid}`, {
+      method: "POST",
+      headers: this.headers
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to like message: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data.success;
+  }
+  
+  async dislikeMessage(cuid) {
+    const response = await fetch(`${this.baseUrl}/ai/dislike/${cuid}`, {
+      method: "POST",
+      headers: this.headers
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to dislike message: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data.success;
+  }
+  
+  async getFeedback(cuid) {
+    const response = await fetch(`${this.baseUrl}/ai/feedback/${cuid}`, {
+      method: "GET",
+      headers: this.headers
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to get feedback: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data.feedback;
+  }
+  
+  async cancelFeedback(cuid) {
+    const response = await fetch(`${this.baseUrl}/ai/feedback/${cuid}`, {
+      method: "DELETE",
+      headers: this.headers
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to cancel feedback: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data.success;
+  }
+  
+  async toggleLike(cuid) {
+    const currentFeedback = await this.getFeedback(cuid);
+    const currentType = currentFeedback.feedback_type;
+    
+    if (currentType === "like") {
+      await this.cancelFeedback(cuid);
+      return "neutral";
+    } else {
+      await this.likeMessage(cuid);
+      return "like";
+    }
+  }
+  
+  async toggleDislike(cuid) {
+    const currentFeedback = await this.getFeedback(cuid);
+    const currentType = currentFeedback.feedback_type;
+    
+    if (currentType === "dislike") {
+      await this.cancelFeedback(cuid);
+      return "neutral";
+    } else {
+      await this.dislikeMessage(cuid);
+      return "dislike";
+    }
+  }
+  
+  async batchGetFeedback(cuids) {
+    const feedbackData = {};
+    
+    for (const cuid of cuids) {
+      try {
+        feedbackData[cuid] = await this.getFeedback(cuid);
+      } catch (error) {
+        console.log(`Error getting feedback for ${cuid}: ${error.message}`);
+        feedbackData[cuid] = { feedback_type: null, timestamp: null };
+      }
+    }
+    
+    return feedbackData;
+  }
+  
+  async analyzeSessionFeedback(sessionMessages) {
+    const assistantMessages = sessionMessages.filter(
+      msg => msg.role === "assistant" && msg.cuid
+    );
+    
+    if (assistantMessages.length === 0) {
+      return {
+        total_messages: 0,
+        feedback_coverage: 0.0,
+        like_rate: 0.0,
+        dislike_rate: 0.0,
+        feedback_timeline: []
+      };
+    }
+    
+    const cuids = assistantMessages.map(msg => msg.cuid);
+    const feedbackData = await this.batchGetFeedback(cuids);
+    
+    const totalMessages = assistantMessages.length;
+    const feedbackCount = Object.values(feedbackData)
+      .filter(feedback => feedback.feedback_type !== null).length;
+    const likeCount = Object.values(feedbackData)
+      .filter(feedback => feedback.feedback_type === "like").length;
+    const dislikeCount = Object.values(feedbackData)
+      .filter(feedback => feedback.feedback_type === "dislike").length;
+    
+    const timeline = assistantMessages.map(msg => {
+      const feedback = feedbackData[msg.cuid] || {};
+      return {
+        cuid: msg.cuid,
+        message_time: msg.created_at,
+        feedback_type: feedback.feedback_type,
+        feedback_time: feedback.timestamp
+      };
+    });
+    
+    return {
+      total_messages: totalMessages,
+      feedback_coverage: totalMessages > 0 ? feedbackCount / totalMessages : 0.0,
+      like_rate: feedbackCount > 0 ? likeCount / feedbackCount : 0.0,
+      dislike_rate: feedbackCount > 0 ? dislikeCount / feedbackCount : 0.0,
+      feedback_timeline: timeline
+    };
+  }
+  
+  async getFeedbackStatistics(messageCuids) {
+    const feedbackData = await this.batchGetFeedback(messageCuids);
+    
+    const stats = {
+      total_messages: messageCuids.length,
+      with_feedback: 0,
+      likes: 0,
+      dislikes: 0,
+      neutral: 0,
+      feedback_by_hour: {},
+      feedback_by_day: {}
+    };
+    
+    for (const [cuid, feedback] of Object.entries(feedbackData)) {
+      const feedbackType = feedback.feedback_type;
+      
+      if (feedbackType === null) {
+        stats.neutral++;
+      } else {
+        stats.with_feedback++;
+        if (feedbackType === "like") {
+          stats.likes++;
+        } else if (feedbackType === "dislike") {
+          stats.dislikes++;
+        }
+        
+        const timestamp = feedback.timestamp;
+        if (timestamp) {
+          try {
+            const dt = new Date(timestamp);
+            const hourKey = dt.getHours().toString().padStart(2, '0') + ":00";
+            const dayKey = dt.toISOString().split('T')[0];
+            
+            stats.feedback_by_hour[hourKey] = (stats.feedback_by_hour[hourKey] || 0) + 1;
+            stats.feedback_by_day[dayKey] = (stats.feedback_by_day[dayKey] || 0) + 1;
+          } catch (error) {
+            // Ignore timestamp parsing errors
+          }
+        }
+      }
+    }
+    
+    stats.feedback_rate = stats.total_messages > 0 ? stats.with_feedback / stats.total_messages : 0.0;
+    stats.satisfaction_rate = stats.with_feedback > 0 ? stats.likes / stats.with_feedback : 0.0;
+    
+    return stats;
+  }
+  
+  async findProblematicMessages(messageCuids, threshold = 0.3) {
+    const feedbackData = await this.batchGetFeedback(messageCuids);
+    
+    return Object.entries(feedbackData)
+      .filter(([cuid, feedback]) => feedback.feedback_type === "dislike")
+      .map(([cuid, feedback]) => cuid);
+  }
+  
+  async exportFeedbackReport(messageCuids) {
+    const stats = await this.getFeedbackStatistics(messageCuids);
+    const feedbackData = await this.batchGetFeedback(messageCuids);
+    
+    let report = "# Feedback Report\n\n";
+    report += `**Total Messages:** ${stats.total_messages}\n`;
+    report += `**Messages with Feedback:** ${stats.with_feedback}\n`;
+    report += `**Feedback Rate:** ${(stats.feedback_rate * 100).toFixed(1)}%\n`;
+    report += `**Satisfaction Rate:** ${(stats.satisfaction_rate * 100).toFixed(1)}%\n\n`;
+    
+    report += "## Feedback Breakdown\n\n";
+    report += `- 👍 Likes: ${stats.likes}\n`;
+    report += `- 👎 Dislikes: ${stats.dislikes}\n`;
+    report += `- ⚪ Neutral: ${stats.neutral}\n\n`;
+    
+    if (Object.keys(stats.feedback_by_day).length > 0) {
+      report += "## Daily Feedback Activity\n\n";
+      const sortedDays = Object.entries(stats.feedback_by_day)
+        .sort(([a], [b]) => a.localeCompare(b));
+      
+      for (const [day, count] of sortedDays) {
+        report += `- ${day}: ${count} feedback events\n`;
+      }
+      report += "\n";
+    }
+    
+    report += "## Message Details\n\n";
+    for (const [cuid, feedback] of Object.entries(feedbackData)) {
+      const feedbackType = feedback.feedback_type || "neutral";
+      const timestamp = feedback.timestamp || "N/A";
+      
+      const emoji = { like: "👍", dislike: "👎", neutral: "⚪" }[feedbackType];
+      report += `- \`${cuid}\`: ${emoji} ${feedbackType} (${timestamp})\n`;
+    }
+    
+    return report;
+  }
+}
+
+// Usage example
+const manager = new FeedbackManager("your-api-key");
+
+// Like a message
+const success = await manager.likeMessage("msg_abc123xyz");
+console.log(`Like recorded: ${success}`);
+
+// Get current feedback
+const feedback = await manager.getFeedback("msg_abc123xyz");
+console.log(`Current feedback: ${feedback.feedback_type}`);
+
+// Toggle feedback
+const newState = await manager.toggleLike("msg_abc123xyz");
+console.log(`New state: ${newState}`);
+
+// Analyze session feedback
+const sessionMessages = [
+  { role: "assistant", cuid: "msg_1", created_at: "2024-01-15T10:30:00Z" },
+  { role: "assistant", cuid: "msg_2", created_at: "2024-01-15T10:32:00Z" }
+];
+const analysis = await manager.analyzeSessionFeedback(sessionMessages);
+console.log(`Session feedback coverage: ${(analysis.feedback_coverage * 100).toFixed(1)}%`);
+
+// Get statistics
+const messageList = ["msg_1", "msg_2", "msg_3"];
+const stats = await manager.getFeedbackStatistics(messageList);
+console.log(`Overall satisfaction rate: ${(stats.satisfaction_rate * 100).toFixed(1)}%`);
+```
+
+  </Tab>
+</Tabs>
+
+## Use Cases
+
+### User Experience Enhancement
+
+Improve user interaction with AI responses:
+
+- **Response Quality Tracking**: Monitor which types of responses users find most helpful
+- **Real-time Feedback**: Allow users to quickly rate responses during conversations
+- **Feedback-driven Improvements**: Use feedback data to improve AI response quality
+- **User Satisfaction Metrics**: Track overall user satisfaction with AI interactions
+
+### Content Quality Analysis
+
+Analyze and improve AI response quality:
+
+- **Response Effectiveness**: Identify which response patterns work best
+- **Topic Performance**: See which topics generate positive vs. negative feedback
+- **Model Comparison**: Compare feedback across different AI models
+- **Quality Trends**: Track improvement or degradation in response quality over time
+
+### Product Analytics
+
+Gather insights for product development:
+
+- **Feature Usage**: Understand how users interact with feedback features
+- **User Engagement**: Measure user engagement through feedback participation
+- **Satisfaction Trends**: Track satisfaction trends over time
+- **Problem Identification**: Quickly identify problematic responses that need attention
+
+## Integration Examples
+
+### Chat Interface with Feedback
+
+<Tabs items={["React", "Vue"]}>
+  <Tab value="React">
+
+```jsx
+import React, { useState, useEffect } from 'react';
+
+const MessageWithFeedback = ({ message, feedbackManager }) => {
+  const [feedback, setFeedback] = useState(null);
+  const [loading, setLoading] = useState(false);
+  
+  useEffect(() => {
+    // Load existing feedback when component mounts
+    if (message.role === 'assistant' && message.cuid) {
+      loadFeedback();
+    }
+  }, [message.cuid]);
+  
+  const loadFeedback = async () => {
+    try {
+      const feedbackData = await feedbackManager.getFeedback(message.cuid);
+      setFeedback(feedbackData.feedback_type);
+    } catch (error) {
+      console.error('Error loading feedback:', error);
+    }
+  };
+  
+  const handleLike = async () => {
+    setLoading(true);
+    try {
+      const newState = await feedbackManager.toggleLike(message.cuid);
+      setFeedback(newState === 'neutral' ? null : 'like');
+    } catch (error) {
+      console.error('Error updating like:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  const handleDislike = async () => {
+    setLoading(true);
+    try {
+      const newState = await feedbackManager.toggleDislike(message.cuid);
+      setFeedback(newState === 'neutral' ? null : 'dislike');
+    } catch (error) {
+      console.error('Error updating dislike:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  return (
+    <div className={`message ${message.role}`}>
+      <div className="message-content">
+        {message.content.map((content, index) => (
+          <div key={index}>
+            {content.type === 'text' && <p>{content.text}</p>}
+            {content.type === 'file' && <p><em>File: {content.path}</em></p>}
+          </div>
+        ))}
+      </div>
+      
+      {message.role === 'assistant' && message.cuid && (
+        <div className="feedback-buttons">
+          <button
+            onClick={handleLike}
+            disabled={loading}
+            className={`like-button ${feedback === 'like' ? 'active' : ''}`}
+            title="Like this response"
+          >
+            👍 {feedback === 'like' ? 'Liked' : 'Like'}
+          </button>
+          
+          <button
+            onClick={handleDislike}
+            disabled={loading}
+            className={`dislike-button ${feedback === 'dislike' ? 'active' : ''}`}
+            title="Dislike this response"
+          >
+            👎 {feedback === 'dislike' ? 'Disliked' : 'Dislike'}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const ConversationView = ({ session, feedbackManager }) => {
+  return (
+    <div className="conversation">
+      {session.messages.map((message, index) => (
+        <MessageWithFeedback
+          key={message.cuid || index}
+          message={message}
+          feedbackManager={feedbackManager}
+        />
+      ))}
+    </div>
+  );
+};
+
+// Usage
+const App = () => {
+  const feedbackManager = new FeedbackManager('your-api-key');
+  const [session, setSession] = useState(null);
+  
+  // Load session data...
+  
+  return (
+    <div className="app">
+      {session && (
+        <ConversationView
+          session={session}
+          feedbackManager={feedbackManager}
+        />
+      )}
+    </div>
+  );
+};
+```
+
+  </Tab>
+  <Tab value="Vue">
+
+```vue
+<template>
+  <div class="conversation">
+    <div
+      v-for="(message, index) in session.messages"
+      :key="message.cuid || index"
+      :class="['message', message.role]"
+    >
+      <div class="message-content">
+        <div v-for="(content, contentIndex) in message.content" :key="contentIndex">
+          <p v-if="content.type === 'text'">{{ content.text }}</p>
+          <p v-else-if="content.type === 'file'"><em>File: {{ content.path }}</em></p>
+        </div>
+      </div>
+      
+      <div v-if="message.role === 'assistant' && message.cuid" class="feedback-buttons">
+        <button
+          @click="handleLike(message.cuid)"
+          :disabled="loading"
+          :class="['like-button', { active: feedback[message.cuid] === 'like' }]"
+          title="Like this response"
+        >
+          👍 {{ feedback[message.cuid] === 'like' ? 'Liked' : 'Like' }}
+        </button>
+        
+        <button
+          @click="handleDislike(message.cuid)"
+          :disabled="loading"
+          :class="['dislike-button', { active: feedback[message.cuid] === 'dislike' }]"
+          title="Dislike this response"
+        >
+          👎 {{ feedback[message.cuid] === 'dislike' ? 'Disliked' : 'Dislike' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'ConversationView',
+  props: {
+    session: {
+      type: Object,
+      required: true
+    },
+    feedbackManager: {
+      type: Object,
+      required: true
+    }
+  },
+  data() {
+    return {
+      feedback: {},
+      loading: false
+    };
+  },
+  async mounted() {
+    await this.loadAllFeedback();
+  },
+  methods: {
+    async loadAllFeedback() {
+      const assistantMessages = this.session.messages.filter(
+        msg => msg.role === 'assistant' && msg.cuid
+      );
+      
+      const cuids = assistantMessages.map(msg => msg.cuid);
+      if (cuids.length > 0) {
+        try {
+          const feedbackData = await this.feedbackManager.batchGetFeedback(cuids);
+          const feedbackState = {};
+          
+          for (const [cuid, feedback] of Object.entries(feedbackData)) {
+            feedbackState[cuid] = feedback.feedback_type;
+          }
+          
+          this.feedback = feedbackState;
+        } catch (error) {
+          console.error('Error loading feedback:', error);
+        }
+      }
+    },
+    
+    async handleLike(cuid) {
+      this.loading = true;
+      try {
+        const newState = await this.feedbackManager.toggleLike(cuid);
+        this.$set(this.feedback, cuid, newState === 'neutral' ? null : 'like');
+      } catch (error) {
+        console.error('Error updating like:', error);
+      } finally {
+        this.loading = false;
+      }
+    },
+    
+    async handleDislike(cuid) {
+      this.loading = true;
+      try {
+        const newState = await this.feedbackManager.toggleDislike(cuid);
+        this.$set(this.feedback, cuid, newState === 'neutral' ? null : 'dislike');
+      } catch (error) {
+        console.error('Error updating dislike:', error);
+      } finally {
+        this.loading = false;
+      }
+    }
+  }
+};
+</script>
+
+<style scoped>
+.message {
+  margin: 1rem 0;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.message.user {
+  background-color: #e3f2fd;
+  margin-left: 2rem;
+}
+
+.message.assistant {
+  background-color: #f5f5f5;
+  margin-right: 2rem;
+}
+
+.feedback-buttons {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.like-button, .dislike-button {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.like-button:hover {
+  background-color: #e8f5e8;
+  border-color: #4caf50;
+}
+
+.dislike-button:hover {
+  background-color: #ffeaea;
+  border-color: #f44336;
+}
+
+.like-button.active {
+  background-color: #4caf50;
+  color: white;
+}
+
+.dislike-button.active {
+  background-color: #f44336;
+  color: white;
+}
+
+.like-button:disabled, .dislike-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+</style>
+```
+
+  </Tab>
+</Tabs>
+
+## Best Practices
+
+### Feedback Collection
+
+1. **Make it Easy**: Provide simple, one-click feedback options
+2. **Visual Feedback**: Show clear visual indicators of current feedback state
+3. **Non-intrusive**: Don't interrupt the conversation flow with feedback requests
+4. **Optional**: Never require feedback - keep it completely optional
+
+### Feedback Analysis
+
+1. **Regular Review**: Regularly analyze feedback patterns to identify trends
+2. **Contextual Analysis**: Consider the context when analyzing negative feedback
+3. **Response Time**: Monitor how quickly users provide feedback after responses
+4. **Segmentation**: Analyze feedback by user type, topic, or time period
+
+### Privacy and Ethics
+
+1. **Anonymization**: Consider anonymizing feedback data for analysis
+2. **Transparency**: Be clear about how feedback is used to improve the service
+3. **User Control**: Allow users to view and modify their feedback history
+4. **Data Retention**: Implement appropriate data retention policies for feedback
+
+## Error Handling
+
+### Common Error Responses
+
+```json
+{
+  "error": "Message not found",
+  "code": "MESSAGE_NOT_FOUND"
+}
+```
+
+```json
+{
+  "error": "Cannot provide feedback on user messages",
+  "code": "INVALID_MESSAGE_TYPE"
+}
+```
+
+### Error Codes
+
+- `MESSAGE_NOT_FOUND` - The specified message does not exist
+- `INVALID_MESSAGE_TYPE` - Feedback can only be provided on assistant messages
+- `FEEDBACK_ALREADY_EXISTS` - Feedback has already been provided (when not allowing updates)
+- `FEEDBACK_NOT_FOUND` - No feedback exists for this message (when trying to cancel)
+
+### Handling Feedback Errors
+
+<Tabs items={["Python", "JavaScript"]}>
+  <Tab value="Python">
+
+```python
+def safe_provide_feedback(manager, cuid, feedback_type):
+    """Safely provide feedback with error handling"""
+    try:
+        if feedback_type == "like":
+            result = manager.like_message(cuid)
+        elif feedback_type == "dislike":
+            result = manager.dislike_message(cuid)
+        elif feedback_type == "cancel":
+            result = manager.cancel_feedback(cuid)
+        else:
+            raise ValueError(f"Invalid feedback type: {feedback_type}")
+        
+        return {"success": True, "result": result}
+        
+    except requests.exceptions.HTTPError as e:
+        if e.response.status_code == 404:
+            return {"success": False, "error": "Message not found"}
+        elif e.response.status_code == 400:
+            error_data = e.response.json()
+            if error_data.get("code") == "INVALID_MESSAGE_TYPE":
+                return {"success": False, "error": "Cannot provide feedback on this message type"}
+            else:
+                return {"success": False, "error": error_data.get("error", "Bad request")}
+        else:
+            return {"success": False, "error": f"HTTP error: {e.response.status_code}"}
+    except Exception as e:
+        return {"success": False, "error": f"Unexpected error: {e}"}
+
+def batch_feedback_with_retry(manager, feedback_actions, max_retries=3):
+    """Apply multiple feedback actions with retry logic"""
+    results = {}
+    
+    for cuid, action in feedback_actions.items():
+        for attempt in range(max_retries):
+            result = safe_provide_feedback(manager, cuid, action)
+            
+            if result["success"]:
+                results[cuid] = result
+                break
+            elif "not found" in result["error"].lower():
+                # Don't retry if message doesn't exist
+                results[cuid] = result
+                break
+            elif attempt < max_retries - 1:
+                print(f"Retrying feedback for {cuid} (attempt {attempt + 1})")
+                time.sleep(1)  # Brief delay before retry
+            else:
+                results[cuid] = result
+    
+    return results
+
+# Usage
+feedback_actions = {
+    "msg_1": "like",
+    "msg_2": "dislike", 
+    "msg_3": "cancel"
+}
+
+results = batch_feedback_with_retry(manager, feedback_actions)
+for cuid, result in results.items():
+    if result["success"]:
+        print(f"✅ {cuid}: Feedback applied successfully")
+    else:
+        print(f"❌ {cuid}: {result['error']}")
+```
+
+  </Tab>
+  <Tab value="JavaScript">
+
+```javascript
+async function safeProvideFeedback(manager, cuid, feedbackType) {
+  try {
+    let result;
+    
+    if (feedbackType === "like") {
+      result = await manager.likeMessage(cuid);
+    } else if (feedbackType === "dislike") {
+      result = await manager.dislikeMessage(cuid);
+    } else if (feedbackType === "cancel") {
+      result = await manager.cancelFeedback(cuid);
+    } else {
+      throw new Error(`Invalid feedback type: ${feedbackType}`);
+    }
+    
+    return { success: true, result };
+    
+  } catch (error) {
+    if (error.message.includes("404")) {
+      return { success: false, error: "Message not found" };
+    } else if (error.message.includes("400")) {
+      return { success: false, error: "Cannot provide feedback on this message type" };
+    } else {
+      return { success: false, error: `Unexpected error: ${error.message}` };
+    }
+  }
+}
+
+async function batchFeedbackWithRetry(manager, feedbackActions, maxRetries = 3) {
+  const results = {};
+  
+  for (const [cuid, action] of Object.entries(feedbackActions)) {
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+      const result = await safeProvideFeedback(manager, cuid, action);
+      
+      if (result.success) {
+        results[cuid] = result;
+        break;
+      } else if (result.error.toLowerCase().includes("not found")) {
+        // Don't retry if message doesn't exist
+        results[cuid] = result;
+        break;
+      } else if (attempt < maxRetries - 1) {
+        console.log(`Retrying feedback for ${cuid} (attempt ${attempt + 1})`);
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Brief delay
+      } else {
+        results[cuid] = result;
+      }
+    }
+  }
+  
+  return results;
+}
+
+// Usage
+const feedbackActions = {
+  "msg_1": "like",
+  "msg_2": "dislike",
+  "msg_3": "cancel"
+};
+
+const results = await batchFeedbackWithRetry(manager, feedbackActions);
+for (const [cuid, result] of Object.entries(results)) {
+  if (result.success) {
+    console.log(`✅ ${cuid}: Feedback applied successfully`);
+  } else {
+    console.log(`❌ ${cuid}: ${result.error}`);
+  }
+}
+```
+
+  </Tab>
+</Tabs>
