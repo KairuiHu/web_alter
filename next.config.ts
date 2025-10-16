@@ -4,10 +4,6 @@ import type { NextConfig } from "next";
 const withMDX = createMDX();
 
 const config: NextConfig = {
-  output: 'export',
-  trailingSlash: true,
-  basePath: '/docs',
-  assetPrefix: '/docs/',
   // reactStrictMode: true,
   async rewrites() {
     return {
@@ -24,21 +20,21 @@ const config: NextConfig = {
     return [
       // Root redirect to version 1.0
       {
-        source: "/",
-        destination: "/1.0/synvo-api/api-keys-authentication",
+        source: "/docs",
+        destination: "/docs/1.0/intro/quickstart",
         permanent: false,
       },
       {
-        source: "/1.0",
-        destination: "/1.0/synvo-api/api-keys-authentication",
+        source: "/docs/1.0",
+        destination: "/docs/1.0/intro/quickstart",
         permanent: false,
       },
 
-      // Default missing version to 1.0 for all nested paths
+      // Default missing version to 1.0 for all nested paths (e.g., /docs/api/...)
       // Exclude when the first segment is already version 1.0
       {
-        source: "/:first((?!1\\.0).*)/:path*",
-        destination: "/1.0/:first/:path*",
+        source: "/docs/:first((?!1\\.0).*)/:path*",
+        destination: "/docs/1.0/:first/:path*",
         permanent: false,
       },
     ];
