@@ -1,0 +1,1134 @@
+---
+id: session-history
+title: Session History
+slug: /synvo-api/session-history
+---
+
+The Synvo API maintains conversation history for all interactions, allowing you to retrieve, manage, and continue previous conversations. Each conversation is identified by a unique session ID (SUID).
+
+## Authentication
+
+All endpoints require authentication via either:
+- **Bearer Token**: `Authorization: Bearer <token>`
+- **API Key**: `X-API-Key: <api_key>`
+
+## Base URL
+
+```
+https://api.synvo.ai
+```
+
+## List Sessions
+
+Returns a list of all conversation sessions for the authenticated user, including session summaries and creation dates.
+
+**Endpoint:** `GET /history`
+
+### Example Request
+
+<Tabs items={["cURL", "Python", "JavaScript"]}>
+  <Tab value="cURL">
+
+```bash
+curl -X GET "https://api.synvo.ai/history" \
+  -H "X-API-Key: ${API-KEY}"
+```
+
+  </Tab>
+  <Tab value="Python">
+
+```python
+import requests
+
+token = "<BEARER_TOKEN>"
+url = "https://api.synvo.ai/history"
+headers = {"X-API-Key": f"{token}"}
+
+response = requests.get(url, headers=headers, timeout=30)
+response.raise_for_status()
+print(response.json())
+```
+
+  </Tab>
+  <Tab value="JavaScript">
+
+```javascript
+const token = "<BEARER_TOKEN>";
+
+const response = await fetch("https://api.synvo.ai/history", {
+  method: "GET",
+  headers: {
+    "X-API-Key": `${token}`,
+  },
+});
+
+if (!response.ok) {
+  throw new Error(`Request failed: ${response.status}`);
+}
+
+console.log(await response.json());
+```
+
+  </Tab>
+</Tabs>
+
+### Example Response
+
+```json
+{
+  "success": true,
+  "sessions": [
+    {
+      "suid": "sess_abc123xyz",
+      "created_at": "2024-01-15T10:30:00Z",
+      "summary": "Discussion about quarterly financial reports and revenue analysis"
+    },
+    {
+      "suid": "sess_def456uvw",
+      "created_at": "2024-01-14T15:45:00Z",
+      "summary": "Technical documentation review and API integration questions"
+    },
+    {
+      "suid": "sess_ghi789rst",
+      "created_at": "2024-01-13T09:20:00Z",
+      "summary": "Project planning and resource allocation discussion"
+    }
+  ]
+}
+```
+
+### Response Codes
+
+- `200` - Sessions retrieved successfully
+- `401` - Unauthorized
+
+## Get Session Details
+
+Returns the complete message history for a specific conversation session, including all user and assistant messages.
+
+**Endpoint:** `GET /history/{suid}`
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `suid` | string | Yes | Session unique identifier |
+
+### Example Request
+
+<Tabs items={["cURL", "Python", "JavaScript"]}>
+  <Tab value="cURL">
+
+```bash
+curl -X GET "https://api.synvo.ai/history/sess_abc123xyz" \
+  -H "X-API-Key: ${API-KEY}"
+```
+
+  </Tab>
+  <Tab value="Python">
+
+```python
+import requests
+
+token = "<BEARER_TOKEN>"
+suid = "sess_abc123xyz"
+url = f"https://api.synvo.ai/history/{suid}"
+headers = {"X-API-Key": f"{token}"}
+
+response = requests.get(url, headers=headers, timeout=30)
+response.raise_for_status()
+print(response.json())
+```
+
+  </Tab>
+  <Tab value="JavaScript">
+
+```javascript
+const token = "<BEARER_TOKEN>";
+const suid = "sess_abc123xyz";
+
+const response = await fetch(`https://api.synvo.ai/history/${suid}`, {
+  method: "GET",
+  headers: {
+    "X-API-Key": `${token}`,
+  },
+});
+
+if (!response.ok) {
+  throw new Error(`Request failed: ${response.status}`);
+}
+
+console.log(await response.json());
+```
+
+  </Tab>
+</Tabs>
+
+### Example Response
+
+```json
+{
+  "success": true,
+  "session": {
+    "suid": "sess_abc123xyz",
+    "created_at": "2024-01-15T10:30:00Z",
+    "summary": "Discussion about quarterly financial reports and revenue analysis",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "Can you analyze the Q4 financial report I uploaded?"
+          }
+        ],
+        "cuid": "msg_user123",
+        "created_at": "2024-01-15T10:30:15Z"
+      },
+      {
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "I'll analyze your Q4 financial report. Let me examine the key metrics and trends..."
+          }
+        ],
+        "cuid": "msg_asst456",
+        "created_at": "2024-01-15T10:30:45Z",
+        "searched_files": ["file_abc123xyz"]
+      },
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "What were the main revenue drivers this quarter?"
+          }
+        ],
+        "cuid": "msg_user789",
+        "created_at": "2024-01-15T10:32:10Z"
+      },
+      {
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "Based on the financial report, the main revenue drivers for Q4 were:\n\n1. **Product Sales Growth**: 18% increase in core product revenue\n2. **Service Expansion**: New service offerings contributed 12% growth\n3. **Market Expansion**: International markets showed 25% growth\n\nThe report shows particularly strong performance in the enterprise segment..."
+          }
+        ],
+        "cuid": "msg_asst012",
+        "created_at": "2024-01-15T10:32:35Z",
+        "searched_files": ["file_abc123xyz"]
+      }
+    ]
+  }
+}
+```
+
+### Message Structure
+
+Each message in the conversation contains:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `role` | string | Message role: `user`, `assistant`, `system`, or `tool` |
+| `content` | array | Message content items (text, files, etc.) |
+| `cuid` | string | Conversation message unique identifier |
+| `created_at` | string | Message timestamp |
+| `searched_files` | array | File IDs that were searched (assistant messages only) |
+
+### Content Types
+
+- **Text Content**: `{"type": "text", "text": "message content"}`
+- **File Content**: `{"type": "file", "file_id": "abc123", "path": "/path/to/file"}`
+
+### Response Codes
+
+- `200` - Session details retrieved successfully
+- `401` - Unauthorized
+- `404` - Session not found
+
+## Delete Session
+
+Permanently deletes a conversation session and all its messages. This action cannot be undone.
+
+**Endpoint:** `DELETE /history/delete/{suid}`
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `suid` | string | Yes | Session unique identifier |
+
+### Example Request
+
+<Tabs items={["cURL", "Python", "JavaScript"]}>
+  <Tab value="cURL">
+
+```bash
+curl -X DELETE "https://api.synvo.ai/history/delete/sess_abc123xyz" \
+  -H "X-API-Key: ${API-KEY}"
+```
+
+  </Tab>
+  <Tab value="Python">
+
+```python
+import requests
+
+token = "<BEARER_TOKEN>"
+suid = "sess_abc123xyz"
+url = f"https://api.synvo.ai/history/delete/{suid}"
+headers = {"X-API-Key": f"{token}"}
+
+response = requests.delete(url, headers=headers, timeout=30)
+response.raise_for_status()
+print(response.json())
+```
+
+  </Tab>
+  <Tab value="JavaScript">
+
+```javascript
+const token = "<BEARER_TOKEN>";
+const suid = "sess_abc123xyz";
+
+const response = await fetch(`https://api.synvo.ai/history/delete/${suid}`, {
+  method: "DELETE",
+  headers: {
+    "X-API-Key": `${token}`,
+  },
+});
+
+if (!response.ok) {
+  throw new Error(`Request failed: ${response.status}`);
+}
+
+console.log(await response.json());
+```
+
+  </Tab>
+</Tabs>
+
+### Example Response
+
+```json
+{
+  "success": true,
+  "message": "Session deleted successfully"
+}
+```
+
+### Response Codes
+
+- `200` - Session deleted successfully
+- `401` - Unauthorized
+- `404` - Session not found
+
+## Session Management
+
+### Session Manager Class
+
+<Tabs items={["Python", "JavaScript"]}>
+  <Tab value="Python">
+
+```python
+import requests
+from datetime import datetime, timedelta
+from typing import List, Dict, Optional
+
+class SessionManager:
+    def __init__(self, api_key):
+        self.api_key = api_key
+        self.base_url = "https://api.synvo.ai"
+        self.headers = {"X-API-Key": api_key}
+    
+    def list_sessions(self) -> List[Dict]:
+        """Get all conversation sessions"""
+        response = requests.get(
+            f"{self.base_url}/history",
+            headers=self.headers
+        )
+        response.raise_for_status()
+        return response.json()["sessions"]
+    
+    def get_session(self, suid: str) -> Dict:
+        """Get detailed session information"""
+        response = requests.get(
+            f"{self.base_url}/history/{suid}",
+            headers=self.headers
+        )
+        response.raise_for_status()
+        return response.json()["session"]
+    
+    def delete_session(self, suid: str) -> bool:
+        """Delete a session"""
+        response = requests.delete(
+            f"{self.base_url}/history/delete/{suid}",
+            headers=self.headers
+        )
+        response.raise_for_status()
+        return response.json()["success"]
+    
+    def get_recent_sessions(self, days: int = 7) -> List[Dict]:
+        """Get sessions from the last N days"""
+        sessions = self.list_sessions()
+        cutoff_date = datetime.now() - timedelta(days=days)
+        
+        recent_sessions = []
+        for session in sessions:
+            session_date = datetime.fromisoformat(session["created_at"].replace("Z", "+00:00"))
+            if session_date >= cutoff_date:
+                recent_sessions.append(session)
+        
+        return recent_sessions
+    
+    def search_sessions(self, query: str) -> List[Dict]:
+        """Search sessions by summary content"""
+        sessions = self.list_sessions()
+        matching_sessions = []
+        
+        query_lower = query.lower()
+        for session in sessions:
+            if query_lower in session.get("summary", "").lower():
+                matching_sessions.append(session)
+        
+        return matching_sessions
+    
+    def get_session_statistics(self) -> Dict:
+        """Get statistics about conversation sessions"""
+        sessions = self.list_sessions()
+        
+        if not sessions:
+            return {
+                "total_sessions": 0,
+                "oldest_session": None,
+                "newest_session": None,
+                "sessions_by_month": {}
+            }
+        
+        # Calculate statistics
+        session_dates = [
+            datetime.fromisoformat(s["created_at"].replace("Z", "+00:00"))
+            for s in sessions
+        ]
+        
+        oldest = min(session_dates)
+        newest = max(session_dates)
+        
+        # Group by month
+        sessions_by_month = {}
+        for date in session_dates:
+            month_key = date.strftime("%Y-%m")
+            sessions_by_month[month_key] = sessions_by_month.get(month_key, 0) + 1
+        
+        return {
+            "total_sessions": len(sessions),
+            "oldest_session": oldest.isoformat(),
+            "newest_session": newest.isoformat(),
+            "sessions_by_month": sessions_by_month
+        }
+    
+    def export_session(self, suid: str, format: str = "json") -> str:
+        """Export session in different formats"""
+        session = self.get_session(suid)
+        
+        if format == "json":
+            import json
+            return json.dumps(session, indent=2)
+        
+        elif format == "markdown":
+            md_content = f"# Conversation: {session['summary']}\n\n"
+            md_content += f"**Session ID:** {session['suid']}\n"
+            md_content += f"**Created:** {session['created_at']}\n\n"
+            
+            for message in session["messages"]:
+                role = message["role"].title()
+                timestamp = message["created_at"]
+                
+                md_content += f"## {role} ({timestamp})\n\n"
+                
+                for content in message["content"]:
+                    if content["type"] == "text":
+                        md_content += f"{content['text']}\n\n"
+                    elif content["type"] == "file":
+                        md_content += f"*[File: {content.get('path', 'Unknown')}]*\n\n"
+                
+                if message.get("searched_files"):
+                    md_content += f"*Searched files: {', '.join(message['searched_files'])}*\n\n"
+            
+            return md_content
+        
+        elif format == "txt":
+            txt_content = f"Conversation: {session['summary']}\n"
+            txt_content += f"Session ID: {session['suid']}\n"
+            txt_content += f"Created: {session['created_at']}\n"
+            txt_content += "=" * 50 + "\n\n"
+            
+            for message in session["messages"]:
+                role = message["role"].upper()
+                timestamp = message["created_at"]
+                
+                txt_content += f"[{role}] {timestamp}\n"
+                
+                for content in message["content"]:
+                    if content["type"] == "text":
+                        txt_content += f"{content['text']}\n"
+                    elif content["type"] == "file":
+                        txt_content += f"[FILE: {content.get('path', 'Unknown')}]\n"
+                
+                txt_content += "\n" + "-" * 30 + "\n\n"
+            
+            return txt_content
+        
+        else:
+            raise ValueError(f"Unsupported format: {format}")
+    
+    def cleanup_old_sessions(self, days: int = 30, dry_run: bool = True) -> List[str]:
+        """Delete sessions older than N days"""
+        sessions = self.list_sessions()
+        cutoff_date = datetime.now() - timedelta(days=days)
+        
+        old_sessions = []
+        for session in sessions:
+            session_date = datetime.fromisoformat(session["created_at"].replace("Z", "+00:00"))
+            if session_date < cutoff_date:
+                old_sessions.append(session["suid"])
+        
+        if not dry_run:
+            for suid in old_sessions:
+                try:
+                    self.delete_session(suid)
+                    print(f"Deleted session: {suid}")
+                except Exception as e:
+                    print(f"Failed to delete session {suid}: {e}")
+        
+        return old_sessions
+    
+    def continue_session(self, suid: str, message: str) -> Dict:
+        """Continue an existing conversation session"""
+        # This would typically involve making a new query with parent_cuid
+        # pointing to the last message in the session
+        session = self.get_session(suid)
+        last_message = session["messages"][-1] if session["messages"] else None
+        
+        if not last_message:
+            raise ValueError("Session has no messages to continue from")
+        
+        # Return information needed to continue the conversation
+        return {
+            "parent_cuid": last_message["cuid"],
+            "session_summary": session["summary"],
+            "message_count": len(session["messages"])
+        }
+
+# Usage example
+manager = SessionManager("your-api-key")
+
+# List all sessions
+sessions = manager.list_sessions()
+print(f"Total sessions: {len(sessions)}")
+
+# Get recent sessions
+recent = manager.get_recent_sessions(days=7)
+print(f"Sessions from last 7 days: {len(recent)}")
+
+# Search sessions
+financial_sessions = manager.search_sessions("financial")
+print(f"Financial-related sessions: {len(financial_sessions)}")
+
+# Get statistics
+stats = manager.get_session_statistics()
+print(f"Session statistics: {stats}")
+
+# Export a session
+if sessions:
+    markdown_export = manager.export_session(sessions[0]["suid"], "markdown")
+    print("Exported session to markdown")
+
+# Cleanup old sessions (dry run)
+old_sessions = manager.cleanup_old_sessions(days=30, dry_run=True)
+print(f"Found {len(old_sessions)} old sessions")
+```
+
+  </Tab>
+  <Tab value="JavaScript">
+
+```javascript
+class SessionManager {
+  constructor(apiKey) {
+    this.apiKey = apiKey;
+    this.baseUrl = "https://api.synvo.ai";
+    this.headers = {
+      "X-API-Key": apiKey
+    };
+  }
+  
+  async listSessions() {
+    const response = await fetch(`${this.baseUrl}/history`, {
+      method: "GET",
+      headers: this.headers
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to list sessions: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data.sessions;
+  }
+  
+  async getSession(suid) {
+    const response = await fetch(`${this.baseUrl}/history/${suid}`, {
+      method: "GET",
+      headers: this.headers
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to get session: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data.session;
+  }
+  
+  async deleteSession(suid) {
+    const response = await fetch(`${this.baseUrl}/history/delete/${suid}`, {
+      method: "DELETE",
+      headers: this.headers
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to delete session: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data.success;
+  }
+  
+  async getRecentSessions(days = 7) {
+    const sessions = await this.listSessions();
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - days);
+    
+    return sessions.filter(session => {
+      const sessionDate = new Date(session.created_at);
+      return sessionDate >= cutoffDate;
+    });
+  }
+  
+  async searchSessions(query) {
+    const sessions = await this.listSessions();
+    const queryLower = query.toLowerCase();
+    
+    return sessions.filter(session => 
+      session.summary?.toLowerCase().includes(queryLower)
+    );
+  }
+  
+  async getSessionStatistics() {
+    const sessions = await this.listSessions();
+    
+    if (sessions.length === 0) {
+      return {
+        total_sessions: 0,
+        oldest_session: null,
+        newest_session: null,
+        sessions_by_month: {}
+      };
+    }
+    
+    const sessionDates = sessions.map(s => new Date(s.created_at));
+    const oldest = new Date(Math.min(...sessionDates));
+    const newest = new Date(Math.max(...sessionDates));
+    
+    // Group by month
+    const sessionsByMonth = {};
+    sessionDates.forEach(date => {
+      const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+      sessionsByMonth[monthKey] = (sessionsByMonth[monthKey] || 0) + 1;
+    });
+    
+    return {
+      total_sessions: sessions.length,
+      oldest_session: oldest.toISOString(),
+      newest_session: newest.toISOString(),
+      sessions_by_month: sessionsByMonth
+    };
+  }
+  
+  async exportSession(suid, format = "json") {
+    const session = await this.getSession(suid);
+    
+    if (format === "json") {
+      return JSON.stringify(session, null, 2);
+    }
+    
+    if (format === "markdown") {
+      let mdContent = `# Conversation: ${session.summary}\n\n`;
+      mdContent += `**Session ID:** ${session.suid}\n`;
+      mdContent += `**Created:** ${session.created_at}\n\n`;
+      
+      for (const message of session.messages) {
+        const role = message.role.charAt(0).toUpperCase() + message.role.slice(1);
+        const timestamp = message.created_at;
+        
+        mdContent += `## ${role} (${timestamp})\n\n`;
+        
+        for (const content of message.content) {
+          if (content.type === "text") {
+            mdContent += `${content.text}\n\n`;
+          } else if (content.type === "file") {
+            mdContent += `*[File: ${content.path || 'Unknown'}]*\n\n`;
+          }
+        }
+        
+        if (message.searched_files?.length) {
+          mdContent += `*Searched files: ${message.searched_files.join(', ')}*\n\n`;
+        }
+      }
+      
+      return mdContent;
+    }
+    
+    if (format === "txt") {
+      let txtContent = `Conversation: ${session.summary}\n`;
+      txtContent += `Session ID: ${session.suid}\n`;
+      txtContent += `Created: ${session.created_at}\n`;
+      txtContent += "=".repeat(50) + "\n\n";
+      
+      for (const message of session.messages) {
+        const role = message.role.toUpperCase();
+        const timestamp = message.created_at;
+        
+        txtContent += `[${role}] ${timestamp}\n`;
+        
+        for (const content of message.content) {
+          if (content.type === "text") {
+            txtContent += `${content.text}\n`;
+          } else if (content.type === "file") {
+            txtContent += `[FILE: ${content.path || 'Unknown'}]\n`;
+          }
+        }
+        
+        txtContent += "\n" + "-".repeat(30) + "\n\n";
+      }
+      
+      return txtContent;
+    }
+    
+    throw new Error(`Unsupported format: ${format}`);
+  }
+  
+  async cleanupOldSessions(days = 30, dryRun = true) {
+    const sessions = await this.listSessions();
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - days);
+    
+    const oldSessions = sessions
+      .filter(session => new Date(session.created_at) < cutoffDate)
+      .map(session => session.suid);
+    
+    if (!dryRun) {
+      for (const suid of oldSessions) {
+        try {
+          await this.deleteSession(suid);
+          console.log(`Deleted session: ${suid}`);
+        } catch (error) {
+          console.log(`Failed to delete session ${suid}: ${error.message}`);
+        }
+      }
+    }
+    
+    return oldSessions;
+  }
+  
+  async continueSession(suid, message) {
+    const session = await this.getSession(suid);
+    const lastMessage = session.messages[session.messages.length - 1];
+    
+    if (!lastMessage) {
+      throw new Error("Session has no messages to continue from");
+    }
+    
+    return {
+      parent_cuid: lastMessage.cuid,
+      session_summary: session.summary,
+      message_count: session.messages.length
+    };
+  }
+}
+
+// Usage example
+const manager = new SessionManager("your-api-key");
+
+// List all sessions
+const sessions = await manager.listSessions();
+console.log(`Total sessions: ${sessions.length}`);
+
+// Get recent sessions
+const recent = await manager.getRecentSessions(7);
+console.log(`Sessions from last 7 days: ${recent.length}`);
+
+// Search sessions
+const financialSessions = await manager.searchSessions("financial");
+console.log(`Financial-related sessions: ${financialSessions.length}`);
+
+// Get statistics
+const stats = await manager.getSessionStatistics();
+console.log("Session statistics:", stats);
+
+// Export a session
+if (sessions.length > 0) {
+  const markdownExport = await manager.exportSession(sessions[0].suid, "markdown");
+  console.log("Exported session to markdown");
+}
+
+// Cleanup old sessions (dry run)
+const oldSessions = await manager.cleanupOldSessions(30, true);
+console.log(`Found ${oldSessions.length} old sessions`);
+```
+
+  </Tab>
+</Tabs>
+
+## Use Cases
+
+### Conversation Continuity
+
+Continue previous conversations seamlessly:
+
+- **Resume Discussions**: Pick up where you left off in previous sessions
+- **Context Preservation**: Maintain conversation context across multiple interactions
+- **Follow-up Questions**: Ask additional questions about previous topics
+
+### Session Analytics
+
+Analyze conversation patterns and usage:
+
+- **Usage Tracking**: Monitor how often conversations are accessed
+- **Topic Analysis**: Identify common discussion themes
+- **Session Duration**: Analyze conversation length and complexity
+- **User Behavior**: Understand interaction patterns
+
+### Data Management
+
+Organize and maintain conversation history:
+
+- **Archive Management**: Export important conversations for record-keeping
+- **Storage Optimization**: Clean up old or unnecessary sessions
+- **Backup Creation**: Export sessions for backup purposes
+- **Compliance**: Maintain conversation records for audit requirements
+
+### Integration Examples
+
+### Chat Application Integration
+
+<Tabs items={["Python", "JavaScript"]}>
+  <Tab value="Python">
+
+```python
+class ChatApplication:
+    def __init__(self, api_key):
+        self.session_manager = SessionManager(api_key)
+        self.current_session = None
+    
+    def start_new_conversation(self):
+        """Start a new conversation"""
+        self.current_session = None
+        return "New conversation started"
+    
+    def load_conversation(self, suid):
+        """Load an existing conversation"""
+        try:
+            session = self.session_manager.get_session(suid)
+            self.current_session = session
+            return f"Loaded conversation: {session['summary']}"
+        except Exception as e:
+            return f"Failed to load conversation: {e}"
+    
+    def list_recent_conversations(self, days=7):
+        """List recent conversations for quick access"""
+        recent = self.session_manager.get_recent_sessions(days)
+        return [
+            {
+                "suid": s["suid"],
+                "summary": s["summary"],
+                "date": s["created_at"]
+            }
+            for s in recent
+        ]
+    
+    def search_conversations(self, query):
+        """Search through conversation history"""
+        results = self.session_manager.search_sessions(query)
+        return [
+            {
+                "suid": s["suid"],
+                "summary": s["summary"],
+                "relevance": self._calculate_relevance(s["summary"], query)
+            }
+            for s in results
+        ]
+    
+    def export_conversation(self, suid, format="markdown"):
+        """Export conversation for sharing or archiving"""
+        return self.session_manager.export_session(suid, format)
+    
+    def _calculate_relevance(self, summary, query):
+        """Simple relevance scoring"""
+        query_words = query.lower().split()
+        summary_words = summary.lower().split()
+        
+        matches = sum(1 for word in query_words if word in summary_words)
+        return matches / len(query_words) if query_words else 0
+
+# Usage in a chat interface
+app = ChatApplication("your-api-key")
+
+# Show recent conversations in sidebar
+recent_conversations = app.list_recent_conversations()
+print("Recent conversations:")
+for conv in recent_conversations[:5]:
+    print(f"- {conv['summary'][:50]}... ({conv['date']})")
+
+# Search functionality
+search_results = app.search_conversations("financial report")
+print(f"\nFound {len(search_results)} conversations about financial reports")
+```
+
+  </Tab>
+  <Tab value="JavaScript">
+
+```javascript
+class ChatApplication {
+  constructor(apiKey) {
+    this.sessionManager = new SessionManager(apiKey);
+    this.currentSession = null;
+  }
+  
+  startNewConversation() {
+    this.currentSession = null;
+    return "New conversation started";
+  }
+  
+  async loadConversation(suid) {
+    try {
+      const session = await this.sessionManager.getSession(suid);
+      this.currentSession = session;
+      return `Loaded conversation: ${session.summary}`;
+    } catch (error) {
+      return `Failed to load conversation: ${error.message}`;
+    }
+  }
+  
+  async listRecentConversations(days = 7) {
+    const recent = await this.sessionManager.getRecentSessions(days);
+    return recent.map(s => ({
+      suid: s.suid,
+      summary: s.summary,
+      date: s.created_at
+    }));
+  }
+  
+  async searchConversations(query) {
+    const results = await this.sessionManager.searchSessions(query);
+    return results.map(s => ({
+      suid: s.suid,
+      summary: s.summary,
+      relevance: this._calculateRelevance(s.summary, query)
+    }));
+  }
+  
+  async exportConversation(suid, format = "markdown") {
+    return await this.sessionManager.exportSession(suid, format);
+  }
+  
+  _calculateRelevance(summary, query) {
+    const queryWords = query.toLowerCase().split();
+    const summaryWords = summary.toLowerCase().split();
+    
+    const matches = queryWords.filter(word => 
+      summaryWords.some(summaryWord => summaryWord.includes(word))
+    ).length;
+    
+    return queryWords.length > 0 ? matches / queryWords.length : 0;
+  }
+}
+
+// Usage in a chat interface
+const app = new ChatApplication("your-api-key");
+
+// Show recent conversations in sidebar
+const recentConversations = await app.listRecentConversations();
+console.log("Recent conversations:");
+recentConversations.slice(0, 5).forEach(conv => {
+  console.log(`- ${conv.summary.substring(0, 50)}... (${conv.date})`);
+});
+
+// Search functionality
+const searchResults = await app.searchConversations("financial report");
+console.log(`\nFound ${searchResults.length} conversations about financial reports`);
+```
+
+  </Tab>
+</Tabs>
+
+## Best Practices
+
+### Session Management
+
+1. **Regular Cleanup**: Periodically clean up old sessions to manage storage
+2. **Meaningful Summaries**: Ensure session summaries are descriptive for easy searching
+3. **Backup Important Sessions**: Export critical conversations for long-term storage
+4. **Privacy Considerations**: Delete sensitive conversations when no longer needed
+
+### Performance Optimization
+
+1. **Pagination**: For applications with many sessions, implement pagination
+2. **Caching**: Cache frequently accessed sessions locally
+3. **Lazy Loading**: Load session details only when needed
+4. **Search Indexing**: Consider maintaining a local search index for faster queries
+
+### User Experience
+
+1. **Quick Access**: Provide easy access to recent conversations
+2. **Search Functionality**: Implement robust search across conversation history
+3. **Visual Organization**: Group sessions by date, topic, or project
+4. **Export Options**: Allow users to export conversations in multiple formats
+
+## Error Handling
+
+### Common Error Responses
+
+```json
+{
+  "error": "Session not found",
+  "code": "SESSION_NOT_FOUND"
+}
+```
+
+```json
+{
+  "error": "Session access denied",
+  "code": "SESSION_ACCESS_DENIED"
+}
+```
+
+### Error Codes
+
+- `SESSION_NOT_FOUND` - The specified session does not exist
+- `SESSION_ACCESS_DENIED` - User does not have access to this session
+- `SESSION_DELETED` - Session has been permanently deleted
+- `INVALID_SESSION_ID` - Session ID format is invalid
+
+### Handling Session Errors
+
+<Tabs items={["Python", "JavaScript"]}>
+  <Tab value="Python">
+
+```python
+def safe_get_session(manager, suid, default=None):
+    """Safely get session with error handling"""
+    try:
+        return manager.get_session(suid)
+    except requests.exceptions.HTTPError as e:
+        if e.response.status_code == 404:
+            print(f"Session {suid} not found")
+            return default
+        elif e.response.status_code == 403:
+            print(f"Access denied to session {suid}")
+            return default
+        else:
+            print(f"Error accessing session {suid}: {e}")
+            return default
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        return default
+
+def safe_delete_session(manager, suid):
+    """Safely delete session with confirmation"""
+    try:
+        # Get session info first
+        session = manager.get_session(suid)
+        print(f"About to delete: {session['summary']}")
+        
+        # Confirm deletion
+        confirm = input("Are you sure? (y/N): ")
+        if confirm.lower() == 'y':
+            result = manager.delete_session(suid)
+            if result:
+                print("Session deleted successfully")
+                return True
+        else:
+            print("Deletion cancelled")
+            return False
+    except Exception as e:
+        print(f"Error deleting session: {e}")
+        return False
+
+# Usage
+session = safe_get_session(manager, "sess_abc123xyz")
+if session:
+    print(f"Session loaded: {session['summary']}")
+else:
+    print("Session could not be loaded")
+```
+
+  </Tab>
+  <Tab value="JavaScript">
+
+```javascript
+async function safeGetSession(manager, suid, defaultValue = null) {
+  try {
+    return await manager.getSession(suid);
+  } catch (error) {
+    if (error.message.includes("404")) {
+      console.log(`Session ${suid} not found`);
+      return defaultValue;
+    } else if (error.message.includes("403")) {
+      console.log(`Access denied to session ${suid}`);
+      return defaultValue;
+    } else {
+      console.log(`Error accessing session ${suid}: ${error.message}`);
+      return defaultValue;
+    }
+  }
+}
+
+async function safeDeleteSession(manager, suid) {
+  try {
+    // Get session info first
+    const session = await manager.getSession(suid);
+    console.log(`About to delete: ${session.summary}`);
+    
+    // In a real application, you'd show a confirmation dialog
+    const confirmed = confirm("Are you sure you want to delete this session?");
+    
+    if (confirmed) {
+      const result = await manager.deleteSession(suid);
+      if (result) {
+        console.log("Session deleted successfully");
+        return true;
+      }
+    } else {
+      console.log("Deletion cancelled");
+      return false;
+    }
+  } catch (error) {
+    console.log(`Error deleting session: ${error.message}`);
+    return false;
+  }
+}
+
+// Usage
+const session = await safeGetSession(manager, "sess_abc123xyz");
+if (session) {
+  console.log(`Session loaded: ${session.summary}`);
+} else {
+  console.log("Session could not be loaded");
+}
+```
+
+  </Tab>
+</Tabs>
