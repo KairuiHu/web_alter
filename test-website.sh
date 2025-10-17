@@ -4,7 +4,7 @@ echo "🧪 Testing Synvo Docs Website Access"
 echo "===================================="
 
 SERVER_IP="54.206.138.202"
-PORT="8081"
+PORT="80"
 
 echo "1. Testing local access..."
 if curl -s -I http://localhost:$PORT | head -1 | grep -q "200 OK"; then

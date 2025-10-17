@@ -5,7 +5,7 @@ echo "=============================================="
 
 DOMAIN="docs.synvo.ai"
 SERVER_IP="54.206.138.202"
-PORT="8081"
+PORT="80"
 
 echo "1. Testing DNS resolution..."
 DNS_IP=$(nslookup $DOMAIN 2>/dev/null | grep -A1 "Name:" | tail -1 | awk '{print $2}')

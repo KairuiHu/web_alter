@@ -25,9 +25,9 @@ if npm run build; then
     
     echo "🧪 Testing application..."
     sleep 2
-    if curl -s -I http://localhost:8081 | head -1 | grep -q "200 OK"; then
+    if curl -s -I http://localhost:80 | head -1 | grep -q "200 OK"; then
         echo "✅ Application is running!"
-        echo "🌐 Website: http://54.206.138.202:8081"
+        echo "🌐 Website: http://docs.synvo.ai"
         
         # Show PM2 status
         echo ""
