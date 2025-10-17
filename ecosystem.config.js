@@ -3,7 +3,7 @@ module.exports = {
     name: 'synvo-docs',
     script: 'npm',
     args: 'start',
-    cwd: '/home/jkyang/kai/eta-docs',
+    cwd: '/data/kairui/web_alter',
     env: {
       NODE_ENV: 'production',
       PORT: 8080
