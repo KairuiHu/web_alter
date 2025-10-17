@@ -11,10 +11,13 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "Eta",
-    template: "%s | Eta",
+    default: "Synvo",
+    template: "%s | Synvo",
   },
-  description: "An incredibly fast embedded JS template engine",
+  description: "Multimodal Contextualization System for AI Agents",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function Layout({ children }: LayoutProps<"/">) {
