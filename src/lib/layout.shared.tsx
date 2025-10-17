@@ -1,5 +1,6 @@
 import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
 import { ExternalLinkIcon } from "lucide-react";
+import Image from "next/image";
 /**
  * Shared layout configurations
  *
@@ -12,17 +13,23 @@ export function baseOptions(): BaseLayoutProps {
     nav: {
       title: (
         <>
-          <span className="text-2xl align-top leading-none -mt-2">η</span>
-          <span>Eta</span>
+          <Image
+            src="/assets/logo-only.svg"
+            alt="Synvo Logo"
+            width={32}
+            height={32}
+            className="align-top"
+          />
+          <span>Synvo</span>
         </>
       ),
     },
-    githubUrl: "https://github.com/bgub/eta",
+    githubUrl: "https://github.com/synvo-ai",
     // see https://fumadocs.dev/docs/ui/navigation/links
     links: [
       {
         text: "Discord",
-        url: "https://discord.gg/27gGncJYE2",
+        url: "https://discord.com/",
         icon: <ExternalLinkIcon />,
       },
       {

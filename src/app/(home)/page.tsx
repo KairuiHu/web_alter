@@ -1,5 +1,6 @@
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import Link from "next/link";
+import Image from "next/image";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 
@@ -9,10 +10,14 @@ export default function HomePage() {
       {/* Hero Section */}
       <div className="mx-auto max-w-3xl text-center">
         <div className="mb-4 flex items-center justify-center gap-3">
-          <span className="text-6xl align-top font-bold leading-none -mt-6">
-            η
-          </span>
-          <h1 className="text-4xl font-bold sm:text-5xl">Eta</h1>
+          <Image
+            src="/assets/logo-only.svg"
+            alt="Synvo Logo"
+            width={64}
+            height={64}
+            className="align-top"
+          />
+          <h1 className="text-4xl font-bold sm:text-5xl">Synvo</h1>
         </div>
         <p className="text-fd-muted-foreground text-balance">
           Lightweight, powerful, pluggable embedded JS template engine. Written

@@ -21,12 +21,12 @@ const config: NextConfig = {
       // Root redirect to version 1.0
       {
         source: "/docs",
-        destination: "/docs/1.0/intro/quickstart",
+        destination: "/docs/1.0/intro/cookbook",
         permanent: false,
       },
       {
         source: "/docs/1.0",
-        destination: "/docs/1.0/intro/quickstart",
+        destination: "/docs/1.0/intro/cookbook",
         permanent: false,
       },
 

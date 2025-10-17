@@ -1,7 +1,7 @@
 ---
 id: quickstart
 title: Quickstart
-slug: /
+slug: /quickstart
 ---
 
 Install Eta
