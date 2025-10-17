@@ -20,8 +20,7 @@ export default function HomePage() {
           <h1 className="text-4xl font-bold sm:text-5xl">Synvo</h1>
         </div>
         <p className="text-fd-muted-foreground text-balance">
-          Lightweight, powerful, pluggable embedded JS template engine. Written
-          in TypeScript – use it in Node, Deno, or the browser.
+          Multimodal Contextualization System for AI Agents.
         </p>
       </div>
 
@@ -32,12 +31,6 @@ export default function HomePage() {
           className={cn(buttonVariants({ color: "primary" }), "px-4 py-2")}
         >
           Get Started
-        </Link>
-        <Link
-          href="/playground"
-          className={cn(buttonVariants({ color: "outline" }), "px-4 py-2")}
-        >
-          Open Playground
         </Link>
       </div>
 

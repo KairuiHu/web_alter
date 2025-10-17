@@ -32,10 +32,6 @@ export function baseOptions(): BaseLayoutProps {
         url: "https://discord.com/",
         icon: <ExternalLinkIcon />,
       },
-      {
-        text: "Playground",
-        url: "/playground",
-      },
     ],
   };
 }
