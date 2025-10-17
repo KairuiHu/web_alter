@@ -21,6 +21,9 @@ export default function HomePage() {
         </div>
         <p className="text-fd-muted-foreground text-balance">
           Multimodal Contextualization System for AI Agents.
+          Synvo AI adds long-term memory, deep contextual understanding, 
+          and on-device performance for AI Agents.
+          Faster, smarter, and truly human-aware.
         </p>
       </div>
 
@@ -34,128 +37,90 @@ export default function HomePage() {
         </Link>
       </div>
 
-      {/* EJS Comparison and Code Examples Side by Side */}
+      {/* Features and Code Examples Side by Side */}
       <div className="mx-auto max-w-6xl px-4">
         <div className="grid gap-8 lg:grid-cols-2">
           <div>
             <h2 className="mb-4 text-2xl font-bold">
-              A faster, more lightweight, and more configurable EJS alternative
+              Advanced AI Capabilities
             </h2>
-            <p className="mb-4 text-fd-muted-foreground">Eta vs. EJS:</p>
-            <ul className="space-y-2 text-sm">
-              <li>
-                • Eta{" "}
-                <strong>
-                  <a
-                    href="https://deno.land/x/eta"
-                    className="text-fd-primary hover:underline"
-                  >
-                    supports Deno
-                  </a>
-                </strong>
-                , out-of-the-box
-              </li>
-              <li>
-                • Eta supports <strong>layouts</strong> out of the box
-              </li>
-              <li>
-                • Eta allows <strong>left whitespace control</strong> (with{" "}
-                <code className="rounded bg-fd-muted px-1">-</code>
-                ), something that doesn't work in EJS because EJS uses{" "}
-                <code className="rounded bg-fd-muted px-1">-</code> on the left
-                side to indicate that the value shouldn't be escaped. Instead,
-                Eta uses <code className="rounded bg-fd-muted px-1">~</code> to
-                output a raw value
-              </li>
-              <li>
-                • Eta gives you{" "}
-                <strong>more flexibility with delimeters</strong> -- you could
-                set them to{" "}
-                <code className="rounded bg-fd-muted px-1">{"{{"}</code> and{" "}
-                <code className="rounded bg-fd-muted px-1">{"}}"}</code>, for
-                example, while with EJS this isn't possible
-              </li>
-              <li>
-                • Eta adds <strong>plugin support</strong>
-              </li>
-              <li>
-                • Comments in Eta use{" "}
-                <code className="rounded bg-fd-muted px-1">{"/* ... */"}</code>{" "}
-                which allows multiline commenting and is more consistent
-              </li>
-              <li>
-                • Eta doesn't break with delimiters inside strings and comments.{" "}
-                <em>
-                  Example:{" "}
-                  <code className="rounded bg-fd-muted px-1">
-                    {'<%= "%>" %>'}
-                  </code>{" "}
-                  works in Eta, while it breaks in EJS
-                </em>
-              </li>
-              <li>
-                • Eta exposes <strong>Typescript types</strong> and distributes
-                a UMD build
-              </li>
-              <li>
-                • Eta allows custom tag-type prefixes.{" "}
-                <em>
-                  Example: you could change{" "}
-                  <code className="rounded bg-fd-muted px-1">{"<%="}</code> to{" "}
-                  <code className="rounded bg-fd-muted px-1">{"<%*"}</code>
-                </em>
-              </li>
-              <li>
-                • Eta throws more informative errors.{" "}
-                <em>
-                  If you accidentally leave a tag, string, or multiline comment
-                  unclosed, Eta will tell you where the problem is
-                </em>
-              </li>
-            </ul>
+            <p className="mb-4 text-fd-muted-foreground">Key Features:</p>
+            <div className="space-y-6">
+              <div>
+                <h3 className="mb-2 text-lg font-semibold">Persistent Memory</h3>
+                <p className="text-sm text-fd-muted-foreground">
+                  Enables AI to retain and recall context across sessions, delivering consistent and coherent understanding over time.
+                </p>
+              </div>
+              <div>
+                <h3 className="mb-2 text-lg font-semibold">Contextual Intelligence</h3>
+                <p className="text-sm text-fd-muted-foreground">
+                  Transforms unstructured multimodal data into structured context that makes AI responses more accurate and human-like.
+                </p>
+              </div>
+              <div>
+                <h3 className="mb-2 text-lg font-semibold">On-Device Execution</h3>
+                <p className="text-sm text-fd-muted-foreground">
+                  Delivers low-latency, privacy-preserving AI by processing context and memory directly on the device.
+                </p>
+              </div>
+            </div>
           </div>
           <div>
             <Tabs
-              items={["Example 1", "Example 2", "Partials", "Layouts"]}
+              items={["Create API Key", "Upload File", "Query Document"]}
               className="w-full"
             >
-              <Tab value="Example 1">
+              <Tab value="Create API Key">
                 <pre className="overflow-x-auto rounded-lg bg-fd-muted p-4 text-sm">
-                  <code>{`Users:
+                  <code>{`import requests
 
-<ul>
-<% it.users.forEach(function(user){ %>
-  <li><%= user %></li>
-<% }) %>
-</ul>`}</code>
+# Create API key
+response = requests.post(
+    "https://api.synvo.ai/user/api_keys/create",
+    data={"name": "My API Key"},
+    headers={"X-API-Key": session_token}
+)
+
+api_key = response.json()["api_key"]
+print(f"API key created: {api_key}")`}</code>
                 </pre>
               </Tab>
-              <Tab value="Example 2">
+              <Tab value="Upload File">
                 <pre className="overflow-x-auto rounded-lg bg-fd-muted p-4 text-sm">
-                  <code>{`<%= await getSomeValue() %>
-    
-<% /* Eta supports multiline comments,
-which is really useful */ %>
+                  <code>{`# Upload document for AI processing
+with open("document.pdf", "rb") as f:
+    response = requests.post(
+        "https://api.synvo.ai/file/upload",
+        files={"file": f},
+        data={
+            "path": "/",
+            "build_memory": "true"
+        },
+        headers={"X-API-Key": api_key}
+    )
 
-<%= "<%" %>`}</code>
+file_id = response.json()["file_id"]`}</code>
                 </pre>
               </Tab>
-              <Tab value="Partials">
+              <Tab value="Query Document">
                 <pre className="overflow-x-auto rounded-lg bg-fd-muted p-4 text-sm">
-                  <code>{`<%~ include("mypartial") %>
+                  <code>{`# Query your document with AI
+payload = {
+    "messages": [{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "Summarize this document"},
+            {"type": "file", "file_id": file_id}
+        ]
+    }]
+}
 
-<%~ include('./navbar', { pages: [
-  'home',
-  'about',
-  'users'
-] }) %>`}</code>
-                </pre>
-              </Tab>
-              <Tab value="Layouts">
-                <pre className="overflow-x-auto rounded-lg bg-fd-muted p-4 text-sm">
-                  <code>{`<% layout("layouts/basic") %>
-
-<p>This will be rendered into a layout</p>`}</code>
+response = requests.post(
+    "https://api.synvo.ai/ai/query",
+    data={"payload": json.dumps(payload), "model": "synvo"},
+    headers={"X-API-Key": api_key}
+)`}</code>
                 </pre>
               </Tab>
             </Tabs>
