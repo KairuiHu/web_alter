@@ -1,0 +1,1858 @@
+openapi: 3.0.1
+info:
+  title: Synvo AI HTTP API
+  version: 0.1.0
+  description: |
+    Public HTTP API used by the Synvo AI Dashboard. This document focuses on non-auth endpoints used from the web app: Files, AI Query, History, and API Keys.
+
+    Notes
+    - Base path in the app is served via /api proxy. See servers below.
+    - Authentication: endpoints accept either Bearer token or session cookie. The app also refreshes tokens automatically.
+    - Response schemas may be simplified for readability; real responses can include additional fields.
+  contact:
+    name: Synvo AI
+  license:
+    name: Proprietary
+servers:
+  - url: /api
+    description: Dev server proxied by Vite
+
+security:
+  - apiKeyAuth: []
+
+tags:
+  - name: Files
+    description: File and directory management operations
+  - name: AI
+    description: AI query and inference endpoints
+  - name: History
+    description: Session history management
+  - name: API Keys
+    description: API key management
+  - name: Feedback
+    description: Message feedback and rating operations
+  - name: Metadata
+    description: File metadata operations
+
+paths:
+  /file/create_dir:
+    post:
+      tags: [Files]
+      summary: Create a directory if not exists
+      description: Creates a virtual directory in Azure Blob Storage by uploading a .keep marker file
+      operationId: createDirectory
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                path:
+                  type: string
+                  description: Directory path (e.g., "/", "/docs")
+                  default: "/"
+      responses:
+        '200':
+          description: Directory exists or created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Directory created successfully at /docs"
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+      x-codeSamples:
+        - lang: cURL
+          label: curl
+          source: |
+            curl -X POST "https://api.synvo.ai/file/create_dir" \
+              -H "X-API-Key: ${API-KEY}" \
+              -H "Content-Type: application/x-www-form-urlencoded" \
+              --data-urlencode "path=/docs"
+        - lang: Python
+          label: Python (requests)
+          source: |
+            import requests
+
+            token = "<BEARER_TOKEN>"
+            url = "https://api.synvo.ai/file/create_dir"
+            data = {"path": "/docs"}
+            headers = {"X-API-Key": f"{token}"}
+
+            response = requests.post(url, data=data, headers=headers, timeout=30)
+            response.raise_for_status()
+            print(response.json())
+        - lang: JavaScript
+          label: JavaScript (fetch)
+          source: |
+            const token = "<BEARER_TOKEN>";
+            const params = new URLSearchParams({ path: "/docs" });
+
+            const response = await fetch("https://api.synvo.ai/file/create_dir", {
+              method: "POST",
+              headers: {
+                "X-API-Key": `${token}`,
+              },
+              body: params,
+            });
+
+            if (!response.ok) {
+              throw new Error(`Request failed: ${response.status}`);
+            }
+
+            console.log(await response.json());
+
+  /file/list:
+    get:
+      tags: [Files]
+      summary: List directory contents
+      description: Lists files and directories at a given path, optionally recursive with version tracking
+      operationId: listFiles
+      parameters:
+        - in: query
+          name: path
+          schema:
+            type: string
+            default: "/"
+          description: Directory path
+        - in: query
+          name: recursive
+          schema:
+            type: boolean
+            default: true
+          description: If true, include nested items and return tree structure
+        - in: query
+          name: version
+          schema:
+            type: string
+          description: Optional file version to check if refresh is needed
+      responses:
+        '200':
+          description: Directory listing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FileItem'
+                  tree:
+                    type: object
+                    description: Nested tree structure (only when recursive=true)
+                  version:
+                    type: string
+                    description: Current file version
+                  need_refresh_file:
+                    type: boolean
+                    description: Whether client needs to refresh
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Directory not found
+      x-codeSamples:
+        - lang: cURL
+          label: curl
+          source: |
+            curl -X GET "https://api.synvo.ai/file/list?path=/project&recursive=true" \
+              -H "X-API-Key: ${API-KEY}"
+        - lang: Python
+          label: Python (requests)
+          source: |
+            import requests
+
+            token = "<BEARER_TOKEN>"
+            url = "https://api.synvo.ai/file/list"
+            params = {"path": "/project", "recursive": True}
+            headers = {"X-API-Key": f"{token}"}
+
+            response = requests.get(url, params=params, headers=headers, timeout=30)
+            response.raise_for_status()
+            print(response.json())
+        - lang: JavaScript
+          label: JavaScript (fetch)
+          source: |
+            const token = "<BEARER_TOKEN>";
+            const params = new URLSearchParams({
+              path: "/project",
+              recursive: "true"
+            });
+
+            const response = await fetch(`https://api.synvo.ai/file/list?${params}`, {
+              method: "GET",
+              headers: {
+                "X-API-Key": `${token}`,
+              },
+            });
+
+            if (!response.ok) {
+              throw new Error(`Request failed: ${response.status}`);
+            }
+
+            console.log(await response.json());
+
+  /file/delete/{file_id}:
+    delete:
+      tags: [Files]
+      summary: Delete a file by id
+      description: Deletes a file or directory and removes it from the vector database
+      operationId: deleteFile
+      parameters:
+        - in: path
+          name: file_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "File deleted successfully"
+        '401':
+          description: Unauthorized
+        '404':
+          description: File not found
+      x-codeSamples:
+        - lang: cURL
+          label: curl
+          source: |
+            curl -X DELETE "https://api.synvo.ai/file/delete/abc123xyz" \
+              -H "X-API-Key: ${API-KEY}"
+        - lang: Python
+          label: Python (requests)
+          source: |
+            import requests
+
+            token = "<BEARER_TOKEN>"
+            file_id = "abc123xyz"
+            url = f"https://api.synvo.ai/file/delete/{file_id}"
+            headers = {"X-API-Key": f"{token}"}
+
+            response = requests.delete(url, headers=headers, timeout=30)
+            response.raise_for_status()
+            print(response.json())
+        - lang: JavaScript
+          label: JavaScript (fetch)
+          source: |
+            const token = "<BEARER_TOKEN>";
+            const fileId = "abc123xyz";
+
+            const response = await fetch(`https://api.synvo.ai/file/delete/${fileId}`, {
+              method: "DELETE",
+              headers: {
+                "X-API-Key": `${token}`,
+              },
+            });
+
+            if (!response.ok) {
+              throw new Error(`Request failed: ${response.status}`);
+            }
+
+            console.log(await response.json());
+
+  /file/upload:
+    post:
+      tags: [Files]
+      summary: Upload a file
+      description: Uploads a file to the specified path, builds memory index if requested, and stores in Azure Blob Storage
+      operationId: uploadFile
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: File to upload
+                path:
+                  type: string
+                  default: "/"
+                  description: Upload path
+                build_memory:
+                  type: boolean
+                  default: true
+                  description: If true, immediately build memory/index
+                disable_lazy_metadata:
+                  type: boolean
+                  default: false
+                  description: If true, force parsing metadata now
+      responses:
+        '200':
+          description: Upload accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  filename:
+                    type: string
+                  path:
+                    type: string
+                  renamed:
+                    type: boolean
+                    description: True if filename was changed to avoid conflict
+                  file_id:
+                    type: string
+                  timestamp:
+                    type: string
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+      x-codeSamples:
+        - lang: cURL
+          label: curl
+          source: |
+            curl -X POST "https://api.synvo.ai/file/upload" \
+              -H "X-API-Key: ${API-KEY}" \
+              -F "file=@/path/to/document.pdf" \
+              -F "path=/" \
+              -F "build_memory=true" \
+              -F "disable_lazy_metadata=false"
+        - lang: Python
+          label: Python (requests)
+          source: |
+            import requests
+
+            token = "<BEARER_TOKEN>"
+            url = "https://api.synvo.ai/file/upload"
+            headers = {"X-API-Key": f"{token}"}
+
+            with open("/path/to/document.pdf", "rb") as f:
+                files = {"file": f}
+                data = {
+                    "path": "/",
+                    "build_memory": "true",
+                    "disable_lazy_metadata": "false"
+                }
+                response = requests.post(url, files=files, data=data, headers=headers, timeout=60)
+
+            response.raise_for_status()
+            print(response.json())
+        - lang: JavaScript
+          label: JavaScript (fetch)
+          source: |
+            const token = "<BEARER_TOKEN>";
+            const fileInput = document.querySelector('input[type="file"]');
+            const file = fileInput.files[0];
+
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("path", "/");
+            formData.append("build_memory", "true");
+            formData.append("disable_lazy_metadata", "false");
+
+            const response = await fetch("https://api.synvo.ai/file/upload", {
+              method: "POST",
+              headers: {
+                "X-API-Key": `${token}`,
+              },
+              body: formData,
+            });
+
+            if (!response.ok) {
+              throw new Error(`Request failed: ${response.status}`);
+            }
+
+            console.log(await response.json());
+
+  /file/download:
+    get:
+      tags: [Files]
+      summary: Download a file by id
+      description: Returns a signed URL for downloading the file from Azure Blob Storage
+      operationId: downloadFile
+      parameters:
+        - in: query
+          name: file_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: File download information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    description: Signed URL for file download (valid for 1 hour)
+                  name:
+                    type: string
+                    description: Original filename
+                  file_type:
+                    type: string
+                    description: MIME type or file category
+                  file_id:
+                    type: string
+        '401':
+          description: Unauthorized
+        '404':
+          description: File not found
+      x-codeSamples:
+        - lang: cURL
+          label: curl
+          source: |
+            curl -X GET "https://api.synvo.ai/file/download?file_id=abc123xyz" \
+              -H "X-API-Key: ${API-KEY}"
+        - lang: Python
+          label: Python (requests)
+          source: |
+            import requests
+
+            token = "<BEARER_TOKEN>"
+            file_id = "abc123xyz"
+            url = "https://api.synvo.ai/file/download"
+            params = {"file_id": file_id}
+            headers = {"X-API-Key": f"{token}"}
+
+            response = requests.get(url, params=params, headers=headers, timeout=30)
+            response.raise_for_status()
+            
+            # Get the signed URL and download the file
+            data = response.json()
+            download_url = data["url"]
+            file_response = requests.get(download_url, timeout=60)
+            
+            with open(data["name"], "wb") as f:
+                f.write(file_response.content)
+        - lang: JavaScript
+          label: JavaScript (fetch)
+          source: |
+            const token = "<BEARER_TOKEN>";
+            const fileId = "abc123xyz";
+
+            const response = await fetch(`https://api.synvo.ai/file/download?file_id=${fileId}`, {
+              method: "GET",
+              headers: {
+                "X-API-Key": `${token}`,
+              },
+            });
+
+            if (!response.ok) {
+              throw new Error(`Request failed: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log("Download URL:", data.url);
+            
+            // Open the download URL in a new window
+            window.open(data.url, "_blank");
+
+  /file/move:
+    post:
+      tags: [Files]
+      summary: Move or rename a file or directory
+      description: Moves a file or directory to a new location and updates all database references
+      operationId: moveFile
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - src
+                - dest
+              properties:
+                src:
+                  type: string
+                  description: Source path (e.g., "/project/report.pdf")
+                dest:
+                  type: string
+                  description: Destination path (e.g., "/archive/report.pdf")
+      responses:
+        '200':
+          description: Successfully moved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  file_moves:
+                    type: array
+                    items:
+                      type: array
+                      items:
+                        type: string
+                      minItems: 2
+                      maxItems: 2
+                    description: Array of [old_path, new_path] tuples
+        '401':
+          description: Unauthorized
+        '404':
+          description: Source not found
+        '409':
+          description: Destination already exists
+      x-codeSamples:
+        - lang: cURL
+          label: curl
+          source: |
+            curl -X POST "https://api.synvo.ai/file/move" \
+              -H "X-API-Key: ${API-KEY}" \
+              -H "Content-Type: application/x-www-form-urlencoded" \
+              --data-urlencode "src=/project/report.pdf" \
+              --data-urlencode "dest=/archive/report.pdf"
+        - lang: Python
+          label: Python (requests)
+          source: |
+            import requests
+
+            token = "<BEARER_TOKEN>"
+            url = "https://api.synvo.ai/file/move"
+            data = {
+                "src": "/project/report.pdf",
+                "dest": "/archive/report.pdf"
+            }
+            headers = {"X-API-Key": f"{token}"}
+
+            response = requests.post(url, data=data, headers=headers, timeout=30)
+            response.raise_for_status()
+            print(response.json())
+        - lang: JavaScript
+          label: JavaScript (fetch)
+          source: |
+            const token = "<BEARER_TOKEN>";
+            const params = new URLSearchParams({
+              src: "/project/report.pdf",
+              dest: "/archive/report.pdf"
+            });
+
+            const response = await fetch("https://api.synvo.ai/file/move", {
+              method: "POST",
+              headers: {
+                "X-API-Key": `${token}`,
+              },
+              body: params,
+            });
+
+            if (!response.ok) {
+              throw new Error(`Request failed: ${response.status}`);
+            }
+
+            console.log(await response.json());
+
+  /file/thumbnail:
+    get:
+      tags: [Files]
+      summary: Get file thumbnail
+      description: Returns a thumbnail image for supported file types (images, PDFs, videos)
+      operationId: getFileThumbnail
+      parameters:
+        - in: query
+          name: file_id
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: max_size
+          schema:
+            type: integer
+            default: 200
+          description: Maximum thumbnail size (width or height)
+      responses:
+        '200':
+          description: Thumbnail image
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: Unauthorized
+        '404':
+          description: File not found
+      x-codeSamples:
+        - lang: cURL
+          label: curl
+          source: |
+            curl -X GET "https://api.synvo.ai/file/thumbnail?file_id=abc123xyz&max_size=200" \
+              -H "X-API-Key: ${API-KEY}" \
+              -o thumbnail.jpg
+        - lang: Python
+          label: Python (requests)
+          source: |
+            import requests
+
+            token = "<BEARER_TOKEN>"
+            file_id = "abc123xyz"
+            url = "https://api.synvo.ai/file/thumbnail"
+            params = {"file_id": file_id, "max_size": 200}
+            headers = {"X-API-Key": f"{token}"}
+
+            response = requests.get(url, params=params, headers=headers, timeout=30)
+            response.raise_for_status()
+            
+            with open("thumbnail.jpg", "wb") as f:
+                f.write(response.content)
+        - lang: JavaScript
+          label: JavaScript (fetch)
+          source: |
+            const token = "<BEARER_TOKEN>";
+            const fileId = "abc123xyz";
+            const params = new URLSearchParams({
+              file_id: fileId,
+              max_size: "200"
+            });
+
+            const response = await fetch(`https://api.synvo.ai/file/thumbnail?${params}`, {
+              method: "GET",
+              headers: {
+                "X-API-Key": `${token}`,
+              },
+            });
+
+            if (!response.ok) {
+              throw new Error(`Request failed: ${response.status}`);
+            }
+
+            const blob = await response.blob();
+            const imageUrl = URL.createObjectURL(blob);
+            
+            // Display thumbnail in an img element
+            const img = document.createElement("img");
+            img.src = imageUrl;
+            document.body.appendChild(img);
+
+  /file/status/{file_id}:
+    get:
+      tags: [Files]
+      summary: Get file processing status
+      description: Returns the current processing status of a file (PENDING, COMPLETED, FAILED)
+      operationId: getFileStatus
+      parameters:
+        - in: path
+          name: file_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: File status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  file_id:
+                    type: string
+                  status:
+                    type: string
+                    enum: [PENDING, COMPLETED, FAILED, UNKNOWN]
+        '401':
+          description: Unauthorized
+      x-codeSamples:
+        - lang: cURL
+          label: curl
+          source: |
+            curl -X GET "https://api.synvo.ai/file/status/abc123xyz" \
+              -H "X-API-Key: ${API-KEY}"
+        - lang: Python
+          label: Python (requests)
+          source: |
+            import requests
+
+            token = "<BEARER_TOKEN>"
+            file_id = "abc123xyz"
+            url = f"https://api.synvo.ai/file/status/{file_id}"
+            headers = {"X-API-Key": f"{token}"}
+
+            response = requests.get(url, headers=headers, timeout=30)
+            response.raise_for_status()
+            print(response.json())
+        - lang: JavaScript
+          label: JavaScript (fetch)
+          source: |
+            const token = "<BEARER_TOKEN>";
+            const fileId = "abc123xyz";
+
+            const response = await fetch(`https://api.synvo.ai/file/status/${fileId}`, {
+              method: "GET",
+              headers: {
+                "X-API-Key": `${token}`,
+              },
+            });
+
+            if (!response.ok) {
+              throw new Error(`Request failed: ${response.status}`);
+            }
+
+            console.log(await response.json());
+
+  /webpage/add:
+    post:
+      tags: [Files]
+      summary: Add a webpage
+      description: Crawls and indexes a webpage as a document
+      operationId: addWebpage
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - url
+              properties:
+                url:
+                  type: string
+                  description: URL of the webpage to add
+                path:
+                  type: string
+                  default: "/web"
+                  description: Path to store the webpage
+                name:
+                  type: string
+                  default: "new-web-page"
+                  description: Display name for the webpage
+                screenshot:
+                  type: string
+                  default: ""
+                  description: Base64 encoded screenshot (optional)
+                build_memory:
+                  type: boolean
+                  default: true
+                disable_lazy_metadata:
+                  type: boolean
+                  default: true
+      responses:
+        '200':
+          description: Webpage added
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  filename:
+                    type: string
+                  path:
+                    type: string
+                  file_id:
+                    type: string
+                  timestamp:
+                    type: string
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+      x-codeSamples:
+        - lang: cURL
+          label: curl
+          source: |
+            curl -X POST "https://api.synvo.ai/webpage/add" \
+              -H "X-API-Key: ${API-KEY}" \
+              -H "Content-Type: application/x-www-form-urlencoded" \
+              --data-urlencode "url=https://example.com/article" \
+              --data-urlencode "path=/web" \
+              --data-urlencode "name=Example Article" \
+              --data-urlencode "build_memory=true"
+        - lang: Python
+          label: Python (requests)
+          source: |
+            import requests
+
+            token = "<BEARER_TOKEN>"
+            url = "https://api.synvo.ai/webpage/add"
+            data = {
+                "url": "https://example.com/article",
+                "path": "/web",
+                "name": "Example Article",
+                "build_memory": True
+            }
+            headers = {"X-API-Key": f"{token}"}
+
+            response = requests.post(url, data=data, headers=headers, timeout=60)
+            response.raise_for_status()
+            print(response.json())
+        - lang: JavaScript
+          label: JavaScript (fetch)
+          source: |
+            const token = "<BEARER_TOKEN>";
+            const params = new URLSearchParams({
+              url: "https://example.com/article",
+              path: "/web",
+              name: "Example Article",
+              build_memory: "true"
+            });
+
+            const response = await fetch("https://api.synvo.ai/webpage/add", {
+              method: "POST",
+              headers: {
+                "X-API-Key": `${token}`,
+              },
+              body: params,
+            });
+
+            if (!response.ok) {
+              throw new Error(`Request failed: ${response.status}`);
+            }
+
+            console.log(await response.json());
+
+  /metadata/{file_id}:
+    get:
+      tags: [Metadata]
+      summary: Get file metadata
+      description: Returns file information and extracted metadata (tags, summary, etc.)
+      operationId: getMetadata
+      parameters:
+        - in: path
+          name: file_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: File metadata
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  file_info:
+                    type: object
+                    properties:
+                      file_id:
+                        type: string
+                      file_path:
+                        type: string
+                      file_type:
+                        type: string
+                      file_name:
+                        type: string
+                      created_at:
+                        type: string
+                  metadata:
+                    type: object
+                    description: Extracted metadata (structure varies by file type)
+        '401':
+          description: Unauthorized
+        '404':
+          description: File not found
+      x-codeSamples:
+        - lang: cURL
+          label: curl
+          source: |
+            curl -X GET "https://api.synvo.ai/metadata/abc123xyz" \
+              -H "X-API-Key: ${API-KEY}"
+        - lang: Python
+          label: Python (requests)
+          source: |
+            import requests
+
+            token = "<BEARER_TOKEN>"
+            file_id = "abc123xyz"
+            url = f"https://api.synvo.ai/metadata/{file_id}"
+            headers = {"X-API-Key": f"{token}"}
+
+            response = requests.get(url, headers=headers, timeout=30)
+            response.raise_for_status()
+            print(response.json())
+        - lang: JavaScript
+          label: JavaScript (fetch)
+          source: |
+            const token = "<BEARER_TOKEN>";
+            const fileId = "abc123xyz";
+
+            const response = await fetch(`https://api.synvo.ai/metadata/${fileId}`, {
+              method: "GET",
+              headers: {
+                "X-API-Key": `${token}`,
+              },
+            });
+
+            if (!response.ok) {
+              throw new Error(`Request failed: ${response.status}`);
+            }
+
+            console.log(await response.json());
+
+  /ai/search:
+    post:
+      tags: [AI]
+      summary: Search for relevant files
+      description: Uses AI to search for files relevant to a query and returns file information
+      operationId: fileSearch
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - message
+              properties:
+                message:
+                  type: string
+                  description: Search query
+      responses:
+        '200':
+          description: List of relevant files
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    file_id:
+                      type: string
+                    file_path:
+                      type: string
+                    file_name:
+                      type: string
+                    file_type:
+                      type: string
+                    created_at:
+                      type: string
+        '401':
+          description: Unauthorized
+      x-codeSamples:
+        - lang: cURL
+          label: curl
+          source: |
+            curl -X POST "https://api.synvo.ai/ai/search" \
+              -H "X-API-Key: ${API-KEY}" \
+              -H "Content-Type: application/x-www-form-urlencoded" \
+              --data-urlencode "message=financial reports for Q4"
+        - lang: Python
+          label: Python (requests)
+          source: |
+            import requests
+
+            token = "<BEARER_TOKEN>"
+            url = "https://api.synvo.ai/ai/search"
+            data = {"message": "financial reports for Q4"}
+            headers = {"X-API-Key": f"{token}"}
+
+            response = requests.post(url, data=data, headers=headers, timeout=30)
+            response.raise_for_status()
+            print(response.json())
+        - lang: JavaScript
+          label: JavaScript (fetch)
+          source: |
+            const token = "<BEARER_TOKEN>";
+            const params = new URLSearchParams({
+              message: "financial reports for Q4"
+            });
+
+            const response = await fetch("https://api.synvo.ai/ai/search", {
+              method: "POST",
+              headers: {
+                "X-API-Key": `${token}`,
+              },
+              body: params,
+            });
+
+            if (!response.ok) {
+              throw new Error(`Request failed: ${response.status}`);
+            }
+
+            console.log(await response.json());
+
+  /ai/query:
+    post:
+      tags: [AI]
+      summary: Submit a query to the AI endpoint
+      description: Sends a message to the AI and receives a response. Supports streaming and various AI features (search, MCP, agent mode)
+      operationId: queryAI
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - payload
+              properties:
+                payload:
+                  type: string
+                  description: "JSON string with { messages: Message[] }"
+                  example: '{"messages":[{"role":"user","content":[{"type":"text","text":"Hello"}]}]}'
+                model:
+                  type: string
+                  default: "synvo"
+                  description: Model to use (synvo, gpt, etc.)
+                agent_model:
+                  type: string
+                  default: "gpt"
+                  description: Agent model for tool use
+                parent_cuid:
+                  type: string
+                  description: Parent conversation ID for threading
+                streaming:
+                  type: boolean
+                  default: false
+                  description: Enable streaming responses
+                force_search:
+                  type: boolean
+                  default: false
+                  description: Force file search
+                mcp:
+                  type: boolean
+                  default: false
+                  description: Enable web search
+                agent:
+                  type: boolean
+                  default: false
+                  description: Enable deep research mode
+                profiling:
+                  type: boolean
+                  default: false
+                  description: Enable performance profiling
+                model_args:
+                  type: string
+                  description: JSON string containing model specific args
+                platform:
+                  type: string
+                  default: "web"
+                  description: Platform identifier (web, api, mobile)
+      responses:
+        '200':
+          description: Query result or streaming response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  response:
+                    $ref: '#/components/schemas/Message'
+                  suid:
+                    type: string
+                    description: Session ID
+                  summary:
+                    type: string
+                    description: Session summary
+                  timestamp:
+                    type: string
+                    format: date-time
+            text/event-stream:
+              schema:
+                type: string
+                description: Server-sent events stream
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+      x-codeSamples:
+        - lang: cURL
+          label: curl
+          source: |
+            curl -X POST "https://api.synvo.ai/ai/query" \
+              -H "X-API-Key: ${API-KEY}" \
+              -F 'payload={"messages":[{"role":"user","content":[{"type":"text","text":"What is the capital of France?"}]}]}' \
+              -F "model=synvo" \
+              -F "streaming=false"
+        - lang: Python
+          label: Python (requests)
+          source: |
+            import requests
+            import json
+
+            token = "<BEARER_TOKEN>"
+            url = "https://api.synvo.ai/ai/query"
+            headers = {"X-API-Key": f"{token}"}
+
+            payload = {
+                "messages": [
+                    {
+                        "role": "user",
+                        "content": [
+                            {"type": "text", "text": "What is the capital of France?"}
+                        ]
+                    }
+                ]
+            }
+
+            data = {
+                "payload": json.dumps(payload),
+                "model": "synvo",
+                "streaming": "false"
+            }
+
+            response = requests.post(url, data=data, headers=headers, timeout=60)
+            response.raise_for_status()
+            print(response.json())
+        - lang: JavaScript
+          label: JavaScript (fetch)
+          source: |
+            const token = "<BEARER_TOKEN>";
+
+            const payload = {
+              messages: [
+                {
+                  role: "user",
+                  content: [
+                    { type: "text", text: "What is the capital of France?" }
+                  ]
+                }
+              ]
+            };
+
+            const formData = new FormData();
+            formData.append("payload", JSON.stringify(payload));
+            formData.append("model", "synvo");
+            formData.append("streaming", "false");
+
+            const response = await fetch("https://api.synvo.ai/ai/query", {
+              method: "POST",
+              headers: {
+                "X-API-Key": `${token}`,
+              },
+              body: formData,
+            });
+
+            if (!response.ok) {
+              throw new Error(`Request failed: ${response.status}`);
+            }
+
+            console.log(await response.json());
+
+  /history:
+    get:
+      tags: [History]
+      summary: List AI sessions
+      description: Returns a list of all conversation sessions for the authenticated user
+      operationId: listSessions
+      responses:
+        '200':
+          description: Sessions list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  sessions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        suid:
+                          type: string
+                        created_at:
+                          type: string
+                          format: date-time
+                        summary:
+                          type: string
+        '401':
+          description: Unauthorized
+      x-codeSamples:
+        - lang: cURL
+          label: curl
+          source: |
+            curl -X GET "https://api.synvo.ai/history" \
+              -H "X-API-Key: ${API-KEY}"
+        - lang: Python
+          label: Python (requests)
+          source: |
+            import requests
+
+            token = "<BEARER_TOKEN>"
+            url = "https://api.synvo.ai/history"
+            headers = {"X-API-Key": f"{token}"}
+
+            response = requests.get(url, headers=headers, timeout=30)
+            response.raise_for_status()
+            print(response.json())
+        - lang: JavaScript
+          label: JavaScript (fetch)
+          source: |
+            const token = "<BEARER_TOKEN>";
+
+            const response = await fetch("https://api.synvo.ai/history", {
+              method: "GET",
+              headers: {
+                "X-API-Key": `${token}`,
+              },
+            });
+
+            if (!response.ok) {
+              throw new Error(`Request failed: ${response.status}`);
+            }
+
+            console.log(await response.json());
+
+  /history/{suid}:
+    get:
+      tags: [History]
+      summary: Get session details
+      description: Returns the complete message history for a conversation session
+      operationId: getSession
+      parameters:
+        - in: path
+          name: suid
+          required: true
+          schema:
+            type: string
+          description: Session unique identifier
+      responses:
+        '200':
+          description: Session detail
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  session:
+                    type: object
+                    properties:
+                      suid:
+                        type: string
+                      messages:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Message'
+                      created_at:
+                        type: string
+                        format: date-time
+                      summary:
+                        type: string
+        '401':
+          description: Unauthorized
+        '404':
+          description: Session not found
+      x-codeSamples:
+        - lang: cURL
+          label: curl
+          source: |
+            curl -X GET "https://api.synvo.ai/history/sess_abc123xyz" \
+              -H "X-API-Key: ${API-KEY}"
+        - lang: Python
+          label: Python (requests)
+          source: |
+            import requests
+
+            token = "<BEARER_TOKEN>"
+            suid = "sess_abc123xyz"
+            url = f"https://api.synvo.ai/history/{suid}"
+            headers = {"X-API-Key": f"{token}"}
+
+            response = requests.get(url, headers=headers, timeout=30)
+            response.raise_for_status()
+            print(response.json())
+        - lang: JavaScript
+          label: JavaScript (fetch)
+          source: |
+            const token = "<BEARER_TOKEN>";
+            const suid = "sess_abc123xyz";
+
+            const response = await fetch(`https://api.synvo.ai/history/${suid}`, {
+              method: "GET",
+              headers: {
+                "X-API-Key": `${token}`,
+              },
+            });
+
+            if (!response.ok) {
+              throw new Error(`Request failed: ${response.status}`);
+            }
+
+            console.log(await response.json());
+
+  /history/delete/{suid}:
+    delete:
+      tags: [History]
+      summary: Delete a session
+      description: Permanently deletes a conversation session and all its messages
+      operationId: deleteSession
+      parameters:
+        - in: path
+          name: suid
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
+        '404':
+          description: Session not found
+      x-codeSamples:
+        - lang: cURL
+          label: curl
+          source: |
+            curl -X DELETE "https://api.synvo.ai/history/delete/sess_abc123xyz" \
+              -H "X-API-Key: ${API-KEY}"
+        - lang: Python
+          label: Python (requests)
+          source: |
+            import requests
+
+            token = "<BEARER_TOKEN>"
+            suid = "sess_abc123xyz"
+            url = f"https://api.synvo.ai/history/delete/{suid}"
+            headers = {"X-API-Key": f"{token}"}
+
+            response = requests.delete(url, headers=headers, timeout=30)
+            response.raise_for_status()
+            print(response.json())
+        - lang: JavaScript
+          label: JavaScript (fetch)
+          source: |
+            const token = "<BEARER_TOKEN>";
+            const suid = "sess_abc123xyz";
+
+            const response = await fetch(`https://api.synvo.ai/history/delete/${suid}`, {
+              method: "DELETE",
+              headers: {
+                "X-API-Key": `${token}`,
+              },
+            });
+
+            if (!response.ok) {
+              throw new Error(`Request failed: ${response.status}`);
+            }
+
+            console.log(await response.json());
+
+  /ai/like/{cuid}:
+    post:
+      tags: [Feedback]
+      summary: Like a message
+      description: Records positive feedback for an AI response message
+      operationId: likeMessage
+      parameters:
+        - in: path
+          name: cuid
+          required: true
+          schema:
+            type: string
+          description: Conversation message unique identifier
+      responses:
+        '200':
+          description: Feedback recorded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  cuid:
+                    type: string
+        '401':
+          description: Unauthorized
+        '404':
+          description: Message not found
+      x-codeSamples:
+        - lang: cURL
+          label: curl
+          source: |
+            curl -X POST "https://api.synvo.ai/ai/like/msg_abc123xyz" \
+              -H "X-API-Key: ${API-KEY}"
+        - lang: Python
+          label: Python (requests)
+          source: |
+            import requests
+
+            token = "<BEARER_TOKEN>"
+            cuid = "msg_abc123xyz"
+            url = f"https://api.synvo.ai/ai/like/{cuid}"
+            headers = {"X-API-Key": f"{token}"}
+
+            response = requests.post(url, headers=headers, timeout=30)
+            response.raise_for_status()
+            print(response.json())
+        - lang: JavaScript
+          label: JavaScript (fetch)
+          source: |
+            const token = "<BEARER_TOKEN>";
+            const cuid = "msg_abc123xyz";
+
+            const response = await fetch(`https://api.synvo.ai/ai/like/${cuid}`, {
+              method: "POST",
+              headers: {
+                "X-API-Key": `${token}`,
+              },
+            });
+
+            if (!response.ok) {
+              throw new Error(`Request failed: ${response.status}`);
+            }
+
+            console.log(await response.json());
+
+  /ai/dislike/{cuid}:
+    post:
+      tags: [Feedback]
+      summary: Dislike a message
+      description: Records negative feedback for an AI response message
+      operationId: dislikeMessage
+      parameters:
+        - in: path
+          name: cuid
+          required: true
+          schema:
+            type: string
+          description: Conversation message unique identifier
+      responses:
+        '200':
+          description: Feedback recorded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  cuid:
+                    type: string
+        '401':
+          description: Unauthorized
+        '404':
+          description: Message not found
+      x-codeSamples:
+        - lang: cURL
+          label: curl
+          source: |
+            curl -X POST "https://api.synvo.ai/ai/dislike/msg_abc123xyz" \
+              -H "X-API-Key: ${API-KEY}"
+        - lang: Python
+          label: Python (requests)
+          source: |
+            import requests
+
+            token = "<BEARER_TOKEN>"
+            cuid = "msg_abc123xyz"
+            url = f"https://api.synvo.ai/ai/dislike/{cuid}"
+            headers = {"X-API-Key": f"{token}"}
+
+            response = requests.post(url, headers=headers, timeout=30)
+            response.raise_for_status()
+            print(response.json())
+        - lang: JavaScript
+          label: JavaScript (fetch)
+          source: |
+            const token = "<BEARER_TOKEN>";
+            const cuid = "msg_abc123xyz";
+
+            const response = await fetch(`https://api.synvo.ai/ai/dislike/${cuid}`, {
+              method: "POST",
+              headers: {
+                "X-API-Key": `${token}`,
+              },
+            });
+
+            if (!response.ok) {
+              throw new Error(`Request failed: ${response.status}`);
+            }
+
+            console.log(await response.json());
+
+  /ai/feedback/{cuid}:
+    get:
+      tags: [Feedback]
+      summary: Get message feedback
+      description: Retrieves the current feedback status for a message
+      operationId: getMessageFeedback
+      parameters:
+        - in: path
+          name: cuid
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Current feedback
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  cuid:
+                    type: string
+                  feedback:
+                    type: object
+                    properties:
+                      feedback_type:
+                        type: string
+                        enum: [like, dislike]
+                        nullable: true
+                      timestamp:
+                        type: string
+                        format: date-time
+                        nullable: true
+        '401':
+          description: Unauthorized
+        '404':
+          description: Message not found
+      x-codeSamples:
+        - lang: cURL
+          label: curl
+          source: |
+            curl -X GET "https://api.synvo.ai/ai/feedback/msg_abc123xyz" \
+              -H "X-API-Key: ${API-KEY}"
+        - lang: Python
+          label: Python (requests)
+          source: |
+            import requests
+
+            token = "<BEARER_TOKEN>"
+            cuid = "msg_abc123xyz"
+            url = f"https://api.synvo.ai/ai/feedback/{cuid}"
+            headers = {"X-API-Key": f"{token}"}
+
+            response = requests.get(url, headers=headers, timeout=30)
+            response.raise_for_status()
+            print(response.json())
+        - lang: JavaScript
+          label: JavaScript (fetch)
+          source: |
+            const token = "<BEARER_TOKEN>";
+            const cuid = "msg_abc123xyz";
+
+            const response = await fetch(`https://api.synvo.ai/ai/feedback/${cuid}`, {
+              method: "GET",
+              headers: {
+                "X-API-Key": `${token}`,
+              },
+            });
+
+            if (!response.ok) {
+              throw new Error(`Request failed: ${response.status}`);
+            }
+
+            console.log(await response.json());
+    delete:
+      tags: [Feedback]
+      summary: Cancel message feedback
+      description: Removes any existing feedback (like/dislike) from a message
+      operationId: cancelMessageFeedback
+      parameters:
+        - in: path
+          name: cuid
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Feedback removed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  cuid:
+                    type: string
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
+        '404':
+          description: Message not found
+      x-codeSamples:
+        - lang: cURL
+          label: curl
+          source: |
+            curl -X DELETE "https://api.synvo.ai/ai/feedback/msg_abc123xyz" \
+              -H "X-API-Key: ${API-KEY}"
+        - lang: Python
+          label: Python (requests)
+          source: |
+            import requests
+
+            token = "<BEARER_TOKEN>"
+            cuid = "msg_abc123xyz"
+            url = f"https://api.synvo.ai/ai/feedback/{cuid}"
+            headers = {"X-API-Key": f"{token}"}
+
+            response = requests.delete(url, headers=headers, timeout=30)
+            response.raise_for_status()
+            print(response.json())
+        - lang: JavaScript
+          label: JavaScript (fetch)
+          source: |
+            const token = "<BEARER_TOKEN>";
+            const cuid = "msg_abc123xyz";
+
+            const response = await fetch(`https://api.synvo.ai/ai/feedback/${cuid}`, {
+              method: "DELETE",
+              headers: {
+                "X-API-Key": `${token}`,
+              },
+            });
+
+            if (!response.ok) {
+              throw new Error(`Request failed: ${response.status}`);
+            }
+
+            console.log(await response.json());
+
+  /user/api_keys/list:
+    get:
+      tags: [API Keys]
+      summary: List API keys
+      description: Returns all API keys for the authenticated user
+      operationId: listApiKeys
+      responses:
+        '200':
+          description: Key list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ApiKey'
+        '401':
+          description: Unauthorized
+      x-codeSamples:
+        - lang: cURL
+          label: curl
+          source: |
+            curl -X GET "https://api.synvo.ai/user/api_keys/list" \
+              -H "X-API-Key: ${API-KEY}"
+        - lang: Python
+          label: Python (requests)
+          source: |
+            import requests
+
+            token = "<BEARER_TOKEN>"
+            url = "https://api.synvo.ai/user/api_keys/list"
+            headers = {"X-API-Key": f"{token}"}
+
+            response = requests.get(url, headers=headers, timeout=30)
+            response.raise_for_status()
+            print(response.json())
+        - lang: JavaScript
+          label: JavaScript (fetch)
+          source: |
+            const token = "<BEARER_TOKEN>";
+
+            const response = await fetch("https://api.synvo.ai/user/api_keys/list", {
+              method: "GET",
+              headers: {
+                "X-API-Key": `${token}`,
+              },
+            });
+
+            if (!response.ok) {
+              throw new Error(`Request failed: ${response.status}`);
+            }
+
+            console.log(await response.json());
+
+  /user/api_keys/create:
+    post:
+      tags: [API Keys]
+      summary: Create a new API key
+      description: Generates a new API key for programmatic access. The plaintext key is only shown once.
+      operationId: createApiKey
+      requestBody:
+        required: false
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Optional display name for the key
+      responses:
+        '200':
+          description: Key created (plaintext key returned once)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  key_id:
+                    type: string
+                  api_key:
+                    type: string
+                    description: Plaintext API key - save this, it won't be shown again
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+      x-codeSamples:
+        - lang: cURL
+          label: curl
+          source: |
+            curl -X POST "https://api.synvo.ai/user/api_keys/create" \
+              -H "X-API-Key: ${API-KEY}" \
+              -H "Content-Type: application/x-www-form-urlencoded" \
+              --data-urlencode "name=My API Key"
+        - lang: Python
+          label: Python (requests)
+          source: |
+            import requests
+
+            token = "<BEARER_TOKEN>"
+            url = "https://api.synvo.ai/user/api_keys/create"
+            data = {"name": "My API Key"}
+            headers = {"X-API-Key": f"{token}"}
+
+            response = requests.post(url, data=data, headers=headers, timeout=30)
+            response.raise_for_status()
+            result = response.json()
+            
+            # Save this API key securely - it won't be shown again!
+            print(f"New API Key: {result['api_key']}")
+        - lang: JavaScript
+          label: JavaScript (fetch)
+          source: |
+            const token = "<BEARER_TOKEN>";
+            const params = new URLSearchParams({ name: "My API Key" });
+
+            const response = await fetch("https://api.synvo.ai/user/api_keys/create", {
+              method: "POST",
+              headers: {
+                "X-API-Key": `${token}`,
+              },
+              body: params,
+            });
+
+            if (!response.ok) {
+              throw new Error(`Request failed: ${response.status}`);
+            }
+
+            const result = await response.json();
+            
+            // Save this API key securely - it won't be shown again!
+            console.log("New API Key:", result.api_key);
+
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+  schemas:
+    FileItem:
+      type: object
+      properties:
+        is_dir:
+          type: boolean
+        name:
+          type: string
+        path:
+          type: string
+        file_id:
+          type: string
+          nullable: true
+        size:
+          type: integer
+          format: int64
+          nullable: true
+        status:
+          type: string
+          description: Indexing status
+          enum: [PENDING, FAILED, COMPLETED, UNKNOWN]
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          nullable: true
+    MessageContentItem:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [text, file]
+        text:
+          type: string
+          nullable: true
+        path:
+          type: string
+          nullable: true
+        file_id:
+          type: string
+          nullable: true
+    Message:
+      type: object
+      properties:
+        role:
+          type: string
+          enum: [system, user, assistant, tool]
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/MessageContentItem'
+        cuid:
+          type: string
+          description: Conversation message unique identifier
+        created_at:
+          type: string
+          format: date-time
+          nullable: true
+        searched_files:
+          type: array
+          items:
+            type: string
+          description: File IDs that were searched for this message
+          nullable: true
+    ApiKey:
+      type: object
+      properties:
+        key_id:
+          type: string
+        name:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum: [ACTIVE, REVOKED, DISABLED, UNKNOWN]
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          nullable: true
+        last_used_at:
+          type: string
+          format: date-time
+          nullable: true

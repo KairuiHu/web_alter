@@ -1,4 +1,5 @@
 import { loader } from "fumadocs-core/source";
+import { openapiPlugin } from "fumadocs-openapi/server";
 import { icons } from "lucide-react";
 import { createElement } from "react";
 import { docs } from "@/.source";
@@ -8,6 +9,8 @@ export const source = loader({
   // it assigns a URL to your pages
   baseUrl: "/docs",
   source: docs.toFumadocsSource(),
+  // @ts-expect-error Plugin typing is available in newer fumadocs-core releases
+  plugins: [openapiPlugin()],
   icon(icon) {
     if (!icon) {
       // You may set a default icon

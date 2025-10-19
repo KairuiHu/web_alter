@@ -1,4 +1,13 @@
 {
   "title": "Synvo API",
-  "defaultOpen": true
+  "defaultOpen": true,
+  "pages": [
+    "api-reference",
+    "api-keys-authentication",
+    "query-retrieval",
+    "file-upload-management",
+    "file-metadata",
+    "session-history",
+    "message-feedback"
+  ]
 }

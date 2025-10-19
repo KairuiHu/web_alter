@@ -16,6 +16,8 @@ echo ""
 echo "🛑 Stopping application..."
 pm2 stop synvo-docs
 
+bun ./scripts/generate-docs.ts
+
 echo "🔨 Building application..."
 if npm run build; then
     echo "✅ Build successful!"
