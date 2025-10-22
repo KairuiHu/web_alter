@@ -1,0 +1,9 @@
+{
+  "title": "Query Layer",
+  "defaultOpen": true,
+  "pages": [
+    "../file-search",
+    "../query-ai"
+  ]
+}
+

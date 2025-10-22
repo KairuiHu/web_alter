@@ -3,7 +3,6 @@
   "defaultOpen": true,
   "pages": [
     "../synvo-api/api-reference",
-    "../synvo-api/api-keys-authentication",
     "../synvo-api/query-retrieval",
     "../synvo-api/file-upload-management",
     "../synvo-api/file-metadata",
