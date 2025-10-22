@@ -8,66 +8,62 @@ export default function HomePage() {
   return (
     <main className="flex flex-1 flex-col items-center justify-center gap-8 py-16">
       {/* Hero Section */}
-      <div className="mx-auto max-w-3xl text-center">
-        <div className="mb-4 flex items-center justify-center gap-3">
+      <div className="mx-auto max-w-4xl text-center">
+        <div className="mb-6 flex items-center justify-center gap-3">
           <Image
             src="/assets/logo-only.svg"
             alt="Synvo Logo"
-            width={64}
-            height={64}
+            width={48}
+            height={48}
             className="align-top"
           />
-          <h1 className="text-4xl font-bold sm:text-5xl">Synvo API</h1>
+          <h1 className="text-3xl font-bold sm:text-4xl">Synvo API</h1>
         </div>
-        <p className="text-fd-muted-foreground text-balance">
-          Multimodal Contextualization System for AI Agents.
-          Synvo AI adds long-term memory, deep contextual understanding, 
-          and on-device performance for AI Agents.
-          Faster, smarter, and truly human-aware.
+        <p className="mb-8 text-fd-muted-foreground text-balance text-lg">
+          Synvo API enables AI agents with deep multimodal contextual understanding, enhancing performance through accurate context retrieval from diverse user data.
         </p>
       </div>
 
-      {/* CTA Buttons */}
-      <div className="flex flex-wrap items-center justify-center gap-3">
-        <Link
-          href="/docs"
-          className={cn(buttonVariants({ color: "primary" }), "px-4 py-2")}
-        >
-          Get Started
-        </Link>
-      </div>
-
-      {/* Features and Code Examples Side by Side */}
-      <div className="mx-auto max-w-6xl px-4">
-        <div className="grid gap-8 lg:grid-cols-2">
-          <div>
-            <h2 className="mb-4 text-2xl font-bold">
-              Advanced AI Capabilities
-            </h2>
-            <p className="mb-4 text-fd-muted-foreground">Key Features:</p>
-            <div className="space-y-6">
-              <div>
-                <h3 className="mb-2 text-lg font-semibold">Persistent Memory</h3>
-                <p className="text-sm text-fd-muted-foreground">
-                  Enables AI to retain and recall context across sessions, delivering consistent and coherent understanding over time.
-                </p>
+      {/* Demo and Code Section */}
+      <div className="mx-auto max-w-7xl px-4">
+        <div className="grid gap-8 lg:grid-cols-2 lg:items-stretch">
+          {/* Left: GIF Demo */}
+          <div className="flex flex-col h-full">
+            <div className="relative rounded-2xl border-2 border-fd-border bg-fd-muted/30 p-6 shadow-lg flex-1 flex flex-col">
+              <div className="flex-1 flex items-center justify-center">
+                <Image
+                  src="/assets/synvo_api.gif"
+                  alt="Synvo API Demo"
+                  width={600}
+                  height={400}
+                  className="rounded-lg w-full h-auto max-h-[400px] object-contain"
+                  priority
+                />
               </div>
-              <div>
-                <h3 className="mb-2 text-lg font-semibold">Contextual Intelligence</h3>
-                <p className="text-sm text-fd-muted-foreground">
-                  Transforms unstructured multimodal data into structured context that makes AI responses more accurate and human-like.
-                </p>
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-fd-background px-4 py-1 text-sm font-medium text-fd-foreground shadow-md">
+                Live Demo
               </div>
             </div>
           </div>
-          <div>
-            <Tabs
-              items={["Upload File", "Get Context"]}
-              className="w-full"
-            >
-              <Tab value="Upload File">
-                <pre className="overflow-x-auto rounded-lg bg-fd-muted p-4 text-sm">
-                  <code>{`# Upload document into contextual memory
+
+          {/* Right: Code Examples */}
+          <div className="flex flex-col h-full">
+            <div className="rounded-xl border border-fd-border bg-fd-card p-6 shadow-sm flex-1 flex flex-col">
+              <div className="mb-4">
+                <h3 className="text-xl font-semibold mb-2">Try It Yourself</h3>
+                <p className="text-sm text-fd-muted-foreground">
+                  Copy and run these code examples to get started
+                </p>
+              </div>
+              <div className="flex-1 flex flex-col">
+                <Tabs
+                  items={["Upload File", "Get Context"]}
+                  className="w-full flex-1 flex flex-col"
+                >
+                  <Tab value="Upload File">
+                    <div className="flex-1 flex flex-col">
+                      <pre className="overflow-x-auto rounded-lg bg-fd-muted p-4 text-sm flex-1">
+                        <code>{`# Upload document into contextual memory
 api_key = "YOUR_SYNVO_API_KEY"
 with open("document.pdf", "rb") as f:
     response = requests.post(
@@ -80,11 +76,13 @@ with open("document.pdf", "rb") as f:
     )
 
 file_id = response.json()["file_id"]`}</code>
-                </pre>
-              </Tab>
-              <Tab value="Get Context">
-                <pre className="overflow-x-auto rounded-lg bg-fd-muted p-4 text-sm">
-                  <code>{`# Get query-related context
+                      </pre>
+                    </div>
+                  </Tab>
+                  <Tab value="Get Context">
+                    <div className="flex-1 flex flex-col">
+                      <pre className="overflow-x-auto rounded-lg bg-fd-muted p-4 text-sm flex-1">
+                        <code>{`# Get query-related context
 api_key = "YOUR_SYNVO_API_KEY"
 query = "The author of the document"
 payload = {
@@ -104,11 +102,30 @@ response = requests.post(
     },
     headers={"X-API-Key": api_key}
 )`}</code>
-                </pre>
-              </Tab>
-            </Tabs>
+                      </pre>
+                    </div>
+                  </Tab>
+                </Tabs>
+              </div>
+            </div>
           </div>
         </div>
+      </div>
+
+      {/* CTA Buttons */}
+      <div className="flex flex-wrap items-center justify-center gap-3">
+        <Link
+          href="https://console.synvo.ai/"
+          className={cn(buttonVariants({ color: "primary" }), "px-6 py-3 text-base")}
+        >
+          Access API Key
+        </Link>
+        <Link
+          href="http://localhost:3000/docs/1.0/cookbook"
+          className={cn(buttonVariants({ variant: "outline" }), "px-6 py-3 text-base")}
+        >
+          Learn More
+        </Link>
       </div>
     </main>
   );
