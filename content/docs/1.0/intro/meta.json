@@ -5,8 +5,7 @@
     "../synvo-api/api-reference",
     "../synvo-api/query-retrieval",
     "../synvo-api/file-upload-management",
-    "../synvo-api/file-metadata",
-    "../synvo-api/session-history",
-    "../synvo-api/message-feedback"
+    "../synvo-api/history-feedback",
+    "../synvo-api/user-isolation"
   ]
 }

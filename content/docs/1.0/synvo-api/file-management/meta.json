@@ -1,12 +1,12 @@
 {
   "title": "File Management",
-  "defaultOpen": true,
+  "defaultOpen": false,
   "pages": [
     "../create-directory",
     "../list-files",
     "../upload-file",
     "../download-file",
-    "../move-file",
+    "../update-file",
     "../delete-file",
     "../get-file-thumbnail",
     "../get-file-status"

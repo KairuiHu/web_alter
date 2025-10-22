@@ -19,50 +19,35 @@ curl -H "X-API-Key: YOUR_API_KEY" https://api.synvo.ai/endpoint
 
 ## API Endpoints
 
-### Manage Documents
+### File Management
 Manage your documents, files, and directories:
 
-- **[Create Directory](/docs/1.0/synvo-api/endpoints/create-directory)** - Create a virtual directory
-- **[Upload a file](/docs/1.0/synvo-api/endpoints/upload-file)** - Upload a file
-- **[List documents](/docs/1.0/synvo-api/endpoints/list-files)** - List directory contents
-- **[Download File](/docs/1.0/synvo-api/endpoints/download-file)** - Download a file by ID
-- **[Delete document by ID or customId](/docs/1.0/synvo-api/endpoints/delete-file)** - Delete a file by ID
-- **[Update document](/docs/1.0/synvo-api/endpoints/move-file)** - Move or rename files
-- **[Get File Thumbnail](/docs/1.0/synvo-api/endpoints/get-file-thumbnail)** - Get file thumbnails
-- **[Get processing documents](/docs/1.0/synvo-api/endpoints/get-file-status)** - Check file processing status
-- **[Add Document](/docs/1.0/synvo-api/endpoints/add-webpage)** - Add a document with any content type
+- **[Create Directory](/docs/1.0/synvo-api/create-directory)** - Create a virtual directory
+- **[List File](/docs/1.0/synvo-api/list-files)** - List directory contents
+- **[Upload File](/docs/1.0/synvo-api/upload-file)** - Upload a file
+- **[Download File](/docs/1.0/synvo-api/download-file)** - Download a file by ID
+- **[Update File](/docs/1.0/synvo-api/update-file)** - Move or rename files
+- **[Delete File](/docs/1.0/synvo-api/delete-file)** - Delete a file by ID
+- **[Get File Thumbnail](/docs/1.0/synvo-api/get-file-thumbnail)** - Get file thumbnails
+- **[Get File Status](/docs/1.0/synvo-api/get-file-status)** - Check file processing status
 
-### Search
+### Query Layer
 Search and query functionality:
 
-- **[Search Documents](/docs/1.0/synvo-api/endpoints/file-search)** - AI-powered file search
-- **[Search Memory Entries](/docs/1.0/synvo-api/endpoints/query-ai)** - Submit queries to the AI
+- **[Search File](/docs/1.0/synvo-api/file-search)** - AI-powered file search
+- **[Get Context](/docs/1.0/synvo-api/query-ai)** - Submit queries to the AI
 
-### Session Management
+### Session & Feedback Management
 Manage conversation session histories:
 
-- **[List History](/docs/1.0/synvo-api/endpoints/list-history)** - List all session histories by user
-- **[Get History](/docs/1.0/synvo-api/endpoints/get-session)** - Get message history for a conversation session
-- **[Delete Session History](/docs/1.0/synvo-api/endpoints/delete-session)** - Delete a session history
+- **[List History](/docs/1.0/synvo-api/list-history)** - List all session histories by user
+- **[Get History](/docs/1.0/synvo-api/get-session)** - Get message history for a conversation session
+- **[Delete History](/docs/1.0/synvo-api/delete-session)** - Delete a session history
+- **[Like Message](/docs/1.0/synvo-api/like-message)** - Like an AI response
+- **[Dislike Message](/docs/1.0/synvo-api/dislike-message)** - Dislike an AI response
+- **[Get Message Feedback](/docs/1.0/synvo-api/get-message-feedback)** - Get feedback status
+- **[Cancel Message Feedback](/docs/1.0/synvo-api/cancel-message-feedback)** - Remove feedback
 
-### Feedback
-Provide feedback on AI responses:
-
-- **[Like Message](/docs/1.0/synvo-api/endpoints/like-message)** - Like an AI response
-- **[Dislike Message](/docs/1.0/synvo-api/endpoints/dislike-message)** - Dislike an AI response
-- **[Get Message Feedback](/docs/1.0/synvo-api/endpoints/get-message-feedback)** - Get feedback status
-- **[Cancel Message Feedback](/docs/1.0/synvo-api/endpoints/cancel-message-feedback)** - Remove feedback
-
-### API Keys
-Manage your API keys:
-
-- **[List API Keys](/docs/1.0/synvo-api/endpoints/list-api-keys)** - List all API keys
-- **[Create API Key](/docs/1.0/synvo-api/endpoints/create-api-key)** - Create a new API key
-
-### Metadata
-Access file metadata:
-
-- **[Get Metadata](/docs/1.0/synvo-api/endpoints/get-metadata)** - Get file information and metadata
 
 ## Interactive Documentation
 
@@ -74,7 +59,7 @@ Each endpoint page includes:
 
 ## Authentication
 
-All endpoints require authentication using an API key. You can obtain an API key from your account settings or create one using the [Create API Key](/docs/1.0/synvo-api/endpoints/create-api-key) endpoint.
+All endpoints require authentication using an API key. You can obtain an API key from your account settings or create one using the [Create API Key](/docs/1.0/synvo-api/create-api-key) endpoint.
 
 ## Base URL
 
