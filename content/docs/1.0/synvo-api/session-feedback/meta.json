@@ -1,10 +1,10 @@
 {
   "title": "Session & Feedback Management",
-  "defaultOpen": true,
+  "defaultOpen": false,
   "pages": [
-    "../list-sessions",
-    "../get-session",
-    "../delete-session",
+    "../list-history",
+    "../get-history",
+    "../delete-history",
     "../like-message",
     "../dislike-message",
     "../get-message-feedback",
