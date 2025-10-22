@@ -121,7 +121,7 @@ response = requests.post(
           Access API Key
         </Link>
         <Link
-          href="http://localhost:3000/docs/1.0/cookbook"
+          href="http://localhost:3000/docs/1.0/quick-start"
           className={cn(buttonVariants({ variant: "outline" }), "px-6 py-3 text-base")}
         >
           Learn More

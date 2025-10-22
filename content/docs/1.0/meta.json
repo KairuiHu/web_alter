@@ -3,7 +3,7 @@
   "icon": "GitFork",
   "root": true,
   "pages": [
-    "cookbook",
+    "quick-start",
     "intro",
     "synvo-api"
   ]

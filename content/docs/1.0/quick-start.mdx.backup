@@ -1,10 +1,10 @@
 ---
-id: cookbook
-title: Multimodal AI Cookbook
-slug: /cookbook
+id: quick-start
+title: Quick Start
+slug: /quick-start
 ---
 
-This cookbook demonstrates Synvo's powerful multimodal AI capabilities using real demo files. You'll learn how to upload and query different file types: PDFs, images, videos, and audio files. Each demo includes downloadable files and specific questions to showcase AI understanding across modalities.
+This Quick Start guide demonstrates Synvo's powerful multimodal AI capabilities using real demo files. You'll learn how to upload and query different file types: PDFs, images, videos, and audio files. Each demo includes downloadable files and specific questions to showcase AI understanding across modalities.
 
 ## Prerequisites
 
@@ -786,7 +786,7 @@ Here's a complete script that runs all demos sequentially:
 ```python
 #!/usr/bin/env python3
 """
-Synvo Multimodal AI Cookbook - Complete Demo
+Synvo Multimodal AI Quick Start - Complete Demo
 Demonstrates PDF, Image, Video, and Audio processing capabilities
 """
 
@@ -796,7 +796,7 @@ import time
 import os
 from pathlib import Path
 
-class SynvoMultimodalCookbook:
+class SynvoMultimodalQuickStart:
     def __init__(self, api_key):
         self.api_key = api_key
         self.base_url = "https://api.synvo.ai"
@@ -984,7 +984,7 @@ class SynvoMultimodalCookbook:
     
     def run_all_demos(self):
         """Run all multimodal demos"""
-        print("🎬 SYNVO MULTIMODAL AI COOKBOOK")
+        print("🎬 SYNVO MULTIMODAL AI QUICK START")
         print("="*80)
         
         # Download files first
@@ -1016,7 +1016,7 @@ class SynvoMultimodalCookbook:
             status = "✅" if result else "❌"
             print(f"{status} {file_type.upper()}")
         
-        print(f"\n🎉 Multimodal cookbook complete!")
+        print(f"\n🎉 Multimodal quick start complete!")
         print("You've successfully demonstrated Synvo's capabilities across:")
         print("📄 PDF documents")  
         print("🖼️ Images")
@@ -1026,7 +1026,7 @@ class SynvoMultimodalCookbook:
         return results
 
 def main():
-    """Main function to run the cookbook"""
+    """Main function to run the quick start guide"""
     # Get API key from environment or prompt
     api_key = os.getenv("SYNVO_API_KEY")
     
@@ -1037,9 +1037,9 @@ def main():
         print("❌ API key required")
         return
     
-    # Run the cookbook
-    cookbook = SynvoMultimodalCookbook(api_key)
-    results = cookbook.run_all_demos()
+    # Run the quick start guide
+    quickStart = SynvoMultimodalQuickStart(api_key)
+    results = quickStart.run_all_demos()
     
     return results
 
@@ -1052,11 +1052,11 @@ if __name__ == "__main__":
 
 ```javascript
 /**
- * Synvo Multimodal AI Cookbook - Complete Demo
+ * Synvo Multimodal AI Quick Start - Complete Demo
  * Demonstrates PDF, Image, Video, and Audio processing capabilities
  */
 
-class SynvoMultimodalCookbook {
+class SynvoMultimodalQuickStart {
   constructor(apiKey) {
     this.apiKey = apiKey;
     this.baseUrl = "https://api.synvo.ai";
@@ -1236,8 +1236,8 @@ class SynvoMultimodalCookbook {
 // HTML Interface for running demos
 function createDemoInterface() {
   const html = `
-    <div id="synvo-cookbook" style="max-width: 1200px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif;">
-      <h1>🎬 Synvo Multimodal AI Cookbook</h1>
+    <div id="synvo-quick-start" style="max-width: 1200px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif;">
+      <h1>🎬 Synvo Multimodal AI Quick Start</h1>
       
       <div style="margin-bottom: 20px; padding: 15px; background: #f0f9ff; border-radius: 8px;">
         <h3>API Key Setup</h3>
@@ -1321,7 +1321,7 @@ function createDemoInterface() {
 }
 
 // Global variables
-let cookbook = null;
+let quickStart = null;
 
 function setApiKey() {
   const apiKey = document.getElementById('api-key-input').value.trim();
@@ -1330,7 +1330,7 @@ function setApiKey() {
     return;
   }
   
-  cookbook = new SynvoMultimodalCookbook(apiKey);
+  quickStart = new SynvoMultimodalQuickStart(apiKey);
   
   // Enable demo buttons
   ['pdf-btn', 'image-btn', 'video-btn', 'audio-btn', 'run-all-btn'].forEach(id => {
@@ -1349,7 +1349,7 @@ async function runPdfDemo() {
     return;
   }
   
-  const result = await cookbook.runDemo('pdf', file);
+  const result = await quickStart.runDemo('pdf', file);
   document.getElementById('pdf-result').innerHTML = result ? 
     `<p style="color: green;">✅ Success: ${result.answer}</p>` :
     `<p style="color: red;">❌ Demo failed</p>`;
@@ -1364,7 +1364,7 @@ async function runImageDemo() {
     return;
   }
   
-  const result = await cookbook.runDemo('image', file);
+  const result = await quickStart.runDemo('image', file);
   document.getElementById('image-result').innerHTML = result ?
     `<p style="color: green;">✅ Success: ${result.answer}</p>` :
     `<p style="color: red;">❌ Demo failed</p>`;
@@ -1379,7 +1379,7 @@ async function runVideoDemo() {
     return;
   }
   
-  const result = await cookbook.runDemo('video', file);
+  const result = await quickStart.runDemo('video', file);
   document.getElementById('video-result').innerHTML = result ?
     `<p style="color: green;">✅ Success: ${result.answer}</p>` :
     `<p style="color: red;">❌ Demo failed</p>`;
@@ -1394,7 +1394,7 @@ async function runAudioDemo() {
     return;
   }
   
-  const result = await cookbook.runDemo('audio', file);
+  const result = await quickStart.runDemo('audio', file);
   document.getElementById('audio-result').innerHTML = result ?
     `<p style="color: green;">✅ Success: ${result.answer}</p>` :
     `<p style="color: red;">❌ Demo failed</p>`;
@@ -1410,7 +1410,7 @@ async function runAllDemos() {
     
     if (file) {
       console.log(`Running ${fileType} demo...`);
-      results[fileType] = await cookbook.runDemo(fileType, file);
+      results[fileType] = await quickStart.runDemo(fileType, file);
     } else {
       console.log(`Skipping ${fileType} demo - no file selected`);
     }
@@ -1508,7 +1508,7 @@ await monitorFileStatus("YOUR_API_KEY", "your_file_id");
 
 ## What's Next?
 
-After completing this multimodal cookbook, explore advanced features:
+After completing this multimodal quick start guide, explore advanced features:
 
 1. **[Session Management](/docs/1.0/synvo-api/list-history)** - Manage conversation histories
 2. **[File Metadata](/docs/1.0/synvo-api/get-metadata)** - Extract rich file information  
