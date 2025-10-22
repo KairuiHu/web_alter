@@ -5,6 +5,18 @@ const withMDX = createMDX();
 
 const config: NextConfig = {
   // reactStrictMode: true,
+  webpack: (config, { isServer }) => {
+    // Fix for image-size package trying to use node:fs in client context
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+        os: false,
+      };
+    }
+    return config;
+  },
   async rewrites() {
     return {
       beforeFiles: [
@@ -21,12 +33,12 @@ const config: NextConfig = {
       // Root redirect to version 1.0
       {
         source: "/docs",
-        destination: "/docs/1.0/intro/cookbook",
+        destination: "/docs/1.0/cookbook",
         permanent: false,
       },
       {
         source: "/docs/1.0",
-        destination: "/docs/1.0/intro/cookbook",
+        destination: "/docs/1.0/cookbook",
         permanent: false,
       },
 

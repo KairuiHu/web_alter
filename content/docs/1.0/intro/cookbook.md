@@ -1,10 +1,8 @@
 ---
 id: overview
 title: Overview
-slug: /
+slug: /intro/overview
 ---
-
-# Synvo API Overview
 
 Welcome to Synvo! This platform enables you to upload documents and query them with AI for intelligent document analysis and retrieval.
 
@@ -15,16 +13,19 @@ Visit the [Synvo Dashboard](https://console.synvo.ai/dashboard) to manage your A
 ## Getting Started in 3 Steps
 
 ### 1. **Create API Key**
+
 - Use the dashboard or API to generate authentication credentials
 - Manage multiple keys for different projects
 - Monitor usage and rotate keys as needed
 
 ### 2. **Upload Files**
+
 - Support for PDFs, Word docs, text files, images, and more
 - Files are processed with AI for intelligent querying
 - Organize files in virtual directories
 
 ### 3. **Query with AI**
+
 - Ask natural language questions about your documents
 - Get intelligent responses with source citations
 - Support for streaming responses and advanced search
@@ -48,10 +49,9 @@ Visit the [Synvo Dashboard](https://console.synvo.ai/dashboard) to manage your A
 
 ## Next Steps
 
-1. **[API Cookbook](/docs/1.0/cookbook)** - Complete walkthrough with code examples
-2. **[API Keys & Authentication](/docs/1.0//synvo-api/api-keys)** - Manage authentication
-3. **[File Upload & Management](/docs/1.0//synvo-api/files)** - Handle file operations
-4. **[Query & Retrieval](/docs/1.0//synvo-api/query-retrieval)** - Advanced querying features
+1. **[Quick Start](/docs/1.0/cookbook)** - Complete walkthrough with code examples
+2. **[API Keys & Authentication](/docs/1.0/synvo-api/api-keys-authentication)** - Manage authentication
+3. **[File Upload & Management](/docs/1.0/synvo-api/file-upload-management)** - Handle file operations
+4. **[Query & Retrieval](/docs/1.0/synvo-api/query-retrieval)** - Advanced querying features
 
 Start building intelligent document analysis applications with Synvo's powerful API today!
-

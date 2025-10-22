@@ -1,6 +1,6 @@
 ---
 id: cookbook
-title: API Cookbook
+title: Quick Start
 slug: /cookbook
 ---
 
@@ -127,7 +127,6 @@ with open("/path/to/your/document.pdf", "rb") as f:
     files = {"file": f}
     data = {
         "path": "/",
-        "build_memory": "true"  # This enables AI querying
     }
     
     response = requests.post(
@@ -441,8 +440,7 @@ class SynvoQuickStart:
         with open(file_path, "rb") as f:
             files = {"file": f}
             data = {
-                "path": "/",
-                "build_memory": "true"
+                "path": "/"
             }
             
             response = requests.post(
@@ -743,10 +741,10 @@ npm install node-fetch  # If using Node.js
 
 Now that you've completed the basic workflow, explore more advanced features:
 
-1. **[API Keys & Authentication](/synvo-api/api-keys)** - Manage your API keys
-2. **[File Metadata](/synvo-api/file-metadata)** - Extract rich information from files
-3. **[Session History](/synvo-api/session-history)** - Manage conversation history
-4. **[Advanced Querying](/synvo-api/query-retrieval)** - Streaming, web search, and more
+1. **[API Keys & Authentication](/docs/1.0/synvo-api/api-keys-authentication)** - Manage your API keys
+2. **[File Metadata](/docs/1.0/synvo-api/file-metadata)** - Extract rich information from files
+3. **[Session History](/docs/1.0/synvo-api/session-history)** - Manage conversation history
+4. **[Advanced Querying](/docs/1.0/synvo-api/query-retrieval)** - Streaming, web search, and more
 
 ## Troubleshooting
 

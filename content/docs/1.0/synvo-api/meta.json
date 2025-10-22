@@ -1,13 +1,27 @@
 {
-  "title": "Synvo API",
+  "title": "Synvo API Endpoints",
   "defaultOpen": true,
   "pages": [
-    "api-reference",
-    "api-keys-authentication",
-    "query-retrieval",
-    "file-upload-management",
-    "file-metadata",
-    "session-history",
-    "message-feedback"
+    "create-directory",
+    "list-files", 
+    "delete-file",
+    "upload-file",
+    "download-file",
+    "move-file",
+    "get-file-thumbnail",
+    "get-file-status",
+    "add-webpage",
+    "file-search",
+    "query-ai",
+    "list-sessions",
+    "get-session",
+    "delete-session",
+    "like-message",
+    "dislike-message",
+    "get-message-feedback",
+    "cancel-message-feedback",
+    "list-api-keys",
+    "create-api-key",
+    "get-metadata"
   ]
 }

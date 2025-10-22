@@ -1,0 +1,11 @@
+---
+title: "[POST] Search Memory Entries"
+description: Submit a query to the AI endpoint
+slug: /synvo-api/endpoints/query-ai
+---
+
+import { APIPage } from "fumadocs-openapi/ui";
+
+Sends a message to the AI and receives a response. Supports streaming and various AI features (search, MCP, agent mode)
+
+<APIPage document={"./public/openapi.yaml"} operations={[{"path":"/ai/query","method":"post"}]} webhooks={[]} hasHead={false} />

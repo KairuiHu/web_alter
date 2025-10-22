@@ -14,8 +14,8 @@ info:
   license:
     name: Proprietary
 servers:
-  - url: /api
-    description: Dev server proxied by Vite
+  - url: https://api.synvo.ai
+    description: Production API server
 
 security:
   - apiKeyAuth: []
@@ -341,9 +341,7 @@ paths:
             with open("/path/to/document.pdf", "rb") as f:
                 files = {"file": f}
                 data = {
-                    "path": "/",
-                    "build_memory": "true",
-                    "disable_lazy_metadata": "false"
+                    "path": "/"
                 }
                 response = requests.post(url, files=files, data=data, headers=headers, timeout=60)
 

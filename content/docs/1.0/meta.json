@@ -1,5 +1,10 @@
 {
   "title": "v1.0",
   "icon": "GitFork",
-  "root": true
+  "root": true,
+  "pages": [
+    "cookbook",
+    "intro",
+    "synvo-api"
+  ]
 }

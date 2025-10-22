@@ -1,0 +1,11 @@
+---
+title: "[GET] Get processing documents"
+description: Get file processing status
+slug: /synvo-api/endpoints/get-file-status
+---
+
+import { APIPage } from "fumadocs-openapi/ui";
+
+Returns the current processing status of a file (PENDING, COMPLETED, FAILED)
+
+<APIPage document={"./public/openapi.yaml"} operations={[{"path":"/file/status/{file_id}","method":"get"}]} webhooks={[]} hasHead={false} />

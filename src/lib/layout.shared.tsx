@@ -20,7 +20,7 @@ export function baseOptions(): BaseLayoutProps {
             height={32}
             className="align-top"
           />
-          <span>Synvo</span>
+          <span>Synvo API</span>
         </>
       ),
     },
@@ -29,7 +29,7 @@ export function baseOptions(): BaseLayoutProps {
     links: [
       {
         text: "Discord",
-        url: "https://discord.com/",
+        url: "https://discord.gg/M3qHRjBK",
         icon: <ExternalLinkIcon />,
       },
     ],

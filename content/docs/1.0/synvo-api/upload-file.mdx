@@ -1,0 +1,11 @@
+---
+title: "[POST] Upload a file"
+description: Upload a file
+slug: /synvo-api/endpoints/upload-file
+---
+
+import { APIPage } from "fumadocs-openapi/ui";
+
+Uploads a file to the specified path, builds memory index if requested, and stores in Azure Blob Storage
+
+<APIPage document={"./public/openapi.yaml"} operations={[{"path":"/file/upload","method":"post"}]} webhooks={[]} hasHead={false} />

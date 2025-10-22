@@ -11,8 +11,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "Synvo",
-    template: "%s | Synvo",
+    default: "Synvo API",
+    template: "%s | Synvo API",
   },
   description: "Multimodal Contextualization System for AI Agents",
   icons: {

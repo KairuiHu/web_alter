@@ -17,7 +17,7 @@ export default function HomePage() {
             height={64}
             className="align-top"
           />
-          <h1 className="text-4xl font-bold sm:text-5xl">Synvo</h1>
+          <h1 className="text-4xl font-bold sm:text-5xl">Synvo API</h1>
         </div>
         <p className="text-fd-muted-foreground text-balance">
           Multimodal Contextualization System for AI Agents.
@@ -58,44 +58,23 @@ export default function HomePage() {
                   Transforms unstructured multimodal data into structured context that makes AI responses more accurate and human-like.
                 </p>
               </div>
-              <div>
-                <h3 className="mb-2 text-lg font-semibold">On-Device Execution</h3>
-                <p className="text-sm text-fd-muted-foreground">
-                  Delivers low-latency, privacy-preserving AI by processing context and memory directly on the device.
-                </p>
-              </div>
             </div>
           </div>
           <div>
             <Tabs
-              items={["Create API Key", "Upload File", "Query Document"]}
+              items={["Upload File", "Get Context"]}
               className="w-full"
             >
-              <Tab value="Create API Key">
-                <pre className="overflow-x-auto rounded-lg bg-fd-muted p-4 text-sm">
-                  <code>{`import requests
-
-# Create API key
-response = requests.post(
-    "https://api.synvo.ai/user/api_keys/create",
-    data={"name": "My API Key"},
-    headers={"X-API-Key": session_token}
-)
-
-api_key = response.json()["api_key"]
-print(f"API key created: {api_key}")`}</code>
-                </pre>
-              </Tab>
               <Tab value="Upload File">
                 <pre className="overflow-x-auto rounded-lg bg-fd-muted p-4 text-sm">
-                  <code>{`# Upload document for AI processing
+                  <code>{`# Upload document into contextual memory
+api_key = "YOUR_SYNVO_API_KEY"
 with open("document.pdf", "rb") as f:
     response = requests.post(
         "https://api.synvo.ai/file/upload",
         files={"file": f},
         data={
-            "path": "/",
-            "build_memory": "true"
+            "path": "/"
         },
         headers={"X-API-Key": api_key}
     )
@@ -103,22 +82,26 @@ with open("document.pdf", "rb") as f:
 file_id = response.json()["file_id"]`}</code>
                 </pre>
               </Tab>
-              <Tab value="Query Document">
+              <Tab value="Get Context">
                 <pre className="overflow-x-auto rounded-lg bg-fd-muted p-4 text-sm">
-                  <code>{`# Query your document with AI
+                  <code>{`# Get query-related context
+api_key = "YOUR_SYNVO_API_KEY"
+query = "The author of the document"
 payload = {
     "messages": [{
         "role": "user",
         "content": [
-            {"type": "text", "text": "Summarize this document"},
-            {"type": "file", "file_id": file_id}
+            {"type": "text", "text": query},
         ]
     }]
 }
 
 response = requests.post(
-    "https://api.synvo.ai/ai/query",
-    data={"payload": json.dumps(payload), "model": "synvo"},
+    "https://api.synvo.ai/ai/query", 
+    data={
+        "payload": json.dumps(payload),
+        "model": "synvo"
+    },
     headers={"X-API-Key": api_key}
 )`}</code>
                 </pre>

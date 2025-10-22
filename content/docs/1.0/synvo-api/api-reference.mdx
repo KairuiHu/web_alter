@@ -1,36 +1,85 @@
 ---
 id: api-reference
-title: Interactive API Reference
+title: API Reference Overview
 slug: /synvo-api/api-reference
-description: Explore every Synvo API endpoint with an interactive, OpenAPI-powered "try it out" experience.
+description: Overview of the Synvo API endpoints with links to detailed documentation for each endpoint.
 ---
 
-import { OpenAPITagSection } from "@/components/openapi-tag-section";
+# Synvo API Reference
 
-The embedded reference below is powered directly by the schema in [`public/openapi.yaml`](/openapi.yaml). Provide a Synvo API key or bearer token when prompted to send authenticated requests.
+Welcome to the Synvo API documentation. This API provides comprehensive endpoints for file management, AI interactions, session history, and more.
 
-> **Tip:** Use the “Environment” button inside the reference panel to set base URLs, default headers, and authentication once—each request will reuse them.
+## Quick Start
 
-## Files endpoints
+All API requests require authentication using an API key. Include your API key in the `X-API-Key` header:
 
-<OpenAPITagSection tag="Files" />
+```bash
+curl -H "X-API-Key: YOUR_API_KEY" https://api.synvo.ai/endpoint
+```
 
-## AI endpoints
+## API Endpoints
 
-<OpenAPITagSection tag="AI" />
+### Manage Documents
+Manage your documents, files, and directories:
 
-## History endpoints
+- **[Create Directory](/docs/1.0/synvo-api/endpoints/create-directory)** - Create a virtual directory
+- **[Upload a file](/docs/1.0/synvo-api/endpoints/upload-file)** - Upload a file
+- **[List documents](/docs/1.0/synvo-api/endpoints/list-files)** - List directory contents
+- **[Download File](/docs/1.0/synvo-api/endpoints/download-file)** - Download a file by ID
+- **[Delete document by ID or customId](/docs/1.0/synvo-api/endpoints/delete-file)** - Delete a file by ID
+- **[Update document](/docs/1.0/synvo-api/endpoints/move-file)** - Move or rename files
+- **[Get File Thumbnail](/docs/1.0/synvo-api/endpoints/get-file-thumbnail)** - Get file thumbnails
+- **[Get processing documents](/docs/1.0/synvo-api/endpoints/get-file-status)** - Check file processing status
+- **[Add Document](/docs/1.0/synvo-api/endpoints/add-webpage)** - Add a document with any content type
 
-<OpenAPITagSection tag="History" />
+### Search
+Search and query functionality:
 
-## API Keys endpoints
+- **[Search Documents](/docs/1.0/synvo-api/endpoints/file-search)** - AI-powered file search
+- **[Search Memory Entries](/docs/1.0/synvo-api/endpoints/query-ai)** - Submit queries to the AI
 
-<OpenAPITagSection tag="API Keys" />
+### Session Management
+Manage conversation sessions:
 
-## Feedback endpoints
+- **[List Sessions](/docs/1.0/synvo-api/endpoints/list-sessions)** - List all conversation sessions
+- **[Get Session](/docs/1.0/synvo-api/endpoints/get-session)** - Get session details
+- **[Delete Session](/docs/1.0/synvo-api/endpoints/delete-session)** - Delete a session
 
-<OpenAPITagSection tag="Feedback" />
+### Feedback
+Provide feedback on AI responses:
 
-## Metadata endpoints
+- **[Like Message](/docs/1.0/synvo-api/endpoints/like-message)** - Like an AI response
+- **[Dislike Message](/docs/1.0/synvo-api/endpoints/dislike-message)** - Dislike an AI response
+- **[Get Message Feedback](/docs/1.0/synvo-api/endpoints/get-message-feedback)** - Get feedback status
+- **[Cancel Message Feedback](/docs/1.0/synvo-api/endpoints/cancel-message-feedback)** - Remove feedback
 
-<OpenAPITagSection tag="Metadata" />
+### API Keys
+Manage your API keys:
+
+- **[List API Keys](/docs/1.0/synvo-api/endpoints/list-api-keys)** - List all API keys
+- **[Create API Key](/docs/1.0/synvo-api/endpoints/create-api-key)** - Create a new API key
+
+### Metadata
+Access file metadata:
+
+- **[Get Metadata](/docs/1.0/synvo-api/endpoints/get-metadata)** - Get file information and metadata
+
+## Interactive Documentation
+
+Each endpoint page includes:
+- **Detailed descriptions** of parameters and responses
+- **Code examples** in multiple languages (cURL, Python, JavaScript)
+- **Interactive testing** capabilities
+- **Response schemas** and examples
+
+## Authentication
+
+All endpoints require authentication using an API key. You can obtain an API key from your account settings or create one using the [Create API Key](/docs/1.0/synvo-api/endpoints/create-api-key) endpoint.
+
+## Base URL
+
+The API base URL is: `https://api.synvo.ai`
+
+## Rate Limits
+
+API requests are subject to rate limiting. Please refer to your account dashboard for current limits and usage.

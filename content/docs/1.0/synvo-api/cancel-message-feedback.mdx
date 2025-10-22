@@ -1,0 +1,11 @@
+---
+title: "[POST] Cancel Message Feedback"
+description: Cancel message feedback
+slug: /synvo-api/endpoints/cancel-message-feedback
+---
+
+import { APIPage } from "fumadocs-openapi/ui";
+
+Removes any existing feedback (like/dislike) from a message
+
+<APIPage document={"./public/openapi.yaml"} operations={[{"path":"/ai/feedback/{cuid}","method":"delete"}]} webhooks={[]} hasHead={false} />
