@@ -28,7 +28,8 @@ export default function HomePage() {
       <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
         <Link
           href="https://console.synvo.ai/"
-          className={cn(buttonVariants({ color: "primary" }), "px-6 py-3 text-base")}
+          className="px-6 py-3 text-base text-white font-medium rounded-lg transition-colors hover:opacity-90"
+          style={{ backgroundColor: 'rgb(0, 164, 234)' }}
         >
           Access API Key
         </Link>
