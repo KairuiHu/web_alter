@@ -6,7 +6,7 @@ import { cn } from "@/lib/cn";
 
 export default function HomePage() {
   return (
-    <main className="flex flex-1 flex-col items-center justify-center gap-8 py-16">
+    <main className="flex flex-1 flex-col items-center justify-center gap-4 py-16">
       {/* Hero Section */}
       <div className="mx-auto max-w-4xl text-center">
         <div className="mb-6 flex items-center justify-center gap-3">
@@ -19,9 +19,25 @@ export default function HomePage() {
           />
           <h1 className="text-3xl font-bold sm:text-4xl">Synvo API</h1>
         </div>
-        <p className="mb-8 text-fd-muted-foreground text-balance text-lg">
+        <p className="mb-2 text-fd-muted-foreground text-balance text-lg">
           Synvo API enables AI agents with deep multimodal contextual understanding, enhancing performance through accurate context retrieval from diverse user data.
         </p>
+      </div>
+
+      {/* CTA Buttons */}
+      <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
+        <Link
+          href="https://console.synvo.ai/"
+          className={cn(buttonVariants({ color: "primary" }), "px-6 py-3 text-base")}
+        >
+          Access API Key
+        </Link>
+        <Link
+          href="http://docs.synvo.ai/docs/1.0/quick-start"
+          className={cn(buttonVariants({ variant: "outline" }), "px-6 py-3 text-base")}
+        >
+          Learn More
+        </Link>
       </div>
 
       {/* Demo and Code Section */}
@@ -112,21 +128,6 @@ response = requests.post(
         </div>
       </div>
 
-      {/* CTA Buttons */}
-      <div className="flex flex-wrap items-center justify-center gap-3">
-        <Link
-          href="https://console.synvo.ai/"
-          className={cn(buttonVariants({ color: "primary" }), "px-6 py-3 text-base")}
-        >
-          Access API Key
-        </Link>
-        <Link
-          href="http://docs.synvo.ai/docs/1.0/quick-start"
-          className={cn(buttonVariants({ variant: "outline" }), "px-6 py-3 text-base")}
-        >
-          Learn More
-        </Link>
-      </div>
     </main>
   );
 }
