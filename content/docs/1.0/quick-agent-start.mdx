@@ -1,0 +1,399 @@
+---
+id: quick-agent-start
+title: Quick Agent Start
+slug: /quick-agent-start
+---
+
+A Model Context Protocol (MCP) server that enables Claude Desktop, VSCode, Cursor and other AI agents to upload files and query Synvo AI's powerful document analysis capabilities directly from your development environment.
+
+## What Can This MCP Server Do?
+
+This server adds two powerful capabilities to your AI agent:
+
+### 🚀 Upload & Analyze Files
+Upload any document (PDF, DOCX, TXT, images, etc.) to Synvo AI for content extraction and analysis
+
+### 💬 Query File Contents
+Ask questions about uploaded documents and get AI-powered insights with multi-turn conversations
+
+## Quick Setup (5 Minutes)
+
+### Step 1: Installation
+
+<Tabs items={["npm", "Git Clone"]}>
+  <Tab value="npm">
+
+```bash
+# Install from npm (recommended)
+npm install -g @synvo_ai/mcp-server
+```
+
+  </Tab>
+  <Tab value="Git Clone">
+
+```bash
+# Or clone and build locally
+git clone https://github.com/synvoai/mcp-server.git
+cd mcp-server
+npm install
+npm run build
+```
+
+  </Tab>
+</Tabs>
+
+### Step 2: Get Your API Key
+
+Get your free API key from [Synvo Dashboard](https://console.synvo.ai).
+
+1. Log into your [Synvo dashboard](https://console.synvo.ai)
+2. Navigate to **API Keys** section
+3. Click **"Create New Key"**
+4. Copy and save the key immediately - you won't see it again!
+
+### Step 3: Configure Your AI Client
+
+<Tabs items={["Claude Desktop", "VSCode/Cursor"]}>
+  <Tab value="Claude Desktop">
+
+**For macOS:**
+1. Open: `~/Library/Application Support/Claude/claude_desktop_config.json`
+
+**For Windows:**
+1. Open: `%APPDATA%\Claude\claude_desktop_config.json`
+
+2. Add this configuration:
+
+```json
+{
+  "mcpServers": {
+    "synvo": {
+      "command": "npx",
+      "args": ["-y", "@synvo_ai/mcp-server"],
+      "env": {
+        "SYNVO_API_KEY": "your-api-key-here"
+      }
+    }
+  }
+}
+```
+
+3. Restart Claude Desktop
+
+  </Tab>
+  <Tab value="VSCode/Cursor">
+
+Add to your MCP settings:
+
+```json
+{
+  "mcp.servers": {
+    "synvo": {
+      "command": "npx",
+      "args": ["-y", "@synvo_ai/mcp-server"],
+      "env": {
+        "SYNVO_API_KEY": "your-api-key-here"
+      }
+    }
+  }
+}
+```
+
+  </Tab>
+</Tabs>
+
+## Usage Examples
+
+Once configured, you can interact with your AI agent using natural language:
+
+### Example 1: Analyze a Document
+
+<div style={{border: "2px solid #e2e8f0", borderRadius: "12px", padding: "20px", marginBottom: "20px", backgroundColor: "#fafafa"}}>
+  <h4>💬 User:</h4>
+  <p style={{fontStyle: "italic"}}>"Upload and analyze this PDF file: /Users/lucy/Documents/report.pdf"</p>
+
+  <h4 style={{marginTop: "15px"}}>🤖 AI Agent:</h4>
+  <p style={{color: "#059669"}}>✅ File uploaded successfully!</p>
+  <p><strong>File ID:</strong> <code>abc123...</code></p>
+  <p>The file is now available for analysis.</p>
+</div>
+
+### Example 2: Query File Contents
+
+<div style={{border: "2px solid #e2e8f0", borderRadius: "12px", padding: "20px", marginBottom: "20px", backgroundColor: "#fafafa"}}>
+  <h4>💬 User:</h4>
+  <p style={{fontStyle: "italic"}}>"What are the main findings in that report?"</p>
+
+  <h4 style={{marginTop: "15px"}}>🤖 AI Agent:</h4>
+  <p>📝 AI Response:</p>
+  <p>The report identifies three main findings:</p>
+  <ol>
+    <li>Revenue increased by 25% year-over-year</li>
+    <li>Customer satisfaction improved to 92%</li>
+    <li>Operating costs decreased by 15%</li>
+  </ol>
+  <p style={{fontSize: "14px", color: "#666"}}>💬 Conversation ID: <code>conv_xyz789</code></p>
+  <p style={{fontSize: "14px", color: "#666"}}>(Use this ID to continue the conversation)</p>
+</div>
+
+### Example 3: Multi-Turn Conversation
+
+<div style={{border: "2px solid #e2e8f0", borderRadius: "12px", padding: "20px", marginBottom: "20px", backgroundColor: "#fafafa"}}>
+  <h4>💬 User:</h4>
+  <p style={{fontStyle: "italic"}}>"Can you give me more details about the cost reduction?"</p>
+
+  <h4 style={{marginTop: "15px"}}>🤖 AI Agent:</h4>
+  <p>📝 AI Response:</p>
+  <p>The 15% cost reduction was achieved through:</p>
+  <ul>
+    <li>Automation of manual processes (8% savings)</li>
+    <li>Renegotiated supplier contracts (5% savings)</li>
+    <li>Energy efficiency improvements (2% savings)</li>
+  </ul>
+</div>
+
+## Available Tools
+
+### 1. synvo_upload_file
+
+Upload and analyze documents to make them available for AI queries.
+
+**Parameters:**
+
+<Tabs items={["Parameters", "Example"]}>
+  <Tab value="Parameters">
+    <ul>
+      <li><code>file_path</code> (required): Absolute path to the file</li>
+      <li><code>build_memory</code> (optional): Build AI memory from content (default: true)</li>
+    </ul>
+  </Tab>
+  <Tab value="Example">
+
+```json
+{
+  "file_path": "/Users/lucy/Documents/contract.pdf",
+  "build_memory": true
+}
+```
+
+  </Tab>
+</Tabs>
+
+### 2. synvo_query_ai
+
+Ask questions about uploaded files or have AI conversations.
+
+**Parameters:**
+
+<Tabs items={["Parameters", "Example"]}>
+  <Tab value="Parameters">
+    <ul>
+      <li><code>message</code> (required): Your question or instruction</li>
+      <li><code>conversation_id</code> (optional): Continue a previous conversation</li>
+      <li><code>stream</code> (optional): Stream the response (default: false)</li>
+    </ul>
+  </Tab>
+  <Tab value="Example">
+
+```json
+{
+  "message": "Summarize the key points from the contract",
+  "conversation_id": "conv_abc123"
+}
+```
+
+  </Tab>
+</Tabs>
+
+## Common Use Cases
+
+### 📄 Document Analysis
+
+<div style={{border: "1px solid #e2e8f0", borderRadius: "8px", padding: "15px", marginBottom: "15px"}}>
+  <ul style={{marginBottom: 0}}>
+    <li>"Upload this research paper and extract the methodology section"</li>
+    <li>"Analyze this contract and highlight any unusual clauses"</li>
+    <li>"Summarize the key findings from this financial report"</li>
+  </ul>
+</div>
+
+### 🔄 Multi-Document Comparison
+
+<div style={{border: "1px solid #e2e8f0", borderRadius: "8px", padding: "15px", marginBottom: "15px"}}>
+  <ul style={{marginBottom: 0}}>
+    <li>"Upload these three proposals and compare their pricing"</li>
+    <li>"What are the differences between document A and document B?"</li>
+  </ul>
+</div>
+
+### 🔍 Information Extraction
+
+<div style={{border: "1px solid #e2e8f0", borderRadius: "8px", padding: "15px", marginBottom: "15px"}}>
+  <ul style={{marginBottom: 0}}>
+    <li>"Extract all dates and deadlines from this project plan"</li>
+    <li>"List all the action items mentioned in this meeting transcript"</li>
+    <li>"Find all references to 'budget' in these documents"</li>
+  </ul>
+</div>
+
+### 🌐 Translation & Transformation
+
+<div style={{border: "1px solid #e2e8f0", borderRadius: "8px", padding: "15px", marginBottom: "15px"}}>
+  <ul style={{marginBottom: 0}}>
+    <li>"Translate the content of this document to Spanish"</li>
+    <li>"Convert this technical document into simple language"</li>
+    <li>"Create a bullet-point summary of this report"</li>
+  </ul>
+</div>
+
+## Supported File Types
+
+<div style={{display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "15px", marginBottom: "20px"}}>
+  <div style={{border: "1px solid #e2e8f0", borderRadius: "8px", padding: "15px"}}>
+    <h4>📄 Documents</h4>
+    <p style={{fontSize: "14px", marginBottom: 0}}>PDF, DOCX, DOC, TXT, RTF</p>
+  </div>
+  <div style={{border: "1px solid #e2e8f0", borderRadius: "8px", padding: "15px"}}>
+    <h4>📊 Spreadsheets</h4>
+    <p style={{fontSize: "14px", marginBottom: 0}}>XLSX, XLS, CSV</p>
+  </div>
+  <div style={{border: "1px solid #e2e8f0", borderRadius: "8px", padding: "15px"}}>
+    <h4>🖼️ Images</h4>
+    <p style={{fontSize: "14px", marginBottom: 0}}>PNG, JPG, JPEG, GIF (with OCR)</p>
+  </div>
+  <div style={{border: "1px solid #e2e8f0", borderRadius: "8px", padding: "15px"}}>
+    <h4>📽️ Presentations</h4>
+    <p style={{fontSize: "14px", marginBottom: 0}}>PPTX, PPT</p>
+  </div>
+  <div style={{border: "1px solid #e2e8f0", borderRadius: "8px", padding: "15px"}}>
+    <h4>💻 Code</h4>
+    <p style={{fontSize: "14px", marginBottom: 0}}>JS, PY, TS, Java, etc.</p>
+  </div>
+</div>
+
+## Troubleshooting
+
+### Server Not Starting
+
+- Check if Node.js 18+ is installed: `node --version`
+- Verify the build completed: `npm run build`
+- Check logs in Claude Desktop: Menu → Settings → Developer
+
+### Upload Failures
+
+- Ensure file path is absolute (not relative)
+- Verify file exists and is readable
+- Check file size (max 50MB recommended)
+- Confirm API key is valid
+
+### Query Not Working
+
+- Upload a file first before querying
+- Check if conversation_id is valid
+- Verify network connectivity to api.synvo.ai
+
+### Getting Help
+
+- Check full documentation at [https://synvo.ai/docs](https://synvo.ai/docs)
+- API reference at [https://docs.synvo.ai](https://docs.synvo.ai)
+- Report issues at [https://github.com/synvoai/mcp-server/issues](https://github.com/synvoai/mcp-server/issues)
+
+## Advanced Configuration
+
+### Using a Local Build Instead of NPM
+
+If you prefer to use a local build:
+
+<Tabs items={["Windows", "macOS/Linux"]}>
+  <Tab value="Windows">
+
+```json
+{
+  "mcpServers": {
+    "synvo": {
+      "command": "node",
+      "args": ["C:\\path\\to\\synvo-mcp\\dist\\index.js"],
+      "env": {
+        "SYNVO_API_KEY": "your-api-key-here"
+      }
+    }
+  }
+}
+```
+
+  </Tab>
+  <Tab value="macOS/Linux">
+
+```json
+{
+  "mcpServers": {
+    "synvo": {
+      "command": "node",
+      "args": ["/path/to/synvo-mcp/dist/index.js"],
+      "env": {
+        "SYNVO_API_KEY": "your-api-key-here"
+      }
+    }
+  }
+}
+```
+
+  </Tab>
+</Tabs>
+
+### Environment Variables
+
+You can also set the API key globally:
+
+<Tabs items={["Windows", "macOS/Linux"]}>
+  <Tab value="Windows">
+
+```cmd
+setx SYNVO_API_KEY "your-api-key-here"
+```
+
+Then simplify your config:
+
+```json
+{
+  "mcpServers": {
+    "synvo": {
+      "command": "npx",
+      "args": ["-y", "@synvo_ai/mcp-server"]
+    }
+  }
+}
+```
+
+  </Tab>
+  <Tab value="macOS/Linux">
+
+```bash
+export SYNVO_API_KEY="your-api-key-here"
+```
+
+Then simplify your config:
+
+```json
+{
+  "mcpServers": {
+    "synvo": {
+      "command": "npx",
+      "args": ["-y", "@synvo_ai/mcp-server"]
+    }
+  }
+}
+```
+
+  </Tab>
+</Tabs>
+
+## What's Next?
+
+- Explore the full API documentation at [docs.synvo.ai](https://docs.synvo.ai)
+- Join the community on Discord: [https://discord.gg/synvoai](https://discord.gg/synvoai)
+- Follow updates on Twitter: [@SynvoAI](https://twitter.com/SynvoAI)
+
+---
+
+**Need Help?** Contact support@synvo.ai or visit [https://synvo.ai/support](https://synvo.ai/support)
