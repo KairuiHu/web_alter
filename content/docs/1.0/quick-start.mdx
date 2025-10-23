@@ -306,7 +306,14 @@ response = requests.post(
 )
 
 result = response.json()
-print("Answer:", result["response"]["content"][0]["text"])
+
+# Print top 3 related factsed facts
+k = 3
+facts = result["content"][0]["facts"][:k]
+for i, fact in enumerate(facts, 1):
+    print(f"\n--- Fact {i} ---")
+    print(f"Chunk: {fact['chunk']}...")
+    print(f"Reference: {fact['reference']}")
 ```
 
   </Tab>
@@ -342,7 +349,14 @@ response = requests.post(
 )
 
 result = response.json()
-print("Answer:", result["response"]["content"][0]["text"])
+
+# Print top 3 related factsed facts
+k = 3
+facts = result["content"][0]["facts"][:k]
+for i, fact in enumerate(facts, 1):
+    print(f"\n--- Fact {i} ---")
+    print(f"Chunk: {fact['chunk']}...")
+    print(f"Reference: {fact['reference']}")
 ```
 
   </Tab>
@@ -378,7 +392,14 @@ response = requests.post(
 )
 
 result = response.json()
-print("Answer:", result["response"]["content"][0]["text"])
+
+# Print top 3 related facts
+k = 3
+facts = result["content"][0]["facts"][:k]
+for i, fact in enumerate(facts, 1):
+    print(f"\n--- Fact {i} ---")
+    print(f"Chunk: {fact['chunk']}...")
+    print(f"Reference: {fact['reference']}")
 ```
 
   </Tab>
@@ -414,7 +435,14 @@ response = requests.post(
 )
 
 result = response.json()
-print("Answer:", result["response"]["content"][0]["text"])
+
+# Print top 3 related facts
+k = 3
+facts = result["content"][0]["facts"][:k]
+for i, fact in enumerate(facts, 1):
+    print(f"\n--- Fact {i} ---")
+    print(f"Chunk: {fact['chunk']}...")
+    print(f"Reference: {fact['reference']}")
 ```
 
   </Tab>
