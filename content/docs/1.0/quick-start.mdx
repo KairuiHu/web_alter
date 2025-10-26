@@ -4,13 +4,15 @@ title: Quick Start for Human User
 slug: /quick-start
 ---
 
-This Quick Start guide demonstrates Synvo's multimodal AI capabilities using real demo files. You will learn how to upload and query different file types: PDFs, images, videos, and audio files. Each demo includes downloadable files and specific questions to showcase AI understanding across modalities. You can also manage your files and queries in [Synvo Dashboard](https://console.synvo.ai/dashboard).
+This Quick Start guide demonstrates Synvo's multimodal AI capabilities using real demo files. You will learn how to upload and query different file types: PDFs, images, videos, and audio files. Each demo includes downloadable files and specific questions to showcase AI understanding across modalities. You can also manage your files and queries in <a href="https://console.synvo.ai/dashboard" style={{color: "#3b82f6", textDecoration: "none", backgroundColor: "rgba(59, 130, 246, 0.08)", padding: "2px 8px", borderRadius: "6px", fontWeight: "500"}}>Synvo Dashboard</a>.
 
 ## Demo Files Overview
 
-We will use these real files to demonstrate multimodal capabilities. **Click on each file below to preview and interact with the content:**
+We will use these real files to demonstrate multimodal capabilities. **Click on each tab below to preview and interact with the content:**
 
-### 📄 PDF Demo File
+<Tabs items={["📄 PDF", "🖼️ Image", "🎥 Video", "🎵 Audio"]}>
+  <Tab value="📄 PDF">
+
 <div style={{border: "2px solid #e2e8f0", borderRadius: "12px", padding: "20px", marginBottom: "20px", backgroundColor: "#fafafa"}}>
   <h4>NTU Annual Report 2024</h4>
   <p><strong>Question:</strong> "How many patents did NTU file in FY2023?"</p>
@@ -25,12 +27,14 @@ We will use these real files to demonstrate multimodal capabilities. **Click on 
     </iframe>
   </div>
   <div style={{fontSize: "14px", color: "#666", marginTop: "10px"}}>
-    📥 <a href="/assets/NTU_Annual_Report_2024.pdf" download>Download PDF</a> | 
+    📥 <a href="/assets/NTU_Annual_Report_2024.pdf" download style={{color: "#3b82f6", textDecoration: "none", backgroundColor: "rgba(59, 130, 246, 0.08)", padding: "2px 6px", borderRadius: "4px"}}>Download PDF</a> | 
     📊 This report contains detailed patent filing statistics for FY2023
   </div>
 </div>
 
-### 🖼️ Image Demo File  
+  </Tab>
+  <Tab value="🖼️ Image">
+
 <div style={{border: "2px solid #e2e8f0", borderRadius: "12px", padding: "20px", marginBottom: "20px", backgroundColor: "#fafafa"}}>
   <h4>WellFest Event Poster</h4>
   <p><strong>Question:</strong> "When is the WellFest Finale event and where is it located?"</p>
@@ -45,12 +49,14 @@ We will use these real files to demonstrate multimodal capabilities. **Click on 
      </a>
   </div>
   <div style={{fontSize: "14px", color: "#666", marginTop: "10px"}}>
-    📥 <a href="/assets/poster.jpg" download>Download Image</a> | 
+    📥 <a href="/assets/poster.jpg" download style={{color: "#3b82f6", textDecoration: "none", backgroundColor: "rgba(59, 130, 246, 0.08)", padding: "2px 6px", borderRadius: "4px"}}>Download Image</a> | 
     🎪 Click image to view full size | Contains event timing and location details
   </div>
 </div>
 
-### 🎥 Video Demo File
+  </Tab>
+  <Tab value="🎥 Video">
+
 <div style={{border: "2px solid #e2e8f0", borderRadius: "12px", padding: "20px", marginBottom: "20px", backgroundColor: "#fafafa"}}>
   <h4>Andrew's Machine Learning Lecture</h4>
   <p><strong>Question:</strong> "What is the answer to the in-video quiz in Andrew's lecture?"</p>
@@ -67,12 +73,14 @@ We will use these real files to demonstrate multimodal capabilities. **Click on 
     </video>
   </div>
   <div style={{fontSize: "14px", color: "#666", marginTop: "10px"}}>
-    📥 <a href="/assets/Andrew_lecture.mp4" download>Download Video</a> | 
+    📥 <a href="/assets/Andrew_lecture.mp4" download style={{color: "#3b82f6", textDecoration: "none", backgroundColor: "rgba(59, 130, 246, 0.08)", padding: "2px 6px", borderRadius: "4px"}}>Download Video</a> | 
     🎓 Educational ML content with mathematical formulas and quiz questions
   </div>
 </div>
 
-### 🎵 Audio Demo File
+  </Tab>
+  <Tab value="🎵 Audio">
+
 <div style={{border: "2px solid #e2e8f0", borderRadius: "12px", padding: "20px", marginBottom: "20px", backgroundColor: "#fafafa"}}>
   <h4>Finance Lecture on EBIT</h4>
   <p><strong>Question:</strong> "In the lecture about the operating profit margin formula, what is the value of EBIT used in the example calculation for the year 2018?"</p>
@@ -87,70 +95,202 @@ We will use these real files to demonstrate multimodal capabilities. **Click on 
     </audio>
   </div>
   <div style={{fontSize: "14px", color: "#666", marginTop: "10px"}}>
-    📥 <a href="/assets/Finance_lecture.mp3" download>Download Audio</a> | 
+    📥 <a href="/assets/Finance_lecture.mp3" download style={{color: "#3b82f6", textDecoration: "none", backgroundColor: "rgba(59, 130, 246, 0.08)", padding: "2px 6px", borderRadius: "4px"}}>Download Audio</a> | 
     💰 Finance lecture covering EBIT calculations and profit margin formulas
   </div>
 </div>
 
-## Step 1: Create API Key
+  </Tab>
+</Tabs>
 
-First, create an API key to authenticate your requests.
+## Step 1: Setup
 
-1. Log into your [Synvo dashboard](https://console.synvo.ai)
+### 1.1 Create API Key
+
+First, create an API key to authenticate your requests:
+
+1. Log into your <a href="https://console.synvo.ai" style={{color: "#3b82f6", textDecoration: "none", backgroundColor: "rgba(59, 130, 246, 0.08)", padding: "2px 8px", borderRadius: "6px", fontWeight: "500"}}>Synvo dashboard</a>
 2. Navigate to **API Keys** section
 3. Click **"Create New Key"**
 4. Give it a name (e.g., "My First Key")
 5. **Copy and save the key immediately** - you won't see it again!
 
-## Step 2: Upload & Query Files
+### 1.2 Set API Key as Environment Variable
 
-### Demo 1: PDF Analysis - NTU Annual Report
+Set your API key as an environment variable:
 
-**File**: `NTU_Annual_Report_2024.pdf`  
-**Question**: "How many patents did NTU file in FY2023?"  
-**Expected Answer**: 672
+```bash
+export SYNVO_API_KEY="your_api_key_here"
+```
 
-<Tabs items={["Python", "JavaScript", "cURL"]}>
+### 1.3 Download Demo Files
+
+Download all demo files to your local directory:
+
+- <a href="/assets/NTU_Annual_Report_2024.pdf" download style={{color: "#3b82f6", textDecoration: "none", backgroundColor: "rgba(59, 130, 246, 0.08)", padding: "2px 6px", borderRadius: "4px"}}>NTU_Annual_Report_2024.pdf</a>
+- <a href="/assets/poster.jpg" download style={{color: "#3b82f6", textDecoration: "none", backgroundColor: "rgba(59, 130, 246, 0.08)", padding: "2px 6px", borderRadius: "4px"}}>poster.jpg</a>
+- <a href="/assets/Andrew_lecture.mp4" download style={{color: "#3b82f6", textDecoration: "none", backgroundColor: "rgba(59, 130, 246, 0.08)", padding: "2px 6px", borderRadius: "4px"}}>Andrew_lecture.mp4</a>
+- <a href="/assets/Finance_lecture.mp3" download style={{color: "#3b82f6", textDecoration: "none", backgroundColor: "rgba(59, 130, 246, 0.08)", padding: "2px 6px", borderRadius: "4px"}}>Finance_lecture.mp3</a>
+
+Save all files to the same directory where you will run the code examples.
+
+## Step 2: Upload All Files
+
+Upload all four demo files at once and wait for processing to complete.
+
+<Tabs items={["Python", "cURL"]}>
   <Tab value="Python">
 
 ```python
 import requests
 import json
 import time
+import os
 
-api_key = "YOUR_API_KEY"
+api_key = os.getenv("SYNVO_API_KEY")
 
-# Upload PDF file
-with open("./NTU_Annual_Report_2024.pdf", "rb") as f:
-    response = requests.post(
-        "https://api.synvo.ai/file/upload",
-        files={"file": f},
-        data={"path": "/", "build_memory": "true"},
-        headers={"X-API-Key": api_key}
-    )
+# Define all files to upload
+files_to_upload = [
+    "NTU_Annual_Report_2024.pdf",
+    "poster.jpg",
+    "Andrew_lecture.mp4",
+    "Finance_lecture.mp3"
+]
 
-file_id = response.json()["file_id"]
-print(f"File uploaded: {file_id}")
+# Upload all files
+file_ids = {}
+for filename in files_to_upload:
+    print(f"Uploading {filename}...")
+    with open(filename, "rb") as f:
+        response = requests.post(
+            "https://api.synvo.ai/file/upload",
+            files={"file": f},
+            data={"path": "/", "build_memory": "true"},
+            headers={"X-API-Key": api_key}
+        )
+    file_id = response.json()["file_id"]
+    file_ids[filename] = file_id
+    print(f"✅ {filename} uploaded: {file_id}")
 
-# Wait for processing
-while True:
-    status_response = requests.get(
-        f"https://api.synvo.ai/file/status/{file_id}",
-        headers={"X-API-Key": api_key}
-    )
+# Wait for all files to complete processing
+print("\n⏳ Waiting for all files to process...")
+for filename, file_id in file_ids.items():
+    while True:
+        status_response = requests.get(
+            f"https://api.synvo.ai/file/status/{file_id}",
+            headers={"X-API-Key": api_key}
+        )
+        status = status_response.json()["status"]
+        if status == "COMPLETED":
+            print(f"✅ {filename} processing complete!")
+            break
+        elif status == "FAILED":
+            print(f"❌ {filename} processing failed!")
+            break
+        time.sleep(5)
+
+print("\n🎉 All files ready for querying!")
+print("\nFile IDs:")
+for filename, file_id in file_ids.items():
+    print(f"  {filename}: {file_id}")
+```
+
+  </Tab>
+  <Tab value="cURL">
+
+```bash
+# Upload all files
+echo "Uploading files..."
+
+# Upload PDF
+PDF_RESPONSE=$(curl -s -X POST "https://api.synvo.ai/file/upload" \
+  -H "X-API-Key: $SYNVO_API_KEY" \
+  -F "file=@./NTU_Annual_Report_2024.pdf" \
+  -F "path=/" \
+  -F "build_memory=true")
+PDF_FILE_ID=$(echo $PDF_RESPONSE | jq -r '.file_id')
+echo "✅ PDF uploaded: $PDF_FILE_ID"
+
+# Upload Image
+IMAGE_RESPONSE=$(curl -s -X POST "https://api.synvo.ai/file/upload" \
+  -H "X-API-Key: $SYNVO_API_KEY" \
+  -F "file=@./poster.jpg" \
+  -F "path=/" \
+  -F "build_memory=true")
+IMAGE_FILE_ID=$(echo $IMAGE_RESPONSE | jq -r '.file_id')
+echo "✅ Image uploaded: $IMAGE_FILE_ID"
+
+# Upload Video
+VIDEO_RESPONSE=$(curl -s -X POST "https://api.synvo.ai/file/upload" \
+  -H "X-API-Key: $SYNVO_API_KEY" \
+  -F "file=@./Andrew_lecture.mp4" \
+  -F "path=/" \
+  -F "build_memory=true")
+VIDEO_FILE_ID=$(echo $VIDEO_RESPONSE | jq -r '.file_id')
+echo "✅ Video uploaded: $VIDEO_FILE_ID"
+
+# Upload Audio
+AUDIO_RESPONSE=$(curl -s -X POST "https://api.synvo.ai/file/upload" \
+  -H "X-API-Key: $SYNVO_API_KEY" \
+  -F "file=@./Finance_lecture.mp3" \
+  -F "path=/" \
+  -F "build_memory=true")
+AUDIO_FILE_ID=$(echo $AUDIO_RESPONSE | jq -r '.file_id')
+echo "✅ Audio uploaded: $AUDIO_FILE_ID"
+
+# Wait for all files to process
+echo -e "\n⏳ Waiting for all files to process..."
+for FILE_ID in "$PDF_FILE_ID" "$IMAGE_FILE_ID" "$VIDEO_FILE_ID" "$AUDIO_FILE_ID"; do
+  while true; do
+    STATUS=$(curl -s -X GET "https://api.synvo.ai/file/status/$FILE_ID" \
+      -H "X-API-Key: $SYNVO_API_KEY" | jq -r '.status')
     
-    if status_response.json()["status"] == "COMPLETED":
-        print("File processing complete!")
-        break
-    time.sleep(10)
+    if [ "$STATUS" = "COMPLETED" ]; then
+      echo "✅ File $FILE_ID ready!"
+      break
+    elif [ "$STATUS" = "FAILED" ]; then
+      echo "❌ File $FILE_ID failed!"
+      break
+    fi
+    sleep 5
+  done
+done
 
-# Query the PDF
+echo -e "\n🎉 All files ready for querying!"
+echo -e "\nFile IDs:"
+echo "  PDF: $PDF_FILE_ID"
+echo "  Image: $IMAGE_FILE_ID"
+echo "  Video: $VIDEO_FILE_ID"
+echo "  Audio: $AUDIO_FILE_ID"
+```
+
+  </Tab>
+</Tabs>
+
+## Step 3: Query Files
+
+Now query each file with specific questions to demonstrate multimodal AI capabilities.
+
+### Python
+
+<Tabs items={["PDF", "Image", "Video", "Audio"]}>
+  <Tab value="PDF">
+
+**Question**: "How many patents did NTU file in FY2023?"  
+**Expected Answer**: 672
+
+```python
+import requests
+import json
+import os
+
+api_key = os.getenv("SYNVO_API_KEY")
+
 payload = {
     "messages": [{
         "role": "user",
         "content": [
-            {"type": "text", "text": "How many patents did NTU file in FY2023?"},
-            {"type": "file", "file_id": file_id}
+            {"type": "text", "text": "How many patents did NTU file in FY2023?"}
         ]
     }]
 }
@@ -166,108 +306,202 @@ response = requests.post(
 )
 
 result = response.json()
-print("Answer:", result["response"]["content"][0]["text"])
+
+# Print top 3 related factsed facts
+k = 3
+facts = result["content"][0]["facts"][:k]
+for i, fact in enumerate(facts, 1):
+    print(f"\n--- Fact {i} ---")
+    print(f"Chunk: {fact['chunk']}...")
+    print(f"Reference: {fact['reference']}")
 ```
 
   </Tab>
-  <Tab value="JavaScript">
+  <Tab value="Image">
 
-```javascript
-const apiKey = "YOUR_API_KEY";
-const fileInput = document.querySelector('input[type="file"]');
-const file = fileInput.files[0];
+**Question**: "When is the WellFest Finale event and where is it located?"  
+**Expected Answer**: 23rd October 2025 (Thursday), 11am to 4pm, Nanyang Auditorium Foyer
 
-// Upload PDF file
-const formData = new FormData();
-formData.append("file", file);
-formData.append("path", "/");
-formData.append("build_memory", "true");
+```python
+import requests
+import json
+import os
 
-const uploadResponse = await fetch("https://api.synvo.ai/file/upload", {
-  method: "POST",
-  headers: { "X-API-Key": apiKey },
-  body: formData
-});
+api_key = os.getenv("SYNVO_API_KEY")
 
-const { file_id } = await uploadResponse.json();
-console.log("File uploaded:", file_id);
-
-// Wait for processing
-while (true) {
-  const statusResponse = await fetch(`https://api.synvo.ai/file/status/${file_id}`, {
-    headers: { "X-API-Key": apiKey }
-  });
-  
-  const { status } = await statusResponse.json();
-  if (status === "COMPLETED") {
-    console.log("File processing complete!");
-    break;
-  }
-  
-  await new Promise(resolve => setTimeout(resolve, 10000));
+payload = {
+    "messages": [{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "When is the WellFest Finale event and where is it located?"}
+        ]
+    }]
 }
 
-// Query the PDF
-const queryData = new FormData();
-queryData.append("payload", JSON.stringify({
-  messages: [{
-    role: "user",
-    content: [
-      { type: "text", text: "How many patents did NTU file in FY2023?" },
-      { type: "file", file_id }
-    ]
-  }]
-}));
-queryData.append("model", "synvo");
-queryData.append("force_search", "true");
+response = requests.post(
+    "https://api.synvo.ai/ai/query",
+    data={
+        "payload": json.dumps(payload),
+        "model": "synvo",
+        "force_search": "true"
+    },
+    headers={"X-API-Key": api_key}
+)
 
-const queryResponse = await fetch("https://api.synvo.ai/ai/query", {
-  method: "POST",
-  headers: { "X-API-Key": apiKey },
-  body: queryData
-});
+result = response.json()
 
-const result = await queryResponse.json();
-console.log("Answer:", result.response.content[0].text);
+# Print top 3 related factsed facts
+k = 3
+facts = result["content"][0]["facts"][:k]
+for i, fact in enumerate(facts, 1):
+    print(f"\n--- Fact {i} ---")
+    print(f"Chunk: {fact['chunk']}...")
+    print(f"Reference: {fact['reference']}")
 ```
 
   </Tab>
-  <Tab value="cURL">
+  <Tab value="Video">
+
+**Question**: "What is the answer to the in-video quiz in Andrew's lecture?"  
+**Expected Answer**: a_2^{[3]} = g(\\Omega_2^{[3]} \\cdot a^{[2]} + b_2^{[3]})
+
+```python
+import requests
+import json
+import os
+
+api_key = os.getenv("SYNVO_API_KEY")
+
+payload = {
+    "messages": [{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "What is the answer to the in-video quiz in Andrew's lecture?"}
+        ]
+    }]
+}
+
+response = requests.post(
+    "https://api.synvo.ai/ai/query",
+    data={
+        "payload": json.dumps(payload),
+        "model": "synvo",
+        "force_search": "true"
+    },
+    headers={"X-API-Key": api_key}
+)
+
+result = response.json()
+
+# Print top 3 related facts
+k = 3
+facts = result["content"][0]["facts"][:k]
+for i, fact in enumerate(facts, 1):
+    print(f"\n--- Fact {i} ---")
+    print(f"Chunk: {fact['chunk']}...")
+    print(f"Reference: {fact['reference']}")
+```
+
+  </Tab>
+  <Tab value="Audio">
+
+**Question**: "In the lecture about the operating profit margin formula, what is the value of EBIT used in the example calculation for the year 2018?"  
+**Expected Answer**: EBIT = $8 million
+
+```python
+import requests
+import json
+import os
+
+api_key = os.getenv("SYNVO_API_KEY")
+
+payload = {
+    "messages": [{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "In the lecture about the operating profit margin formula, what is the value of EBIT used in the example calculation for the year 2018?"}
+        ]
+    }]
+}
+
+response = requests.post(
+    "https://api.synvo.ai/ai/query",
+    data={
+        "payload": json.dumps(payload),
+        "model": "synvo",
+        "force_search": "true"
+    },
+    headers={"X-API-Key": api_key}
+)
+
+result = response.json()
+
+# Print top 3 related facts
+k = 3
+facts = result["content"][0]["facts"][:k]
+for i, fact in enumerate(facts, 1):
+    print(f"\n--- Fact {i} ---")
+    print(f"Chunk: {fact['chunk']}...")
+    print(f"Reference: {fact['reference']}")
+```
+
+  </Tab>
+</Tabs>
+
+### cURL
+
+<Tabs items={["PDF", "Image", "Video", "Audio"]}>
+  <Tab value="PDF">
+
+**Question**: "How many patents did NTU file in FY2023?"  
+**Expected Answer**: 672
 
 ```bash
-# Upload PDF file
-PDF_RESPONSE=$(curl -X POST "https://api.synvo.ai/file/upload" \
-  -H "X-API-Key: YOUR_API_KEY" \
-  -F "file=@./NTU_Annual_Report_2024.pdf" \
-  -F "path=/" \
-  -F "build_memory=true")
-
-PDF_FILE_ID=$(echo $PDF_RESPONSE | jq -r '.file_id')
-echo "PDF File ID: $PDF_FILE_ID"
-
-# Wait for processing
-echo "⏳ Waiting for PDF processing..."
-while true; do
-  STATUS=$(curl -s -X GET "https://api.synvo.ai/file/status/$PDF_FILE_ID" \
-    -H "X-API-Key: YOUR_API_KEY" | jq -r '.status')
-  
-  echo "Status: $STATUS"
-  
-  if [ "$STATUS" = "COMPLETED" ]; then
-    echo "✅ PDF ready for querying!"
-    break
-  elif [ "$STATUS" = "FAILED" ]; then
-    echo "❌ PDF processing failed"
-    exit 1
-  fi
-  
-  sleep 10
-done
-
-# Query the PDF
 curl -X POST "https://api.synvo.ai/ai/query" \
-  -H "X-API-Key: YOUR_API_KEY" \
-  -F 'payload={"messages":[{"role":"user","content":[{"type":"text","text":"How many patents did NTU file in FY2023?"},{"type":"file","file_id":"'$PDF_FILE_ID'"}]}]}' \
+  -H "X-API-Key: $SYNVO_API_KEY" \
+  -F 'payload={"messages":[{"role":"user","content":[{"type":"text","text":"How many patents did NTU file in FY2023?"}]}]}' \
+  -F "model=synvo" \
+  -F "force_search=true"
+```
+
+  </Tab>
+  <Tab value="Image">
+
+**Question**: "When is the WellFest Finale event and where is it located?"  
+**Expected Answer**: 23rd October 2025 (Thursday), 11am to 4pm, Nanyang Auditorium Foyer
+
+```bash
+curl -X POST "https://api.synvo.ai/ai/query" \
+  -H "X-API-Key: $SYNVO_API_KEY" \
+  -F 'payload={"messages":[{"role":"user","content":[{"type":"text","text":"When is the WellFest Finale event and where is it located?"}]}]}' \
+  -F "model=synvo" \
+  -F "force_search=true"
+```
+
+  </Tab>
+  <Tab value="Video">
+
+**Question**: "What is the answer to the in-video quiz in Andrew's lecture?"  
+**Expected Answer**: a_2^{[3]} = g(\\Omega_2^{[3]} \\cdot a^{[2]} + b_2^{[3]})
+
+```bash
+curl -X POST "https://api.synvo.ai/ai/query" \
+  -H "X-API-Key: $SYNVO_API_KEY" \
+  -F 'payload={"messages":[{"role":"user","content":[{"type":"text","text":"What is the answer to the in-video quiz in Andrew'\''s lecture?"}]}]}' \
+  -F "model=synvo" \
+  -F "force_search=true"
+```
+
+  </Tab>
+  <Tab value="Audio">
+
+**Question**: "In the lecture about the operating profit margin formula, what is the value of EBIT used in the example calculation for the year 2018?"  
+**Expected Answer**: EBIT = $8 million
+
+```bash
+curl -X POST "https://api.synvo.ai/ai/query" \
+  -H "X-API-Key: $SYNVO_API_KEY" \
+  -F 'payload={"messages":[{"role":"user","content":[{"type":"text","text":"In the lecture about the operating profit margin formula, what is the value of EBIT used in the example calculation for the year 2018?"}]}]}' \
   -F "model=synvo" \
   -F "force_search=true"
 ```
@@ -275,360 +509,12 @@ curl -X POST "https://api.synvo.ai/ai/query" \
   </Tab>
 </Tabs>
 
-### Demo 2: Image Analysis - Event Poster
 
-**File**: `poster.jpg`  
-**Question**: "When is the WellFest Finale event and where is it located?"  
-**Expected Answer**: 23rd October 2025 (Thursday), 11am to 4pm, Nanyang Auditorium Foyer
-
-<Tabs items={["Python", "JavaScript"]}>
-  <Tab value="Python">
-
-```python
-# Upload and query image file
-with open("./poster.jpg", "rb") as f:
-    response = requests.post(
-        "https://api.synvo.ai/file/upload",
-        files={"file": f},
-        data={"path": "/", "build_memory": "true"},
-        headers={"X-API-Key": api_key}
-    )
-
-file_id = response.json()["file_id"]
-
-# Wait for processing
-while True:
-    status_response = requests.get(
-        f"https://api.synvo.ai/file/status/{file_id}",
-        headers={"X-API-Key": api_key}
-    )
-    if status_response.json()["status"] == "COMPLETED":
-        break
-    time.sleep(10)
-
-# Query the image
-payload = {
-    "messages": [{
-        "role": "user",
-        "content": [
-            {"type": "text", "text": "When is the WellFest Finale event and where is it located?"},
-            {"type": "file", "file_id": file_id}
-        ]
-    }]
-}
-
-response = requests.post(
-    "https://api.synvo.ai/ai/query",
-    data={
-        "payload": json.dumps(payload),
-        "model": "synvo",
-        "force_search": "true"
-    },
-    headers={"X-API-Key": api_key}
-)
-
-result = response.json()
-print("Answer:", result["response"]["content"][0]["text"])
-```
-
-  </Tab>
-  <Tab value="JavaScript">
-
-```javascript
-// Upload and query image file
-const imageFile = document.querySelector('input[type="file"]').files[0];
-
-const formData = new FormData();
-formData.append("file", imageFile);
-formData.append("path", "/");
-formData.append("build_memory", "true");
-
-const uploadResponse = await fetch("https://api.synvo.ai/file/upload", {
-  method: "POST",
-  headers: { "X-API-Key": apiKey },
-  body: formData
-});
-
-const { file_id } = await uploadResponse.json();
-
-// Wait for processing
-while (true) {
-  const statusResponse = await fetch(`https://api.synvo.ai/file/status/${file_id}`, {
-    headers: { "X-API-Key": apiKey }
-  });
-  
-  const { status } = await statusResponse.json();
-  if (status === "COMPLETED") break;
-  
-  await new Promise(resolve => setTimeout(resolve, 10000));
-}
-
-// Query the image
-const queryData = new FormData();
-queryData.append("payload", JSON.stringify({
-  messages: [{
-    role: "user",
-    content: [
-      { type: "text", text: "When is the WellFest Finale event and where is it located?" },
-      { type: "file", file_id }
-    ]
-  }]
-}));
-queryData.append("model", "synvo");
-queryData.append("force_search", "true");
-
-const queryResponse = await fetch("https://api.synvo.ai/ai/query", {
-  method: "POST",
-  headers: { "X-API-Key": apiKey },
-  body: queryData
-});
-
-const result = await queryResponse.json();
-console.log("Answer:", result.response.content[0].text);
-```
-
-  </Tab>
-</Tabs>
-
-### Demo 3: Video Analysis - Andrew's Lecture
-
-**File**: `Andrew_lecture.mp4`  
-**Question**: "What is the answer to the in-video quiz in Andrew's lecture?"  
-**Expected Answer**: a_2^{[3]} = g(\\Omega_2^{[3]} \\cdot a^{[2]} + b_2^{[3]})
-
-<Tabs items={["Python", "JavaScript"]}>
-  <Tab value="Python">
-
-```python
-# Upload and query video file
-with open("./Andrew_lecture.mp4", "rb") as f:
-    response = requests.post(
-        "https://api.synvo.ai/file/upload",
-        files={"file": f},
-        data={"path": "/", "build_memory": "true"},
-        headers={"X-API-Key": api_key}
-    )
-
-file_id = response.json()["file_id"]
-
-# Wait for processing
-while True:
-    status_response = requests.get(
-        f"https://api.synvo.ai/file/status/{file_id}",
-        headers={"X-API-Key": api_key}
-    )
-    if status_response.json()["status"] == "COMPLETED":
-        break
-    time.sleep(10)
-
-# Query the video
-payload = {
-    "messages": [{
-        "role": "user",
-        "content": [
-            {"type": "text", "text": "What is the answer to the in-video quiz in Andrew's lecture?"},
-            {"type": "file", "file_id": file_id}
-        ]
-    }]
-}
-
-response = requests.post(
-    "https://api.synvo.ai/ai/query",
-    data={
-        "payload": json.dumps(payload),
-        "model": "synvo",
-        "force_search": "true"
-    },
-    headers={"X-API-Key": api_key}
-)
-
-result = response.json()
-print("Answer:", result["response"]["content"][0]["text"])
-```
-
-  </Tab>
-  <Tab value="JavaScript">
-
-```javascript
-// Upload and query video file
-const videoFile = document.querySelector('input[type="file"]').files[0];
-
-const formData = new FormData();
-formData.append("file", videoFile);
-formData.append("path", "/");
-formData.append("build_memory", "true");
-
-const uploadResponse = await fetch("https://api.synvo.ai/file/upload", {
-  method: "POST",
-  headers: { "X-API-Key": apiKey },
-  body: formData
-});
-
-const { file_id } = await uploadResponse.json();
-
-// Wait for processing
-while (true) {
-  const statusResponse = await fetch(`https://api.synvo.ai/file/status/${file_id}`, {
-    headers: { "X-API-Key": apiKey }
-  });
-  
-  const { status } = await statusResponse.json();
-  if (status === "COMPLETED") break;
-  
-  await new Promise(resolve => setTimeout(resolve, 10000));
-}
-
-// Query the video
-const queryData = new FormData();
-queryData.append("payload", JSON.stringify({
-  messages: [{
-    role: "user",
-    content: [
-      { type: "text", text: "What is the answer to the in-video quiz in Andrew's lecture?" },
-      { type: "file", file_id }
-    ]
-  }]
-}));
-queryData.append("model", "synvo");
-queryData.append("force_search", "true");
-
-const queryResponse = await fetch("https://api.synvo.ai/ai/query", {
-  method: "POST",
-  headers: { "X-API-Key": apiKey },
-  body: queryData
-});
-
-const result = await queryResponse.json();
-console.log("Answer:", result.response.content[0].text);
-```
-
-  </Tab>
-</Tabs>
-
-### Demo 4: Audio Analysis - Finance Lecture
-
-**File**: `Finance_lecture.mp3`  
-**Question**: "In the lecture about the operating profit margin formula, what is the value of EBIT used in the example calculation for the year 2018?"  
-**Expected Answer**: EBIT = $8 million
-
-<Tabs items={["Python", "JavaScript"]}>
-  <Tab value="Python">
-
-```python
-# Upload and query audio file
-with open("./Finance_lecture.mp3", "rb") as f:
-    response = requests.post(
-        "https://api.synvo.ai/file/upload",
-        files={"file": f},
-        data={"path": "/", "build_memory": "true"},
-        headers={"X-API-Key": api_key}
-    )
-
-file_id = response.json()["file_id"]
-
-# Wait for processing
-while True:
-    status_response = requests.get(
-        f"https://api.synvo.ai/file/status/{file_id}",
-        headers={"X-API-Key": api_key}
-    )
-    if status_response.json()["status"] == "COMPLETED":
-        break
-    time.sleep(10)
-
-# Query the audio
-payload = {
-    "messages": [{
-        "role": "user",
-        "content": [
-            {"type": "text", "text": "In the lecture about the operating profit margin formula, what is the value of EBIT used in the example calculation for the year 2018?"},
-            {"type": "file", "file_id": file_id}
-        ]
-    }]
-}
-
-response = requests.post(
-    "https://api.synvo.ai/ai/query",
-    data={
-        "payload": json.dumps(payload),
-        "model": "synvo",
-        "force_search": "true"
-    },
-    headers={"X-API-Key": api_key}
-)
-
-result = response.json()
-print("Answer:", result["response"]["content"][0]["text"])
-```
-
-  </Tab>
-  <Tab value="JavaScript">
-
-```javascript
-// Upload and query audio file
-const audioFile = document.querySelector('input[type="file"]').files[0];
-
-const formData = new FormData();
-formData.append("file", audioFile);
-formData.append("path", "/");
-formData.append("build_memory", "true");
-
-const uploadResponse = await fetch("https://api.synvo.ai/file/upload", {
-  method: "POST",
-  headers: { "X-API-Key": apiKey },
-  body: formData
-});
-
-const { file_id } = await uploadResponse.json();
-
-// Wait for processing
-while (true) {
-  const statusResponse = await fetch(`https://api.synvo.ai/file/status/${file_id}`, {
-    headers: { "X-API-Key": apiKey }
-  });
-  
-  const { status } = await statusResponse.json();
-  if (status === "COMPLETED") break;
-  
-  await new Promise(resolve => setTimeout(resolve, 10000));
-}
-
-// Query the audio
-const queryData = new FormData();
-queryData.append("payload", JSON.stringify({
-  messages: [{
-    role: "user",
-    content: [
-      { type: "text", text: "In the lecture about the operating profit margin formula, what is the value of EBIT used in the example calculation for the year 2018?" },
-      { type: "file", file_id }
-    ]
-  }]
-}));
-queryData.append("model", "synvo");
-queryData.append("force_search", "true");
-
-const queryResponse = await fetch("https://api.synvo.ai/ai/query", {
-  method: "POST",
-  headers: { "X-API-Key": apiKey },
-  body: queryData
-});
-
-const result = await queryResponse.json();
-console.log("Answer:", result.response.content[0].text);
-```
-
-  </Tab>
-</Tabs>
-
-
-## Troubleshooting
+## Note
 
 **Large File Processing**
-- Video/audio files may take 5-15 minutes to process
-- Check status periodically with `/file/status/{file_id}`
-
-**Multimodal Query Tips**
-- Always include `force_search=true` for file-specific queries
+- The 8-min demo video file may take 10 seconds to process, larger video file may take more time to process.
+- Check processing status with `/file/status/{file_id}`
 
 **File Format Support**
 - Images: .png, .jpg, .jpeg, .gif, .webp
