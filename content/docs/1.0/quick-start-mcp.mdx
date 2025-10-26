@@ -1,0 +1,124 @@
+---
+id: quick-start-mcp
+title: Quick Start for MCP Agents
+slug: /quick-start-mcp
+---
+
+A Model Context Protocol (MCP) server that enables Claude to upload files and query Synvo AI's powerful document analysis environment.
+
+## What Can This MCP Server Do?
+
+This server adds two powerful capabilities to your AI agent:
+
+🚀 **Upload & Analyze Files** - Upload documents, images, videos, and audio files to Synvo's contextual memory system
+
+🔍 **Query with Context** - Ask intelligent questions about your uploaded content and get precise, contextualized responses
+
+## Getting Started
+
+### 1. Install the MCP Server
+
+```bash
+npm install -g @synvo/mcp-server
+```
+
+### 2. Configure Claude Desktop
+
+Add the following to your Claude Desktop configuration:
+
+```json
+{
+  "mcpServers": {
+    "synvo": {
+      "command": "synvo-mcp-server",
+      "args": ["--api-key", "YOUR_SYNVO_API_KEY"]
+    }
+  }
+}
+```
+
+### 3. Get Your API Key
+
+1. Visit [Synvo Console](https://console.synvo.ai)
+2. Create a new API key
+3. Copy the key to your configuration
+
+### 4. Start Using with Claude
+
+Once configured, you can use these commands in Claude:
+
+- **Upload a file**: "Upload this document to Synvo"
+- **Query content**: "What does this document say about [topic]?"
+- **Search across files**: "Find information about [topic] in my uploaded files"
+
+## Example Usage
+
+### Upload and Query a Document
+
+```
+User: Upload this PDF to Synvo and then tell me what it says about the company's revenue growth.
+
+Claude: I'll upload the PDF to Synvo and analyze it for you.
+
+[Uploads file to Synvo]
+
+Based on the document, the company shows a 15% year-over-year revenue growth, primarily driven by increased subscription sales in the enterprise segment.
+```
+
+### Multi-Modal Analysis
+
+```
+User: Upload this image and video, then compare the information in both.
+
+Claude: I'll upload both files to Synvo and provide a comparative analysis.
+
+[Uploads both files]
+
+The image shows the event poster with basic details, while the video provides additional context about the speaker's background and presentation topics.
+```
+
+## Supported File Types
+
+- **Documents**: PDF, DOCX, TXT, JSON, XLSX
+- **Images**: PNG, JPG, JPEG, GIF, WEBP
+- **Videos**: MP4, MOV, M4V, AVI, MKV
+- **Audio**: MP3, WAV, M4A, AAC, FLAC
+
+## Advanced Features
+
+### Contextual Memory
+Files are processed and stored in Synvo's contextual memory system, allowing for intelligent cross-referencing and relationship discovery.
+
+### Streaming Responses
+Get real-time responses as the AI processes your queries, providing immediate feedback and faster interactions.
+
+### Session Management
+Maintain conversation context across multiple queries, enabling complex multi-step analysis workflows.
+
+## Troubleshooting
+
+**Connection Issues**
+- Verify your API key is correct
+- Check that the MCP server is properly installed
+- Ensure Claude Desktop is restarted after configuration changes
+
+**File Upload Problems**
+- Check file size limits (typically 100MB per file)
+- Verify supported file formats
+- Ensure stable internet connection
+
+**Query Issues**
+- Try rephrasing your questions
+- Use more specific queries for better results
+- Check that files have finished processing before querying
+
+## Next Steps
+
+1. **[API Reference](/docs/1.0/synvo-api/api-reference)** - Complete API documentation
+2. **[File Management](/docs/1.0/synvo-api/file-upload-management)** - Advanced file operations
+3. **[Query Features](/docs/1.0/synvo-api/query-retrieval)** - Advanced querying capabilities
+4. **[Authentication](/docs/1.0/synvo-api/api-keys-authentication)** - API key management
+
+---
+
+Ready to enhance your AI agent with powerful document analysis capabilities? Start by uploading your first file!

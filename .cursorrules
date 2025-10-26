@@ -1,0 +1,58 @@
+# Cursor Rules for Synvo API Documentation Project
+
+## Project Overview
+This is a Next.js documentation website for Synvo API, built with Fumadocs UI. The project provides comprehensive API documentation with interactive examples and theme-aware components.
+
+## Key Technologies
+- Next.js 14 with App Router
+- Fumadocs UI for documentation
+- TypeScript
+- Tailwind CSS
+- React
+
+## Project Structure
+```
+src/
+├── app/                    # Next.js app router pages
+│   ├── (home)/            # Home page and playground
+│   ├── docs/              # Documentation pages
+│   └── api/               # API routes
+├── components/            # React components
+│   ├── ui/               # UI components
+│   └── theme-aware-image.tsx  # Theme-aware image component
+└── lib/                  # Utility functions
+
+content/docs/1.0/         # Documentation content (MDX files)
+public/assets/            # Static assets (images, GIFs)
+```
+
+## Important Files
+- `src/app/(home)/page.tsx` - Main homepage with theme-aware GIF demo
+- `src/components/theme-aware-image.tsx` - Component for switching between dark/light mode images
+- `content/docs/1.0/` - All documentation content in MDX format
+- `public/assets/` - Contains synvo_api_dark.gif and synvo_api_light.gif
+
+## Theme System
+- The project supports both dark and light modes
+- Uses `synvo_api_dark.gif` for dark mode and `synvo_api_light.gif` for light mode
+- Theme switching is handled by the ThemeAwareImage component using `prefers-color-scheme`
+
+## Development Guidelines
+- Use TypeScript for all new components
+- Follow the existing component structure
+- Maintain theme consistency across all UI elements
+- Use Fumadocs UI components when possible
+- Keep documentation in MDX format in the content/docs/ directory
+
+## Important: Code-Only Focus
+- **NEVER run build, dev, or any execution commands**
+- Focus only on writing and editing code
+- User handles all running, building, and testing
+- Provide code solutions without executing them
+
+## API Documentation Structure
+The API docs are organized in content/docs/1.0/synvo-api/ with sections for:
+- File management
+- Query layer
+- Session & feedback management
+- Authentication
