@@ -96,7 +96,7 @@ export default function HomePage() {
               <div className="mb-2">
                 <h3 className="text-xl font-semibold mb-1">Try It Yourself</h3>
                 <p className="text-sm text-fd-muted-foreground">
-                  Copy and run these code examples to get started
+                  First upload the files with the API, then query the API to get the facts.
                 </p>
               </div>
               <div className="flex-1 flex flex-col">
@@ -106,28 +106,6 @@ export default function HomePage() {
                 >
                   <Tab value="Step 1: /file/upload">
                     <div className="flex-1 flex flex-col">
-                      <div className="mb-3 p-3 bg-fd-muted/50 rounded-lg border border-fd-border">
-                        <p className="text-sm text-fd-muted-foreground mb-3">
-                          Get started with these resources:
-                        </p>
-                        <div className="flex flex-wrap gap-2">
-                          <a 
-                            href="https://console.synvo.ai/" 
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-white bg-blue-600 border border-blue-600 rounded-md hover:bg-blue-700 transition-colors"
-                          >
-                            🔑 Get YOUR_SYNVO_API_KEY
-                          </a>
-                          <a 
-                            href="/assets/NTU_Annual_Report_2024.pdf" 
-                            download
-                            className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-fd-foreground bg-fd-background border border-fd-border rounded-md hover:bg-fd-muted transition-colors"
-                          >
-                            📄 NTU_Annual_Report_2024.pdf
-                          </a>
-                        </div>
-                      </div>
                       <pre className="overflow-x-auto rounded-lg bg-fd-muted p-4 text-sm flex-1">
                         <code>{`import requests, json
 
@@ -144,6 +122,33 @@ with open("NTU_Annual_Report_2024.pdf", "rb") as f:
 
 print(json.dumps(res.json(), indent=2))`}</code>
                       </pre>
+                      <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div className="p-3 bg-fd-muted/50 rounded-lg border border-fd-border">
+                          <p className="text-sm text-fd-muted-foreground mb-2">
+                            Don't have API key? Click here!
+                          </p>
+                          <a 
+                            href="https://console.synvo.ai/" 
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-white bg-blue-600 border border-blue-600 rounded-md hover:bg-blue-700 transition-colors"
+                          >
+                            🔑 Get YOUR_SYNVO_API_KEY
+                          </a>
+                        </div>
+                        <div className="p-3 bg-fd-muted/50 rounded-lg border border-fd-border">
+                          <p className="text-sm text-fd-muted-foreground mb-2">
+                            Need a sample to try? Download:
+                          </p>
+                          <a 
+                            href="/assets/NTU_Annual_Report_2024.pdf" 
+                            download
+                            className="inline-flex items-center gap-2 px-3 py-2 text-xs font-medium text-fd-foreground bg-fd-background border border-fd-border rounded-md hover:bg-fd-muted transition-colors"
+                          >
+                            📄 NTU_Annual_Report_2024.pdf
+                          </a>
+                        </div>
+                      </div>
                     </div>
                   </Tab>
                   <Tab value="Step 2: /ai/query">
