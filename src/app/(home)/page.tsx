@@ -45,10 +45,10 @@ export default function HomePage() {
       {/* Demo and Code Section */}
       <div className="mx-auto max-w-7xl px-4">
         <div className="grid gap-8 lg:grid-cols-2 lg:items-stretch">
-          {/* Left: GIF Demo */}
-          <div className="flex flex-col h-full">
-            <div className="relative rounded-2xl border-2 border-fd-border bg-fd-muted/30 p-6 shadow-lg flex-1 flex flex-col">
-              <div className="flex-1 flex items-center justify-center">
+          {/* Left: GIF Demo and Key Features */}
+          <div className="flex flex-col h-full space-y-6">
+            <div className="relative rounded-2xl border-2 border-fd-border bg-fd-muted/30 p-6 shadow-lg">
+              <div className="flex items-center justify-center">
                 <ThemeAwareImage
                   darkSrc="/assets/synvo_api_dark.gif"
                   lightSrc="/assets/synvo_api_light.gif"
@@ -62,6 +62,30 @@ export default function HomePage() {
               </div>
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-fd-background px-4 py-1 text-sm font-medium text-fd-foreground shadow-md">
               Two-Step Contextualization Pipeline
+              </div>
+            </div>
+            
+            {/* Key Features */}
+            <div className="relative rounded-xl border border-fd-border bg-fd-card p-6 shadow-sm">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-fd-background px-4 py-1 text-sm font-medium text-fd-foreground shadow-md">
+                Key Features
+              </div>
+              <div className="space-y-4 pt-2">
+              <div>
+                  <p className="text-sm leading-relaxed">
+                    <span className="text-lg">🧠</span> <span className="font-medium"><strong>Contextual Intelligence</strong></span>: Deliver factual context <span className="text-fd-muted-foreground">(beta)</span>, user profiles <span className="text-fd-muted-foreground">(under dev)</span>, and workflow insights <span className="text-fd-muted-foreground">(under dev)</span> dynamically aligned with each query.
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm leading-relaxed">
+                    <span className="text-lg">⚡</span> <span className="font-medium"><strong>Massive Files Support</strong></span> - Handle thousands of files within seconds, ensuring rapid analysis at scale.
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm leading-relaxed">
+                    <span className="text-lg">🌐</span> <span className="font-medium"><strong>All-Media Compatibility</strong></span>: Seamlessly process documents, images, audio, and video files — supporting diverse formats in one unified system.
+                  </p>
+                </div>
               </div>
             </div>
           </div>

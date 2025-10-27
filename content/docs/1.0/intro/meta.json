@@ -2,9 +2,9 @@
   "title": "Tutorial",
   "defaultOpen": true,
   "pages": [
-    "../synvo-api/api-reference",
-    "../synvo-api/query-retrieval",
+    "overview",
     "../synvo-api/file-upload-management",
+    "../synvo-api/query-retrieval",
     "../synvo-api/history-feedback",
     "../synvo-api/user-isolation"
   ]

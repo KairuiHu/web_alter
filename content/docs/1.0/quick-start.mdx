@@ -1,14 +1,31 @@
 ---
 id: quick-start
-title: Quick Start for Human User
+title: Quick Start for Human Users
 slug: /quick-start
 ---
 
-This Quick Start guide demonstrates Synvo's multimodal AI capabilities using real demo files. You will learn how to upload and query different file types: PDFs, images, videos, and audio files. Each demo includes downloadable files and specific questions to showcase AI understanding across modalities. You can also manage your files and queries in <a href="https://console.synvo.ai/dashboard" style={{color: "#3b82f6", textDecoration: "none", backgroundColor: "rgba(59, 130, 246, 0.08)", padding: "2px 8px", borderRadius: "6px", fontWeight: "500"}}>Synvo Dashboard</a>.
+Whenever AI agents need to understand their human user, the **Synvo API** can help deliver precise context: finding the most relevant information, expressing user intent, and capturing user's task completion habits and workflows from files of any format, with minimal hallucination.
 
-## Demo Files Overview
+This Quick Start demonstrates how Synvo extracts **factual context** from documents, images, videos, and audio, then returns **grounded answers with evidence** that agents can trust. It shows how memory is built from files, how queries retrieve key facts, and how citations enable verification.
 
-We will use these real files to demonstrate multimodal capabilities. **Click on each tab below to preview and interact with the content:**
+Get started with Synvo API through the <a href="https://console.synvo.ai/dashboard" style={{color:"#3b82f6",textDecoration:"none",backgroundColor:"rgba(59,130,246,0.08)",padding:"2px 8px",borderRadius:"6px",fontWeight:"500"}}>Synvo Dashboard</a>. Our free tier includes powerful analytics and visualization tools to help you understand user data, track API usage, and optimize your integration. Sign up now to access your API key and start building with contextual intelligence.
+
+---
+
+## What this Quick Start Covers
+
+1. **Upload** several representative files (PDF, image, video, audio) — Synvo builds **context memory**.
+2. **Query** for validable facts — the API returns **relevant fragments + references**.  
+3. **Verify** evidence — answers are grounded in the user’s own data.
+
+> Synvo AI can process thousands of files in parallel and perform contextual search across all of them within seconds, providing agents with relevant, verifiable, and multimodal context on demand. However, this guide demonstrates a mini end-to-end example using only a few sample files, allowing developers to quickly experience how Synvo's contextual memory and retrieval pipeline work in practice.
+
+---
+
+
+## Demo Files (as a Mini Context Set)
+
+Let's explore Synvo's multimodal capabilities through a set of example files that demonstrate how the API handles different content types. Below are four sample files representing common formats users might share, along with example questions that showcase Synvo's contextual understanding on facts. Each tab contains a different media type with its corresponding query and expected response. **Browse through the examples by clicking the tabs below:**
 
 <Tabs items={["📄 PDF", "🖼️ Image", "🎥 Video", "🎵 Audio"]}>
   <Tab value="📄 PDF">
@@ -23,7 +40,9 @@ We will use these real files to demonstrate multimodal capabilities. **Click on 
       width="100%" 
       height="400px" 
       style={{border: "1px solid #ddd", borderRadius: "8px"}}
-      title="NTU Annual Report 2024 PDF Preview">
+      title="NTU Annual Report 2024 PDF Preview"
+      loading="lazy"
+      suppressHydrationWarning>
     </iframe>
   </div>
   <div style={{fontSize: "14px", color: "#666", marginTop: "10px"}}>
@@ -134,7 +153,7 @@ Download all demo files to your local directory:
 
 Save all files to the same directory where you will run the code examples.
 
-## Step 2: Upload All Files
+## Step 2: Upload and Build Context Memory
 
 Upload all four demo files at once and wait for processing to complete.
 
@@ -148,6 +167,7 @@ import time
 import os
 
 api_key = os.getenv("SYNVO_API_KEY")
+BASE_URL = "https://api.synvo.ai"
 
 # Define all files to upload
 files_to_upload = [
@@ -163,9 +183,9 @@ for filename in files_to_upload:
     print(f"Uploading {filename}...")
     with open(filename, "rb") as f:
         response = requests.post(
-            "https://api.synvo.ai/file/upload",
+            f"{BASE_URL}/file/upload",
             files={"file": f},
-            data={"path": "/", "build_memory": "true"},
+            data={"path": "/"},
             headers={"X-API-Key": api_key}
         )
     file_id = response.json()["file_id"]
@@ -177,7 +197,7 @@ print("\n⏳ Waiting for all files to process...")
 for filename, file_id in file_ids.items():
     while True:
         status_response = requests.get(
-            f"https://api.synvo.ai/file/status/{file_id}",
+            f"{BASE_URL}/file/status/{file_id}",
             headers={"X-API-Key": api_key}
         )
         status = status_response.json()["status"]
@@ -206,8 +226,7 @@ echo "Uploading files..."
 PDF_RESPONSE=$(curl -s -X POST "https://api.synvo.ai/file/upload" \
   -H "X-API-Key: $SYNVO_API_KEY" \
   -F "file=@./NTU_Annual_Report_2024.pdf" \
-  -F "path=/" \
-  -F "build_memory=true")
+  -F "path=/")
 PDF_FILE_ID=$(echo $PDF_RESPONSE | jq -r '.file_id')
 echo "✅ PDF uploaded: $PDF_FILE_ID"
 
@@ -215,8 +234,7 @@ echo "✅ PDF uploaded: $PDF_FILE_ID"
 IMAGE_RESPONSE=$(curl -s -X POST "https://api.synvo.ai/file/upload" \
   -H "X-API-Key: $SYNVO_API_KEY" \
   -F "file=@./poster.jpg" \
-  -F "path=/" \
-  -F "build_memory=true")
+  -F "path=/")
 IMAGE_FILE_ID=$(echo $IMAGE_RESPONSE | jq -r '.file_id')
 echo "✅ Image uploaded: $IMAGE_FILE_ID"
 
@@ -224,8 +242,7 @@ echo "✅ Image uploaded: $IMAGE_FILE_ID"
 VIDEO_RESPONSE=$(curl -s -X POST "https://api.synvo.ai/file/upload" \
   -H "X-API-Key: $SYNVO_API_KEY" \
   -F "file=@./Andrew_lecture.mp4" \
-  -F "path=/" \
-  -F "build_memory=true")
+  -F "path=/")
 VIDEO_FILE_ID=$(echo $VIDEO_RESPONSE | jq -r '.file_id')
 echo "✅ Video uploaded: $VIDEO_FILE_ID"
 
@@ -233,8 +250,7 @@ echo "✅ Video uploaded: $VIDEO_FILE_ID"
 AUDIO_RESPONSE=$(curl -s -X POST "https://api.synvo.ai/file/upload" \
   -H "X-API-Key: $SYNVO_API_KEY" \
   -F "file=@./Finance_lecture.mp3" \
-  -F "path=/" \
-  -F "build_memory=true")
+  -F "path=/")
 AUDIO_FILE_ID=$(echo $AUDIO_RESPONSE | jq -r '.file_id')
 echo "✅ Audio uploaded: $AUDIO_FILE_ID"
 
@@ -267,9 +283,10 @@ echo "  Audio: $AUDIO_FILE_ID"
   </Tab>
 </Tabs>
 
-## Step 3: Query Files
+## Step 3: Query for User Context (Evidence-Backed)
 
-Now query each file with specific questions to demonstrate multimodal AI capabilities.
+Queries search within the user’s context set, not the public web.
+Responses include supporting chunks and references to enable agent-side verification.
 
 ### Python
 
@@ -300,7 +317,7 @@ response = requests.post(
     data={
         "payload": json.dumps(payload),
         "model": "synvo",
-        "force_search": "true"
+        "final_answer": "true"
     },
     headers={"X-API-Key": api_key}
 )
@@ -343,7 +360,7 @@ response = requests.post(
     data={
         "payload": json.dumps(payload),
         "model": "synvo",
-        "force_search": "true"
+        "final_answer": "true"
     },
     headers={"X-API-Key": api_key}
 )
@@ -386,7 +403,7 @@ response = requests.post(
     data={
         "payload": json.dumps(payload),
         "model": "synvo",
-        "force_search": "true"
+        "final_answer": "true"
     },
     headers={"X-API-Key": api_key}
 )
@@ -429,7 +446,7 @@ response = requests.post(
     data={
         "payload": json.dumps(payload),
         "model": "synvo",
-        "force_search": "true"
+        "final_answer": "true"
     },
     headers={"X-API-Key": api_key}
 )
@@ -461,7 +478,7 @@ curl -X POST "https://api.synvo.ai/ai/query" \
   -H "X-API-Key: $SYNVO_API_KEY" \
   -F 'payload={"messages":[{"role":"user","content":[{"type":"text","text":"How many patents did NTU file in FY2023?"}]}]}' \
   -F "model=synvo" \
-  -F "force_search=true"
+  -F "final_answer=true"
 ```
 
   </Tab>
@@ -475,7 +492,7 @@ curl -X POST "https://api.synvo.ai/ai/query" \
   -H "X-API-Key: $SYNVO_API_KEY" \
   -F 'payload={"messages":[{"role":"user","content":[{"type":"text","text":"When is the WellFest Finale event and where is it located?"}]}]}' \
   -F "model=synvo" \
-  -F "force_search=true"
+  -F "final_answer=true"
 ```
 
   </Tab>
@@ -489,7 +506,7 @@ curl -X POST "https://api.synvo.ai/ai/query" \
   -H "X-API-Key: $SYNVO_API_KEY" \
   -F 'payload={"messages":[{"role":"user","content":[{"type":"text","text":"What is the answer to the in-video quiz in Andrew'\''s lecture?"}]}]}' \
   -F "model=synvo" \
-  -F "force_search=true"
+  -F "final_answer=true"
 ```
 
   </Tab>
@@ -503,7 +520,7 @@ curl -X POST "https://api.synvo.ai/ai/query" \
   -H "X-API-Key: $SYNVO_API_KEY" \
   -F 'payload={"messages":[{"role":"user","content":[{"type":"text","text":"In the lecture about the operating profit margin formula, what is the value of EBIT used in the example calculation for the year 2018?"}]}]}' \
   -F "model=synvo" \
-  -F "force_search=true"
+  -F "final_answer=true"
 ```
 
   </Tab>
@@ -521,5 +538,11 @@ curl -X POST "https://api.synvo.ai/ai/query" \
 - Video: .mp4, .mov, .m4v, .avi, .mkv
 - Audio: .mp3, .wav, .m4a, .aac, .flac
 - Documents: .pdf, .docx, .ppt, .pptx, .txt, .json, .jsonl, .xlsx
+
+---
+
+When agents need to understand their user, Synvo provides the precise, verifiable context required to answer correctly — across any file format, with minimal hallucination. Explore and manage context in the
+<a href="https://console.synvo.ai/dashboard
+" style={{color:"#3b82f6",textDecoration:"none",backgroundColor:"rgba(59,130,246,0.08)",padding:"2px 8px",borderRadius:"6px",fontWeight:"500"}}>Synvo Dashboard</a>.
 
 ---

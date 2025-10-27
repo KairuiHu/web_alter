@@ -4,15 +4,31 @@ title: Quick Start for MCP Agents
 slug: /quick-start-mcp
 ---
 
-A Model Context Protocol (MCP) server that enables Claude to upload files and query Synvo AI's powerful document analysis environment.
+The Model Context Protocol (MCP) server seamlessly connects AI agents to Synvo AI's powerful multimodal contextual memory system. This integration enables:
 
-## What Can This MCP Server Do?
+- File uploads and processing across multiple formats
+- Deep document understanding and analysis (beta)
+- User intent recognition (coming soon)
+- Automated workflows (coming soon) 
+- Evidence-based contextual query reasoning
 
-This server adds two powerful capabilities to your AI agent:
+This guide will show you how to integrate Synvo AI with your AI agent using MCP, allowing your agent to upload, analyze, and query files with precise, evidence-grounded understanding.
 
-🚀 **Upload & Analyze Files** - Upload documents, images, videos, and audio files to Synvo's contextual memory system
+---
 
-🔍 **Query with Context** - Ask intelligent questions about your uploaded content and get precise, contextualized responses
+## Overview
+
+The Synvo MCP server extends Claude’s capabilities with two key functions:
+
+### 🚀 Upload & Analyze Files
+
+Agents can upload documents, images, videos, and audio files to Synvo’s contextual memory, where each file is processed into structured, retrievable context.
+
+### 🔍 Query with Context
+
+Claude can then ask grounded, multi-modal questions across uploaded content — retrieving accurate, contextualized responses instead of surface-level summaries.
+
+---
 
 ## Getting Started
 
@@ -79,21 +95,10 @@ The image shows the event poster with basic details, while the video provides ad
 
 ## Supported File Types
 
-- **Documents**: PDF, DOCX, TXT, JSON, XLSX
-- **Images**: PNG, JPG, JPEG, GIF, WEBP
-- **Videos**: MP4, MOV, M4V, AVI, MKV
-- **Audio**: MP3, WAV, M4A, AAC, FLAC
-
-## Advanced Features
-
-### Contextual Memory
-Files are processed and stored in Synvo's contextual memory system, allowing for intelligent cross-referencing and relationship discovery.
-
-### Streaming Responses
-Get real-time responses as the AI processes your queries, providing immediate feedback and faster interactions.
-
-### Session Management
-Maintain conversation context across multiple queries, enabling complex multi-step analysis workflows.
+- Images: .png, .jpg, .jpeg, .gif, .webp
+- Video: .mp4, .mov, .m4v, .avi, .mkv
+- Audio: .mp3, .wav, .m4a, .aac, .flac
+- Documents: .pdf, .docx, .ppt, .pptx, .txt, .json, .jsonl, .xlsx
 
 ## Troubleshooting
 
@@ -121,4 +126,4 @@ Maintain conversation context across multiple queries, enabling complex multi-st
 
 ---
 
-Ready to enhance your AI agent with powerful document analysis capabilities? Start by uploading your first file!
+When AI agents need to understand their user, the Synvo MCP server gives them access to rich, multimodal context — enabling precise, verifiable understanding across every document, image, video, or audio source.

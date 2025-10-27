@@ -2,7 +2,7 @@
   "title": "Synvo API Endpoints",
   "defaultOpen": true,
   "pages": [
-    "quickstart",
+    "api-reference",
     "file-management",
     "query-layer",
     "session-feedback"
