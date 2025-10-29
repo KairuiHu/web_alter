@@ -1,11 +1,13 @@
 {
-  "title": "v1.0",
+  "title": "v0.1.1",
   "icon": "GitFork",
   "root": true,
   "pages": [
+    "overview",
     "quick-start",
     "quick-start-mcp",
     "intro",
-    "synvo-api"
+    "synvo-api",
+    "release-notes"
   ]
 }

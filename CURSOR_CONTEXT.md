@@ -50,7 +50,7 @@ Just implemented theme-aware GIF switching:
 ## 📚 API Documentation Structure
 The API docs are organized into logical sections:
 - **File Management**: Upload, download, delete, search files
-- **Query Layer**: AI-powered search and context retrieval
+- **Context Generation Layer**: AI-powered search and context retrieval
 - **Session Management**: Conversation history and feedback
 - **Authentication**: API key management
 

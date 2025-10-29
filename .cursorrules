@@ -53,6 +53,6 @@ public/assets/            # Static assets (images, GIFs)
 ## API Documentation Structure
 The API docs are organized in content/docs/1.0/synvo-api/ with sections for:
 - File management
-- Query layer
+- Context generation layer
 - Session & feedback management
 - Authentication

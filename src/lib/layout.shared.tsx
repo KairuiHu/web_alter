@@ -28,6 +28,10 @@ export function baseOptions(): BaseLayoutProps {
     // see https://fumadocs.dev/docs/ui/navigation/links
     links: [
       {
+        text: "Release Notes",
+        url: "/docs/1.0/release-notes",
+      },
+      {
         text: "Discord",
         url: "https://discord.gg/M3qHRjBK",
         icon: <ExternalLinkIcon />,

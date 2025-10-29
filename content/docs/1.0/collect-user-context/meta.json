@@ -1,0 +1,8 @@
+{
+  "title": "Collect User Context",
+  "defaultOpen": true,
+  "pages": [
+    "../synvo-api/file-upload-management",
+    "web-url"
+  ]
+}

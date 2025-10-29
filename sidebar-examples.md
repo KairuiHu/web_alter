@@ -6,7 +6,7 @@ Your sidebar is controlled by `meta.json` files in each directory.
 ### Main Sidebar (`content/docs/1.0/meta.json`)
 ```json
 {
-  "title": "v1.0",
+  "title": "v0.1.1",
   "icon": "GitFork", 
   "root": true
 }
