@@ -1,0 +1,10 @@
+{
+  "title": "Synvo API Endpoints",
+  "defaultOpen": true,
+  "pages": [
+    "api-reference",
+    "file-management",
+    "query-layer",
+    "session-feedback"
+  ]
+}

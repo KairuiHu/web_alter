@@ -30,23 +30,10 @@ const config: NextConfig = {
   },
   async redirects() {
     return [
-      // Root redirect to version 1.0
+      // Root redirect to quick-start
       {
         source: "/docs",
-        destination: "/docs/1.0/quick-start",
-        permanent: false,
-      },
-      {
-        source: "/docs/1.0",
-        destination: "/docs/1.0/quick-start",
-        permanent: false,
-      },
-
-      // Default missing version to 1.0 for all nested paths (e.g., /docs/api/...)
-      // Exclude when the first segment is already version 1.0
-      {
-        source: "/docs/:first((?!1\\.0).*)/:path*",
-        destination: "/docs/1.0/:first/:path*",
+        destination: "/docs/quick-start",
         permanent: false,
       },
     ];

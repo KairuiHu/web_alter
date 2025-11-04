@@ -1,0 +1,11 @@
+{
+  "root": true,
+  "pages": [
+    "overview",
+    "quick-start",
+    "quick-start-mcp",
+    "intro",
+    "synvo-api",
+    "release-notes"
+  ]
+}

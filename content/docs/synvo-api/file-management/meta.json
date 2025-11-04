@@ -1,0 +1,15 @@
+{
+  "title": "File Management",
+  "defaultOpen": false,
+  "pages": [
+    "../create-directory",
+    "../list-files",
+    "../upload-file",
+    "../download-file",
+    "../update-file",
+    "../delete-file",
+    "../get-file-thumbnail",
+    "../get-file-status"
+  ]
+}
+

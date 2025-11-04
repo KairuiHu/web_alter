@@ -1,0 +1,548 @@
+---
+id: quick-start
+title: Quick Start for Human Users
+slug: /quick-start
+---
+
+Whenever AI agents need to understand their human user, the **Synvo API** can help deliver precise context: finding the most relevant information, expressing user intent, and capturing user's task completion habits and workflows from files of any format, with minimal hallucination.
+
+This Quick Start demonstrates how Synvo extracts **factual context** from documents, images, videos, and audio, then returns **grounded answers with evidence** that agents can trust. It shows how memory is built from files, how queries retrieve key facts, and how citations enable verification.
+
+Get started with Synvo API through the <a href="https://console.synvo.ai/dashboard" style={{color:"#3b82f6",textDecoration:"none",backgroundColor:"rgba(59,130,246,0.08)",padding:"2px 8px",borderRadius:"6px",fontWeight:"500"}}>Synvo Dashboard</a>. Our free tier includes powerful analytics and visualization tools to help you understand user data, track API usage, and optimize your integration. Sign up now to access your API key and start building with contextual intelligence.
+
+---
+
+## What this Quick Start Covers
+
+1. **Upload** several representative files (PDF, image, video, audio) — Synvo builds **context memory**.
+2. **Query** for validable facts — the API returns **relevant fragments + references**.  
+3. **Verify** evidence — answers are grounded in the user’s own data.
+
+> Synvo AI can process thousands of files in parallel and perform contextual search across all of them within seconds, providing agents with relevant, verifiable, and multimodal context on demand. However, this guide demonstrates a mini end-to-end example using only a few sample files, allowing developers to quickly experience how Synvo's contextual memory and retrieval pipeline work in practice.
+
+---
+
+
+## Demo Files (as a Mini Context Set)
+
+Let's explore Synvo's multimodal capabilities through a set of example files that demonstrate how the API handles different content types. Below are four sample files representing common formats users might share, along with example questions that showcase Synvo's contextual understanding on facts. Each tab contains a different media type with its corresponding query and expected response. **Browse through the examples by clicking the tabs below:**
+
+<Tabs items={["📄 PDF", "🖼️ Image", "🎥 Video", "🎵 Audio"]}>
+  <Tab value="📄 PDF">
+
+<div style={{border: "2px solid #e2e8f0", borderRadius: "12px", padding: "20px", marginBottom: "20px", backgroundColor: "#fafafa"}}>
+  <h4>NTU Annual Report 2024</h4>
+  <p><strong>Question:</strong> "How many patents did NTU file in FY2023?"</p>
+  <p><strong>Expected Answer:</strong> 672</p>
+  <div style={{marginTop: "15px"}}>
+    <iframe 
+      src="/assets/NTU_Annual_Report_2024.pdf" 
+      width="100%" 
+      height="400px" 
+      style={{border: "1px solid #ddd", borderRadius: "8px"}}
+      title="NTU Annual Report 2024 PDF Preview"
+      loading="lazy"
+      suppressHydrationWarning>
+    </iframe>
+  </div>
+  <div style={{fontSize: "14px", color: "#666", marginTop: "10px"}}>
+    📥 <a href="/assets/NTU_Annual_Report_2024.pdf" download style={{color: "#3b82f6", textDecoration: "none", backgroundColor: "rgba(59, 130, 246, 0.08)", padding: "2px 6px", borderRadius: "4px"}}>Download PDF</a> | 
+    📊 This report contains detailed patent filing statistics for FY2023
+  </div>
+</div>
+
+  </Tab>
+  <Tab value="🖼️ Image">
+
+<div style={{border: "2px solid #e2e8f0", borderRadius: "12px", padding: "20px", marginBottom: "20px", backgroundColor: "#fafafa"}}>
+  <h4>WellFest Event Poster</h4>
+  <p><strong>Question:</strong> "When is the WellFest Finale event and where is it located?"</p>
+  <p><strong>Expected Answer:</strong> 23rd October 2025 (Thursday), 11am to 4pm, Nanyang Auditorium Foyer</p>
+  <div style={{marginTop: "15px", textAlign: "center"}}>
+     <a href="/assets/poster.jpg" target="_blank" rel="noopener noreferrer">
+       <img 
+         src="/assets/poster.jpg" 
+         alt="WellFest Event Poster" 
+         style={{maxWidth: "100%", height: "auto", maxHeight: "500px", border: "1px solid #ddd", borderRadius: "8px", cursor: "pointer"}}
+       />
+     </a>
+  </div>
+  <div style={{fontSize: "14px", color: "#666", marginTop: "10px"}}>
+    📥 <a href="/assets/poster.jpg" download style={{color: "#3b82f6", textDecoration: "none", backgroundColor: "rgba(59, 130, 246, 0.08)", padding: "2px 6px", borderRadius: "4px"}}>Download Image</a> | 
+    🎪 Click image to view full size | Contains event timing and location details
+  </div>
+</div>
+
+  </Tab>
+  <Tab value="🎥 Video">
+
+<div style={{border: "2px solid #e2e8f0", borderRadius: "12px", padding: "20px", marginBottom: "20px", backgroundColor: "#fafafa"}}>
+  <h4>Andrew's Machine Learning Lecture</h4>
+  <p><strong>Question:</strong> "What is the answer to the in-video quiz in Andrew's lecture?"</p>
+  <p><strong>Expected Answer:</strong> a_2^{[3]} = g(\\Omega_2^{[3]} \\cdot a^{[2]} + b_2^{[3]})</p>
+  <div style={{marginTop: "15px"}}>
+    <video 
+      controls 
+      width="100%" 
+      height="400px" 
+      style={{border: "1px solid #ddd", borderRadius: "8px"}}
+      preload="metadata">
+      <source src="/assets/Andrew_lecture.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+  </div>
+  <div style={{fontSize: "14px", color: "#666", marginTop: "10px"}}>
+    📥 <a href="/assets/Andrew_lecture.mp4" download style={{color: "#3b82f6", textDecoration: "none", backgroundColor: "rgba(59, 130, 246, 0.08)", padding: "2px 6px", borderRadius: "4px"}}>Download Video</a> | 
+    🎓 Educational ML content with mathematical formulas and quiz questions
+  </div>
+</div>
+
+  </Tab>
+  <Tab value="🎵 Audio">
+
+<div style={{border: "2px solid #e2e8f0", borderRadius: "12px", padding: "20px", marginBottom: "20px", backgroundColor: "#fafafa"}}>
+  <h4>Finance Lecture on EBIT</h4>
+  <p><strong>Question:</strong> "In the lecture about the operating profit margin formula, what is the value of EBIT used in the example calculation for the year 2018?"</p>
+  <p><strong>Expected Answer:</strong> EBIT = $8 million</p>
+  <div style={{marginTop: "15px"}}>
+    <audio 
+      controls 
+      style={{width: "100%"}}
+      preload="metadata">
+      <source src="/assets/Finance_lecture.mp3" type="audio/mpeg" />
+      Your browser does not support the audio element.
+    </audio>
+  </div>
+  <div style={{fontSize: "14px", color: "#666", marginTop: "10px"}}>
+    📥 <a href="/assets/Finance_lecture.mp3" download style={{color: "#3b82f6", textDecoration: "none", backgroundColor: "rgba(59, 130, 246, 0.08)", padding: "2px 6px", borderRadius: "4px"}}>Download Audio</a> | 
+    💰 Finance lecture covering EBIT calculations and profit margin formulas
+  </div>
+</div>
+
+  </Tab>
+</Tabs>
+
+## Step 1: Setup
+
+### 1.1 Create API Key
+
+First, create an API key to authenticate your requests:
+
+1. Log into your <a href="https://console.synvo.ai" style={{color: "#3b82f6", textDecoration: "none", backgroundColor: "rgba(59, 130, 246, 0.08)", padding: "2px 8px", borderRadius: "6px", fontWeight: "500"}}>Synvo dashboard</a>
+2. Navigate to **API Keys** section
+3. Click **"Create New Key"**
+4. Give it a name (e.g., "My First Key")
+5. **Copy and save the key immediately** - you won't see it again!
+
+### 1.2 Set API Key as Environment Variable
+
+Set your API key as an environment variable:
+
+```bash
+export SYNVO_API_KEY="your_api_key_here"
+```
+
+### 1.3 Download Demo Files
+
+Download all demo files to your local directory:
+
+- <a href="/assets/NTU_Annual_Report_2024.pdf" download style={{color: "#3b82f6", textDecoration: "none", backgroundColor: "rgba(59, 130, 246, 0.08)", padding: "2px 6px", borderRadius: "4px"}}>NTU_Annual_Report_2024.pdf</a>
+- <a href="/assets/poster.jpg" download style={{color: "#3b82f6", textDecoration: "none", backgroundColor: "rgba(59, 130, 246, 0.08)", padding: "2px 6px", borderRadius: "4px"}}>poster.jpg</a>
+- <a href="/assets/Andrew_lecture.mp4" download style={{color: "#3b82f6", textDecoration: "none", backgroundColor: "rgba(59, 130, 246, 0.08)", padding: "2px 6px", borderRadius: "4px"}}>Andrew_lecture.mp4</a>
+- <a href="/assets/Finance_lecture.mp3" download style={{color: "#3b82f6", textDecoration: "none", backgroundColor: "rgba(59, 130, 246, 0.08)", padding: "2px 6px", borderRadius: "4px"}}>Finance_lecture.mp3</a>
+
+Save all files to the same directory where you will run the code examples.
+
+## Step 2: Upload and Build Context Memory
+
+Upload all four demo files at once and wait for processing to complete.
+
+<Tabs items={["Python", "cURL"]}>
+  <Tab value="Python">
+
+```python
+import requests
+import json
+import time
+import os
+
+api_key = os.getenv("SYNVO_API_KEY")
+BASE_URL = "https://api.synvo.ai"
+
+# Define all files to upload
+files_to_upload = [
+    "NTU_Annual_Report_2024.pdf",
+    "poster.jpg",
+    "Andrew_lecture.mp4",
+    "Finance_lecture.mp3"
+]
+
+# Upload all files
+file_ids = {}
+for filename in files_to_upload:
+    print(f"Uploading {filename}...")
+    with open(filename, "rb") as f:
+        response = requests.post(
+            f"{BASE_URL}/file/upload",
+            files={"file": f},
+            data={"path": "/"},
+            headers={"X-API-Key": api_key}
+        )
+    file_id = response.json()["file_id"]
+    file_ids[filename] = file_id
+    print(f"✅ {filename} uploaded: {file_id}")
+
+# Wait for all files to complete processing
+print("\n⏳ Waiting for all files to process...")
+for filename, file_id in file_ids.items():
+    while True:
+        status_response = requests.get(
+            f"{BASE_URL}/file/status/{file_id}",
+            headers={"X-API-Key": api_key}
+        )
+        status = status_response.json()["status"]
+        if status == "COMPLETED":
+            print(f"✅ {filename} processing complete!")
+            break
+        elif status == "FAILED":
+            print(f"❌ {filename} processing failed!")
+            break
+        time.sleep(5)
+
+print("\n🎉 All files ready for querying!")
+print("\nFile IDs:")
+for filename, file_id in file_ids.items():
+    print(f"  {filename}: {file_id}")
+```
+
+  </Tab>
+  <Tab value="cURL">
+
+```bash
+# Upload all files
+echo "Uploading files..."
+
+# Upload PDF
+PDF_RESPONSE=$(curl -s -X POST "https://api.synvo.ai/file/upload" \
+  -H "X-API-Key: $SYNVO_API_KEY" \
+  -F "file=@./NTU_Annual_Report_2024.pdf" \
+  -F "path=/")
+PDF_FILE_ID=$(echo $PDF_RESPONSE | jq -r '.file_id')
+echo "✅ PDF uploaded: $PDF_FILE_ID"
+
+# Upload Image
+IMAGE_RESPONSE=$(curl -s -X POST "https://api.synvo.ai/file/upload" \
+  -H "X-API-Key: $SYNVO_API_KEY" \
+  -F "file=@./poster.jpg" \
+  -F "path=/")
+IMAGE_FILE_ID=$(echo $IMAGE_RESPONSE | jq -r '.file_id')
+echo "✅ Image uploaded: $IMAGE_FILE_ID"
+
+# Upload Video
+VIDEO_RESPONSE=$(curl -s -X POST "https://api.synvo.ai/file/upload" \
+  -H "X-API-Key: $SYNVO_API_KEY" \
+  -F "file=@./Andrew_lecture.mp4" \
+  -F "path=/")
+VIDEO_FILE_ID=$(echo $VIDEO_RESPONSE | jq -r '.file_id')
+echo "✅ Video uploaded: $VIDEO_FILE_ID"
+
+# Upload Audio
+AUDIO_RESPONSE=$(curl -s -X POST "https://api.synvo.ai/file/upload" \
+  -H "X-API-Key: $SYNVO_API_KEY" \
+  -F "file=@./Finance_lecture.mp3" \
+  -F "path=/")
+AUDIO_FILE_ID=$(echo $AUDIO_RESPONSE | jq -r '.file_id')
+echo "✅ Audio uploaded: $AUDIO_FILE_ID"
+
+# Wait for all files to process
+echo -e "\n⏳ Waiting for all files to process..."
+for FILE_ID in "$PDF_FILE_ID" "$IMAGE_FILE_ID" "$VIDEO_FILE_ID" "$AUDIO_FILE_ID"; do
+  while true; do
+    STATUS=$(curl -s -X GET "https://api.synvo.ai/file/status/$FILE_ID" \
+      -H "X-API-Key: $SYNVO_API_KEY" | jq -r '.status')
+    
+    if [ "$STATUS" = "COMPLETED" ]; then
+      echo "✅ File $FILE_ID ready!"
+      break
+    elif [ "$STATUS" = "FAILED" ]; then
+      echo "❌ File $FILE_ID failed!"
+      break
+    fi
+    sleep 5
+  done
+done
+
+echo -e "\n🎉 All files ready for querying!"
+echo -e "\nFile IDs:"
+echo "  PDF: $PDF_FILE_ID"
+echo "  Image: $IMAGE_FILE_ID"
+echo "  Video: $VIDEO_FILE_ID"
+echo "  Audio: $AUDIO_FILE_ID"
+```
+
+  </Tab>
+</Tabs>
+
+## Step 3: Query for User Context (Evidence-Backed)
+
+Queries search within the user’s context set, not the public web.
+Responses include supporting chunks and references to enable agent-side verification.
+
+### Python
+
+<Tabs items={["PDF", "Image", "Video", "Audio"]}>
+  <Tab value="PDF">
+
+**Question**: "How many patents did NTU file in FY2023?"  
+**Expected Answer**: 672
+
+```python
+import requests
+import json
+import os
+
+api_key = os.getenv("SYNVO_API_KEY")
+
+payload = {
+    "messages": [{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "How many patents did NTU file in FY2023?"}
+        ]
+    }]
+}
+
+response = requests.post(
+    "https://api.synvo.ai/ai/query",
+    data={
+        "payload": json.dumps(payload),
+        "model": "synvo",
+        "final_answer": "true"
+    },
+    headers={"X-API-Key": api_key}
+)
+
+result = response.json()
+
+# Print top 3 related factsed facts
+k = 3
+facts = result["content"][0]["facts"][:k]
+for i, fact in enumerate(facts, 1):
+    print(f"\n--- Fact {i} ---")
+    print(f"Chunk: {fact['chunk']}...")
+    print(f"Reference: {fact['reference']}")
+```
+
+  </Tab>
+  <Tab value="Image">
+
+**Question**: "When is the WellFest Finale event and where is it located?"  
+**Expected Answer**: 23rd October 2025 (Thursday), 11am to 4pm, Nanyang Auditorium Foyer
+
+```python
+import requests
+import json
+import os
+
+api_key = os.getenv("SYNVO_API_KEY")
+
+payload = {
+    "messages": [{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "When is the WellFest Finale event and where is it located?"}
+        ]
+    }]
+}
+
+response = requests.post(
+    "https://api.synvo.ai/ai/query",
+    data={
+        "payload": json.dumps(payload),
+        "model": "synvo",
+        "final_answer": "true"
+    },
+    headers={"X-API-Key": api_key}
+)
+
+result = response.json()
+
+# Print top 3 related factsed facts
+k = 3
+facts = result["content"][0]["facts"][:k]
+for i, fact in enumerate(facts, 1):
+    print(f"\n--- Fact {i} ---")
+    print(f"Chunk: {fact['chunk']}...")
+    print(f"Reference: {fact['reference']}")
+```
+
+  </Tab>
+  <Tab value="Video">
+
+**Question**: "What is the answer to the in-video quiz in Andrew's lecture?"  
+**Expected Answer**: a_2^{[3]} = g(\\Omega_2^{[3]} \\cdot a^{[2]} + b_2^{[3]})
+
+```python
+import requests
+import json
+import os
+
+api_key = os.getenv("SYNVO_API_KEY")
+
+payload = {
+    "messages": [{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "What is the answer to the in-video quiz in Andrew's lecture?"}
+        ]
+    }]
+}
+
+response = requests.post(
+    "https://api.synvo.ai/ai/query",
+    data={
+        "payload": json.dumps(payload),
+        "model": "synvo",
+        "final_answer": "true"
+    },
+    headers={"X-API-Key": api_key}
+)
+
+result = response.json()
+
+# Print top 3 related facts
+k = 3
+facts = result["content"][0]["facts"][:k]
+for i, fact in enumerate(facts, 1):
+    print(f"\n--- Fact {i} ---")
+    print(f"Chunk: {fact['chunk']}...")
+    print(f"Reference: {fact['reference']}")
+```
+
+  </Tab>
+  <Tab value="Audio">
+
+**Question**: "In the lecture about the operating profit margin formula, what is the value of EBIT used in the example calculation for the year 2018?"  
+**Expected Answer**: EBIT = $8 million
+
+```python
+import requests
+import json
+import os
+
+api_key = os.getenv("SYNVO_API_KEY")
+
+payload = {
+    "messages": [{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "In the lecture about the operating profit margin formula, what is the value of EBIT used in the example calculation for the year 2018?"}
+        ]
+    }]
+}
+
+response = requests.post(
+    "https://api.synvo.ai/ai/query",
+    data={
+        "payload": json.dumps(payload),
+        "model": "synvo",
+        "final_answer": "true"
+    },
+    headers={"X-API-Key": api_key}
+)
+
+result = response.json()
+
+# Print top 3 related facts
+k = 3
+facts = result["content"][0]["facts"][:k]
+for i, fact in enumerate(facts, 1):
+    print(f"\n--- Fact {i} ---")
+    print(f"Chunk: {fact['chunk']}...")
+    print(f"Reference: {fact['reference']}")
+```
+
+  </Tab>
+</Tabs>
+
+### cURL
+
+<Tabs items={["PDF", "Image", "Video", "Audio"]}>
+  <Tab value="PDF">
+
+**Question**: "How many patents did NTU file in FY2023?"  
+**Expected Answer**: 672
+
+```bash
+curl -X POST "https://api.synvo.ai/ai/query" \
+  -H "X-API-Key: $SYNVO_API_KEY" \
+  -F 'payload={"messages":[{"role":"user","content":[{"type":"text","text":"How many patents did NTU file in FY2023?"}]}]}' \
+  -F "model=synvo" \
+  -F "final_answer=true"
+```
+
+  </Tab>
+  <Tab value="Image">
+
+**Question**: "When is the WellFest Finale event and where is it located?"  
+**Expected Answer**: 23rd October 2025 (Thursday), 11am to 4pm, Nanyang Auditorium Foyer
+
+```bash
+curl -X POST "https://api.synvo.ai/ai/query" \
+  -H "X-API-Key: $SYNVO_API_KEY" \
+  -F 'payload={"messages":[{"role":"user","content":[{"type":"text","text":"When is the WellFest Finale event and where is it located?"}]}]}' \
+  -F "model=synvo" \
+  -F "final_answer=true"
+```
+
+  </Tab>
+  <Tab value="Video">
+
+**Question**: "What is the answer to the in-video quiz in Andrew's lecture?"  
+**Expected Answer**: a_2^{[3]} = g(\\Omega_2^{[3]} \\cdot a^{[2]} + b_2^{[3]})
+
+```bash
+curl -X POST "https://api.synvo.ai/ai/query" \
+  -H "X-API-Key: $SYNVO_API_KEY" \
+  -F 'payload={"messages":[{"role":"user","content":[{"type":"text","text":"What is the answer to the in-video quiz in Andrew'\''s lecture?"}]}]}' \
+  -F "model=synvo" \
+  -F "final_answer=true"
+```
+
+  </Tab>
+  <Tab value="Audio">
+
+**Question**: "In the lecture about the operating profit margin formula, what is the value of EBIT used in the example calculation for the year 2018?"  
+**Expected Answer**: EBIT = $8 million
+
+```bash
+curl -X POST "https://api.synvo.ai/ai/query" \
+  -H "X-API-Key: $SYNVO_API_KEY" \
+  -F 'payload={"messages":[{"role":"user","content":[{"type":"text","text":"In the lecture about the operating profit margin formula, what is the value of EBIT used in the example calculation for the year 2018?"}]}]}' \
+  -F "model=synvo" \
+  -F "final_answer=true"
+```
+
+  </Tab>
+</Tabs>
+
+
+## Note
+
+**Large File Processing**
+- The 8-min demo video file may take 10 seconds to process, larger video file may take more time to process.
+- Check processing status with `/file/status/{file_id}`
+
+**File Format Support**
+- Images: .png, .jpg, .jpeg, .gif, .webp
+- Video: .mp4, .mov, .m4v, .avi, .mkv
+- Audio: .mp3, .wav, .m4a, .aac, .flac
+- Documents: .pdf, .docx, .ppt, .pptx, .txt, .json, .jsonl, .xlsx
+
+---
+
+When agents need to understand their user, Synvo provides the precise, verifiable context required to answer correctly — across any file format, with minimal hallucination. Explore and manage context in the
+<a href="https://console.synvo.ai/dashboard
+" style={{color:"#3b82f6",textDecoration:"none",backgroundColor:"rgba(59,130,246,0.08)",padding:"2px 8px",borderRadius:"6px",fontWeight:"500"}}>Synvo Dashboard</a>.
+
+---

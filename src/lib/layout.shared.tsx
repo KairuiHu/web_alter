@@ -29,7 +29,7 @@ export function baseOptions(): BaseLayoutProps {
     links: [
       {
         text: "Release Notes",
-        url: "/docs/1.0/release-notes",
+        url: "/docs/release-notes",
       },
       {
         text: "Discord",

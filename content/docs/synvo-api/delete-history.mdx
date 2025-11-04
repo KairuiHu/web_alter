@@ -1,0 +1,11 @@
+---
+title: "[DELETE] Delete History"
+description: Delete a session history
+slug: /synvo-api/delete-history
+---
+
+import { APIPage } from "fumadocs-openapi/ui";
+
+Permanently deletes a conversation session history and all its associated messages. This action cannot be undone.
+
+<APIPage document={"./public/openapi.yaml"} operations={[{"path":"/history/delete/{suid}","method":"delete"}]} webhooks={[]} hasHead={false} />

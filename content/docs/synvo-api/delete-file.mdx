@@ -1,0 +1,11 @@
+---
+title: "[DELETE] Delete File"
+description: Delete a file by id
+slug: /synvo-api/delete-file
+---
+
+import { APIPage } from "fumadocs-openapi/ui";
+
+Deletes a file or directory and removes it from the vector database
+
+<APIPage document={"./public/openapi.yaml"} operations={[{"path":"/file/delete/{file_id}","method":"delete"}]} webhooks={[]} hasHead={false} />
