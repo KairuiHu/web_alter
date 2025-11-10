@@ -1,0 +1,11 @@
+---
+title: "[POST] Create API Key"
+description: Create a new API key
+slug: /synvo-api/create-api-key
+---
+
+import { APIPage } from "fumadocs-openapi/ui";
+
+Generates a new API key for programmatic access. The plaintext key is only shown once.
+
+<APIPage document={"./public/openapi.yaml"} operations={[{"path":"/user/api_keys/create","method":"post"}]} webhooks={[]} hasHead={false} />

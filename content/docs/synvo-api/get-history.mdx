@@ -1,0 +1,11 @@
+---
+title: "[GET] Get History"
+description: Get message history for a conversation session
+slug: /synvo-api/get-history
+---
+
+import { APIPage } from "fumadocs-openapi/ui";
+
+Retrieves the complete message history for a specific conversation session, including all user messages and AI responses in chronological order.
+
+<APIPage document={"./public/openapi.yaml"} operations={[{"path":"/history/{suid}","method":"get"}]} webhooks={[]} hasHead={false} />

@@ -35,7 +35,7 @@ export default function HomePage() {
           Access API Key
         </Link>
         <Link
-          href="/docs/1.0/quick-start"
+          href="/docs/overview"
           className={cn(buttonVariants({ variant: "outline" }), "px-6 py-3 text-base")}
         >
           Learn More
@@ -73,17 +73,17 @@ export default function HomePage() {
               <div className="space-y-4 pt-2">
               <div>
                   <p className="text-sm leading-relaxed">
-                    <span className="text-lg">🧠</span> <span className="font-medium"><strong>Contextual Intelligence</strong></span>: Deliver factual context <span className="text-fd-muted-foreground">(beta)</span>, user profiles <span className="text-fd-muted-foreground">(under dev)</span>, and workflow insights <span className="text-fd-muted-foreground">(under dev)</span> dynamically aligned with each query.
+                    <span className="text-lg">🧠</span> <span className="font-medium"><strong>Contextual Intelligence</strong></span>: Deliver factual context <span className="text-fd-muted-foreground">(beta)</span>, user profiles <span className="text-fd-muted-foreground">(beta)</span>, and workflow insights <span className="text-fd-muted-foreground">(under dev)</span> dynamically aligned with each query.
                   </p>
                 </div>
                 <div>
                   <p className="text-sm leading-relaxed">
-                    <span className="text-lg">⚡</span> <span className="font-medium"><strong>Massive Files Support</strong></span> - Handle thousands of files within seconds, ensuring rapid analysis at scale.
+                    <span className="text-lg">⚡</span> <span className="font-medium"><strong>Massive Files Support</strong></span> - Contextualize from thousands of files within seconds, ensuring rapid analysis at scale.
                   </p>
                 </div>
                 <div>
                   <p className="text-sm leading-relaxed">
-                    <span className="text-lg">🌐</span> <span className="font-medium"><strong>All-Media Compatibility</strong></span>: Seamlessly process documents, images, audio, and video files — supporting diverse formats in one unified system.
+                    <span className="text-lg">🌐</span> <span className="font-medium"><strong>All-Media Compatibility</strong></span>: Seamlessly process documents, images, videos, and web (e.g., YouTube, Podcasts) — supporting diverse formats in one unified system.
                   </p>
                 </div>
               </div>
@@ -131,7 +131,8 @@ print(json.dumps(res.json(), indent=2))`}</code>
                             href="https://console.synvo.ai/" 
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-white bg-blue-600 border border-blue-600 rounded-md hover:bg-blue-700 transition-colors"
+                            className="inline-flex items-center gap-2 px-3 py-2 text-xs font-medium text-white rounded-md transition-colors hover:opacity-90"
+                            style={{ backgroundColor: 'rgb(0, 164, 234)' }}
                           >
                             🔑 Get YOUR_SYNVO_API_KEY
                           </a>

@@ -781,12 +781,10 @@ paths:
                   type: string
                   default: ""
                   description: Base64 encoded screenshot (optional)
-                build_memory:
-                  type: boolean
-                  default: true
-                disable_lazy_metadata:
-                  type: boolean
-                  default: true
+                sub_user_name:
+                  type: string
+                  default: "default"
+                  description: Sub-user name for multi-user systems
       responses:
         '200':
           description: Webpage added

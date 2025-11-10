@@ -1,0 +1,64 @@
+---
+id: api-reference
+title: API Reference Overview
+slug: /synvo-api/api-reference
+description: Overview of the Synvo API endpoints with links to detailed documentation for each endpoint.
+---
+
+All API requests require authentication using an API key. Include your API key in the `X-API-Key` header:
+
+```bash
+curl -H "X-API-Key: YOUR_API_KEY" https://api.synvo.ai/endpoint
+```
+
+## API Endpoints
+
+### Context Management
+Manage your documents, files, and directories:
+
+- **[Create Directory](/docs/synvo-api/create-directory)** - Create a virtual directory
+- **[List File](/docs/synvo-api/list-files)** - List directory contents
+- **[Upload File](/docs/synvo-api/upload-file)** - Upload a file
+- **[Download File](/docs/synvo-api/download-file)** - Download a file by ID
+- **[Update File](/docs/synvo-api/update-file)** - Move or rename files
+- **[Delete File](/docs/synvo-api/delete-file)** - Delete a file by ID
+- **[Get File Thumbnail](/docs/synvo-api/get-file-thumbnail)** - Get file thumbnails
+- **[Get File Status](/docs/synvo-api/get-file-status)** - Check file processing status
+
+### Context Generation Layer
+Search and query functionality:
+
+- **[Search File](/docs/synvo-api/file-search)** - AI-powered file search
+- **[Get Context](/docs/synvo-api/query-ai)** - Submit queries to the AI
+
+### Session & Feedback Management
+Manage conversation session histories:
+
+- **[List History](/docs/synvo-api/list-history)** - List all session histories by user
+- **[Get History](/docs/synvo-api/get-session)** - Get message history for a conversation session
+- **[Delete History](/docs/synvo-api/delete-session)** - Delete a session history
+- **[Like Message](/docs/synvo-api/like-message)** - Like an AI response
+- **[Dislike Message](/docs/synvo-api/dislike-message)** - Dislike an AI response
+- **[Get Message Feedback](/docs/synvo-api/get-message-feedback)** - Get feedback status
+- **[Delete Message Feedback](/docs/synvo-api/cancel-message-feedback)** - Remove feedback
+
+
+## Interactive Documentation
+
+Each endpoint page includes:
+- **Detailed descriptions** of parameters and responses
+- **Code examples** in multiple languages (cURL, Python, JavaScript)
+- **Interactive testing** capabilities
+- **Response schemas** and examples
+
+## Authentication
+
+All endpoints require authentication using an API key. You can obtain an API key from your account settings or create one using the [Create API Key](/docs/synvo-api/create-api-key) endpoint.
+
+## Base URL
+
+The API base URL is: `https://api.synvo.ai`
+
+## Rate Limits
+
+API requests are subject to rate limiting. Please refer to your account dashboard for current limits and usage.
