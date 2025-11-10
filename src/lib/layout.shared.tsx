@@ -29,7 +29,7 @@ export function baseOptions(): BaseLayoutProps {
     links: [
       {
         text: "Discord",
-        url: "https://discord.gg/M3qHRjBK",
+        url: "https://discord.gg/jB5BA7N77j",
         icon: <ExternalLinkIcon />,
       },
     ],
