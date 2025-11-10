@@ -33,7 +33,7 @@ export function baseOptions(): BaseLayoutProps {
       },
       {
         text: "Discord",
-        url: "https://discord.gg/M3qHRjBK",
+        url: "https://discord.gg/jB5BA7N77j",
         icon: <ExternalLinkIcon />,
       },
     ],
