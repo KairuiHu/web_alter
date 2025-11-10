@@ -35,7 +35,7 @@ export default function HomePage() {
           Access API Key
         </Link>
         <Link
-          href="/docs/quick-start"
+          href="/docs/overview"
           className={cn(buttonVariants({ variant: "outline" }), "px-6 py-3 text-base")}
         >
           Learn More

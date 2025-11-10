@@ -1,5 +1,5 @@
 {
-  "title": "File Management",
+  "title": "Context Management",
   "defaultOpen": false,
   "pages": [
     "../create-directory",
@@ -9,7 +9,8 @@
     "../update-file",
     "../delete-file",
     "../get-file-thumbnail",
-    "../get-file-status"
+    "../get-file-status",
+    "../add-webpage"
   ]
 }
 
