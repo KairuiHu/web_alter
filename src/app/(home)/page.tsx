@@ -4,6 +4,7 @@ import Image from "next/image";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 import { ThemeAwareImage } from "@/components/theme-aware-image";
+import { RotatingText } from "@/components/rotating-text";
 
 export default function HomePage() {
   return (
@@ -20,9 +21,7 @@ export default function HomePage() {
           />
           <h1 className="text-3xl font-bold sm:text-4xl">Synvo API</h1>
         </div>
-        <p className="mb-2 text-fd-muted-foreground text-balance text-lg">
-        Whenever AI agents need to understand the user, the Synvo API delivers precise context—finding the most relevant information and expressing user intent from files of any format, with minimal hallucination.
-        </p>
+        <RotatingText />
       </div>
 
       {/* CTA Buttons */}
@@ -60,8 +59,8 @@ export default function HomePage() {
                   unoptimized
                 />
               </div>
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-fd-background px-4 py-1 text-sm font-medium text-fd-foreground shadow-md">
-              Two-Step Contextualization Pipeline
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-fd-background px-4 py-1 text-sm font-medium text-fd-foreground shadow-md whitespace-nowrap">
+              Two-Step Pipeline to Contextualize Your User
               </div>
             </div>
             
@@ -71,19 +70,19 @@ export default function HomePage() {
                 Key Features
               </div>
               <div className="space-y-4 pt-2">
-              <div>
-                  <p className="text-sm leading-relaxed">
-                    <span className="text-lg">🧠</span> <span className="font-medium"><strong>Contextual Intelligence</strong></span>: Deliver factual context <span className="text-fd-muted-foreground">(beta)</span>, user profiles <span className="text-fd-muted-foreground">(beta)</span>, and workflow insights <span className="text-fd-muted-foreground">(under dev)</span> dynamically aligned with each query.
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm leading-relaxed">
-                    <span className="text-lg">⚡</span> <span className="font-medium"><strong>Massive Files Support</strong></span> - Contextualize from thousands of files within seconds, ensuring rapid analysis at scale.
-                  </p>
-                </div>
                 <div>
                   <p className="text-sm leading-relaxed">
                     <span className="text-lg">🌐</span> <span className="font-medium"><strong>All-Media Compatibility</strong></span>: Seamlessly process documents, images, videos, and web (e.g., YouTube, Podcasts) — supporting diverse formats in one unified system.
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm leading-relaxed">
+                    <span className="text-lg">💾</span> <span className="font-medium"><strong>Massive Files Support</strong></span>: Accurately contextualize from thousands of files without compromising quality or speed.
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm leading-relaxed">
+                    <span className="text-lg">🧠</span> <span className="font-medium"><strong>Contextual Intelligence</strong></span>: For each query, deliver most relevant factual context <span className="text-fd-muted-foreground">(beta)</span>, user profiles <span className="text-fd-muted-foreground">(beta)</span>, and workflow insights <span className="text-fd-muted-foreground">(under dev)</span>.
                   </p>
                 </div>
               </div>
@@ -94,7 +93,7 @@ export default function HomePage() {
           <div className="flex flex-col h-full">
             <div className="rounded-xl border border-fd-border bg-fd-card p-6 shadow-sm flex-1 flex flex-col">
               <div className="mb-2">
-                <h3 className="text-xl font-semibold mb-1">Try It Yourself</h3>
+                <h3 className="text-xl font-semibold mb-1">Understand your user NOW!</h3>
                 <p className="text-sm text-fd-muted-foreground">
                   First upload the files with the API, then query the API to get the facts.
                 </p>
@@ -108,15 +107,15 @@ export default function HomePage() {
                     <div className="flex-1 flex flex-col">
                       <pre className="overflow-x-auto rounded-lg bg-fd-muted p-4 text-sm flex-1">
                         <code>{`import requests, json
-
 API_KEY = "YOUR_SYNVO_API_KEY"
 API_HOST = "https://api.synvo.ai"
 
-# Upload file into contextual memory
+# Upload file into user1's contextual memory
 with open("NTU_Annual_Report_2024.pdf", "rb") as f:
     res = requests.post(
         f"{API_HOST}/file/upload",
         files={"file": f},
+        data={"sub_user_name": "user1"}, # Replace with your own user name
         headers={"X-API-Key": API_KEY}
     )
 
@@ -156,21 +155,20 @@ print(json.dumps(res.json(), indent=2))`}</code>
                     <div className="flex-1 flex flex-col">
                       <pre className="overflow-x-auto rounded-lg bg-fd-muted p-4 text-sm flex-1">
                         <code>{`import requests, json
-
 API_KEY = "YOUR_SYNVO_API_KEY"
 API_HOST = "https://api.synvo.ai"
 
 query = "How many patents did NTU file in FY2023?"
 
-payload = {
-    "messages": [
-        {"role": "user", "content": [{"type": "text", "text": query}]}
-    ]
+payload = {"messages": [{"role": "user", "content": [{"type": "text", "text": query}]}]}
+data = {
+    "payload": json.dumps(payload),
+    "sub_user_name": "user1" # Replace with your own user name
 }
 
 res = requests.post(
     f"{API_HOST}/ai/query",
-    data={"payload": json.dumps(payload)},
+    data=data,
     headers={"X-API-Key": API_KEY},
 )
 
