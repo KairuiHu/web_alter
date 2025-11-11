@@ -7,7 +7,7 @@ info:
 
     Notes
     - Base path in the app is served via /api proxy. See servers below.
-    - Authentication: endpoints accept either Bearer token or session cookie. The app also refreshes tokens automatically.
+    - Authentication: endpoints accept API Key (X-API-Key header).
     - Response schemas may be simplified for readability; real responses can include additional fields.
   contact:
     name: Synvo AI
@@ -84,10 +84,10 @@ paths:
           source: |
             import requests
 
-            token = "<BEARER_TOKEN>"
+            api_key = "<API_KEY>"
             url = "https://api.synvo.ai/file/create_dir"
             data = {"path": "/docs"}
-            headers = {"X-API-Key": f"{token}"}
+            headers = {"X-API-Key": api_key}
 
             response = requests.post(url, data=data, headers=headers, timeout=30)
             response.raise_for_status()
@@ -95,13 +95,13 @@ paths:
         - lang: JavaScript
           label: JavaScript (fetch)
           source: |
-            const token = "<BEARER_TOKEN>";
+            const apiKey = "<API_KEY>";
             const params = new URLSearchParams({ path: "/docs" });
 
             const response = await fetch("https://api.synvo.ai/file/create_dir", {
               method: "POST",
               headers: {
-                "X-API-Key": `${token}`,
+                "X-API-Key": apiKey,
               },
               body: params,
             });
@@ -182,10 +182,10 @@ paths:
           source: |
             import requests
 
-            token = "<BEARER_TOKEN>"
+            api_key = "<API_KEY>"
             url = "https://api.synvo.ai/file/list"
             params = {"path": "/project", "recursive": True}
-            headers = {"X-API-Key": f"{token}"}
+            headers = {"X-API-Key": api_key}
 
             response = requests.get(url, params=params, headers=headers, timeout=30)
             response.raise_for_status()
@@ -193,7 +193,7 @@ paths:
         - lang: JavaScript
           label: JavaScript (fetch)
           source: |
-            const token = "<BEARER_TOKEN>";
+            const apiKey = "<API_KEY>";
             const params = new URLSearchParams({
               path: "/project",
               recursive: "true"
@@ -202,7 +202,7 @@ paths:
             const response = await fetch(`https://api.synvo.ai/file/list?${params}`, {
               method: "GET",
               headers: {
-                "X-API-Key": `${token}`,
+                "X-API-Key": apiKey,
               },
             });
 
@@ -257,11 +257,11 @@ paths:
           source: |
             import requests
 
-            token = "<BEARER_TOKEN>"
+            api_key = "<API_KEY>"
             file_id = "abc123xyz"
             url = f"https://api.synvo.ai/file/delete/{file_id}"
             params = {"sub_user_name": "default"}
-            headers = {"X-API-Key": f"{token}"}
+            headers = {"X-API-Key": api_key}
 
             response = requests.delete(url, params=params, headers=headers, timeout=30)
             response.raise_for_status()
@@ -269,7 +269,7 @@ paths:
         - lang: JavaScript
           label: JavaScript (fetch)
           source: |
-            const token = "<BEARER_TOKEN>";
+            const apiKey = "<API_KEY>";
             const fileId = "abc123xyz";
             const params = new URLSearchParams({
               sub_user_name: "default"
@@ -278,7 +278,7 @@ paths:
             const response = await fetch(`https://api.synvo.ai/file/delete/${fileId}?${params}`, {
               method: "DELETE",
               headers: {
-                "X-API-Key": `${token}`,
+                "X-API-Key": apiKey,
               },
             });
 
@@ -352,9 +352,9 @@ paths:
           source: |
             import requests
 
-            token = "<BEARER_TOKEN>"
+            api_key = "<API_KEY>"
             url = "https://api.synvo.ai/file/upload"
-            headers = {"X-API-Key": f"{token}"}
+            headers = {"X-API-Key": api_key}
 
             with open("/path/to/document.pdf", "rb") as f:
                 files = {"file": f}
@@ -369,7 +369,7 @@ paths:
         - lang: JavaScript
           label: JavaScript (fetch)
           source: |
-            const token = "<BEARER_TOKEN>";
+            const apiKey = "<API_KEY>";
             const fileInput = document.querySelector('input[type="file"]');
             const file = fileInput.files[0];
 
@@ -381,7 +381,7 @@ paths:
             const response = await fetch("https://api.synvo.ai/file/upload", {
               method: "POST",
               headers: {
-                "X-API-Key": `${token}`,
+                "X-API-Key": apiKey,
               },
               body: formData,
             });
@@ -445,11 +445,11 @@ paths:
           source: |
             import requests
 
-            token = "<BEARER_TOKEN>"
+            api_key = "<API_KEY>"
             file_id = "abc123xyz"
             url = "https://api.synvo.ai/file/download"
             params = {"file_id": file_id, "sub_user_name": "default"}
-            headers = {"X-API-Key": f"{token}"}
+            headers = {"X-API-Key": api_key}
 
             response = requests.get(url, params=params, headers=headers, timeout=30)
             response.raise_for_status()
@@ -464,14 +464,14 @@ paths:
         - lang: JavaScript
           label: JavaScript (fetch)
           source: |
-            const token = "<BEARER_TOKEN>";
+            const apiKey = "<API_KEY>";
             const fileId = "abc123xyz";
             const subUserName = "default";
 
             const response = await fetch(`https://api.synvo.ai/file/download?file_id=${fileId}&sub_user_name=${subUserName}`, {
               method: "GET",
               headers: {
-                "X-API-Key": `${token}`,
+                "X-API-Key": apiKey,
               },
             });
 
@@ -553,14 +553,14 @@ paths:
           source: |
             import requests
 
-            token = "<BEARER_TOKEN>"
+            api_key = "<API_KEY>"
             url = "https://api.synvo.ai/file/move"
             data = {
                 "src": "/project/report.pdf",
                 "dest": "/project/new_dir",
                 "sub_user_name": "default"
             }
-            headers = {"X-API-Key": f"{token}"}
+            headers = {"X-API-Key": api_key}
 
             response = requests.post(url, data=data, headers=headers, timeout=30)
             response.raise_for_status()
@@ -568,7 +568,7 @@ paths:
         - lang: JavaScript
           label: JavaScript (fetch)
           source: |
-            const token = "<BEARER_TOKEN>";
+            const apiKey = "<API_KEY>";
             const params = new URLSearchParams({
               src: "/project/report.pdf",
               dest: "/project/new_dir",
@@ -578,7 +578,7 @@ paths:
             const response = await fetch("https://api.synvo.ai/file/move", {
               method: "POST",
               headers: {
-                "X-API-Key": `${token}`,
+                "X-API-Key": apiKey,
               },
               body: params,
             });
@@ -631,11 +631,11 @@ paths:
           source: |
             import requests
 
-            token = "<BEARER_TOKEN>"
+            api_key = "<API_KEY>"
             file_id = "abc123xyz"
             url = "https://api.synvo.ai/file/thumbnail"
             params = {"file_id": file_id, "max_size": 200}
-            headers = {"X-API-Key": f"{token}"}
+            headers = {"X-API-Key": api_key}
 
             response = requests.get(url, params=params, headers=headers, timeout=30)
             response.raise_for_status()
@@ -645,7 +645,7 @@ paths:
         - lang: JavaScript
           label: JavaScript (fetch)
           source: |
-            const token = "<BEARER_TOKEN>";
+            const apiKey = "<API_KEY>";
             const fileId = "abc123xyz";
             const params = new URLSearchParams({
               file_id: fileId,
@@ -655,7 +655,7 @@ paths:
             const response = await fetch(`https://api.synvo.ai/file/thumbnail?${params}`, {
               method: "GET",
               headers: {
-                "X-API-Key": `${token}`,
+                "X-API-Key": apiKey,
               },
             });
 
@@ -717,12 +717,12 @@ paths:
           source: |
             import requests
 
-            token = "<BEARER_TOKEN>"
+            api_key = "<API_KEY>"
             file_id = "abc123xyz"
             sub_user_name = "user1"  # Optional sub-user name
             url = f"https://api.synvo.ai/file/status/{file_id}"
             params = {"sub_user_name": sub_user_name}
-            headers = {"X-API-Key": f"{token}"}
+            headers = {"X-API-Key": api_key}
 
             response = requests.get(url, params=params, headers=headers, timeout=30)
             response.raise_for_status()
@@ -730,7 +730,7 @@ paths:
         - lang: JavaScript
           label: JavaScript (fetch)
           source: |
-            const token = "<BEARER_TOKEN>";
+            const apiKey = "<API_KEY>";
             const fileId = "abc123xyz";
             const subUserName = "user1";  // Optional sub-user name
             
@@ -741,7 +741,7 @@ paths:
             const response = await fetch(`https://api.synvo.ai/file/status/${fileId}?${params}`, {
               method: "GET",
               headers: {
-                "X-API-Key": `${token}`,
+                "X-API-Key": apiKey,
               },
             });
 
@@ -821,7 +821,7 @@ paths:
           source: |
             import requests
 
-            token = "<BEARER_TOKEN>"
+            api_key = "<API_KEY>"
             url = "https://api.synvo.ai/webpage/add"
             data = {
                 "url": "https://example.com/article",
@@ -829,7 +829,7 @@ paths:
                 "name": "Example Article",
                 "build_memory": True
             }
-            headers = {"X-API-Key": f"{token}"}
+            headers = {"X-API-Key": api_key}
 
             response = requests.post(url, data=data, headers=headers, timeout=60)
             response.raise_for_status()
@@ -837,7 +837,7 @@ paths:
         - lang: JavaScript
           label: JavaScript (fetch)
           source: |
-            const token = "<BEARER_TOKEN>";
+            const apiKey = "<API_KEY>";
             const params = new URLSearchParams({
               url: "https://example.com/article",
               path: "/web",
@@ -848,7 +848,7 @@ paths:
             const response = await fetch("https://api.synvo.ai/webpage/add", {
               method: "POST",
               headers: {
-                "X-API-Key": `${token}`,
+                "X-API-Key": apiKey,
               },
               body: params,
             });
@@ -910,10 +910,10 @@ paths:
           source: |
             import requests
 
-            token = "<BEARER_TOKEN>"
+            api_key = "<API_KEY>"
             file_id = "abc123xyz"
             url = f"https://api.synvo.ai/metadata/{file_id}"
-            headers = {"X-API-Key": f"{token}"}
+            headers = {"X-API-Key": api_key}
 
             response = requests.get(url, headers=headers, timeout=30)
             response.raise_for_status()
@@ -921,13 +921,13 @@ paths:
         - lang: JavaScript
           label: JavaScript (fetch)
           source: |
-            const token = "<BEARER_TOKEN>";
+            const apiKey = "<API_KEY>";
             const fileId = "abc123xyz";
 
             const response = await fetch(`https://api.synvo.ai/metadata/${fileId}`, {
               method: "GET",
               headers: {
-                "X-API-Key": `${token}`,
+                "X-API-Key": apiKey,
               },
             });
 
@@ -990,10 +990,10 @@ paths:
           source: |
             import requests
 
-            token = "<BEARER_TOKEN>"
+            api_key = "<API_KEY>"
             url = "https://api.synvo.ai/ai/search"
             data = {"message": "financial reports for Q4"}
-            headers = {"X-API-Key": f"{token}"}
+            headers = {"X-API-Key": api_key}
 
             response = requests.post(url, data=data, headers=headers, timeout=30)
             response.raise_for_status()
@@ -1001,7 +1001,7 @@ paths:
         - lang: JavaScript
           label: JavaScript (fetch)
           source: |
-            const token = "<BEARER_TOKEN>";
+            const apiKey = "<API_KEY>";
             const params = new URLSearchParams({
               message: "financial reports for Q4"
             });
@@ -1009,7 +1009,7 @@ paths:
             const response = await fetch("https://api.synvo.ai/ai/search", {
               method: "POST",
               headers: {
-                "X-API-Key": `${token}`,
+                "X-API-Key": apiKey,
               },
               body: params,
             });
@@ -1129,9 +1129,9 @@ paths:
             import requests
             import json
 
-            token = "<BEARER_TOKEN>"
+            api_key = "<API_KEY>"
             url = "https://api.synvo.ai/ai/query"
-            headers = {"X-API-Key": f"{token}"}
+            headers = {"X-API-Key": api_key}
 
             payload = {
                 "messages": [
@@ -1156,7 +1156,7 @@ paths:
         - lang: JavaScript
           label: JavaScript (fetch)
           source: |
-            const token = "<BEARER_TOKEN>";
+            const apiKey = "<API_KEY>";
 
             const payload = {
               messages: [
@@ -1177,7 +1177,7 @@ paths:
             const response = await fetch("https://api.synvo.ai/ai/query", {
               method: "POST",
               headers: {
-                "X-API-Key": `${token}`,
+                "X-API-Key": apiKey,
               },
               body: formData,
             });
@@ -1229,9 +1229,9 @@ paths:
           source: |
             import requests
 
-            token = "<BEARER_TOKEN>"
+            api_key = "<API_KEY>"
             url = "https://api.synvo.ai/history"
-            headers = {"X-API-Key": f"{token}"}
+            headers = {"X-API-Key": api_key}
 
             response = requests.get(url, headers=headers, timeout=30)
             response.raise_for_status()
@@ -1239,12 +1239,12 @@ paths:
         - lang: JavaScript
           label: JavaScript (fetch)
           source: |
-            const token = "<BEARER_TOKEN>";
+            const apiKey = "<API_KEY>";
 
             const response = await fetch("https://api.synvo.ai/history", {
               method: "GET",
               headers: {
-                "X-API-Key": `${token}`,
+                "X-API-Key": apiKey,
               },
             });
 
@@ -1306,10 +1306,10 @@ paths:
           source: |
             import requests
 
-            token = "<BEARER_TOKEN>"
+            api_key = "<API_KEY>"
             suid = "sess_abc123xyz"
             url = f"https://api.synvo.ai/history/{suid}"
-            headers = {"X-API-Key": f"{token}"}
+            headers = {"X-API-Key": api_key}
 
             response = requests.get(url, headers=headers, timeout=30)
             response.raise_for_status()
@@ -1317,13 +1317,13 @@ paths:
         - lang: JavaScript
           label: JavaScript (fetch)
           source: |
-            const token = "<BEARER_TOKEN>";
+            const apiKey = "<API_KEY>";
             const suid = "sess_abc123xyz";
 
             const response = await fetch(`https://api.synvo.ai/history/${suid}`, {
               method: "GET",
               headers: {
-                "X-API-Key": `${token}`,
+                "X-API-Key": apiKey,
               },
             });
 
@@ -1372,10 +1372,10 @@ paths:
           source: |
             import requests
 
-            token = "<BEARER_TOKEN>"
+            api_key = "<API_KEY>"
             suid = "sess_abc123xyz"
             url = f"https://api.synvo.ai/history/delete/{suid}"
-            headers = {"X-API-Key": f"{token}"}
+            headers = {"X-API-Key": api_key}
 
             response = requests.delete(url, headers=headers, timeout=30)
             response.raise_for_status()
@@ -1383,13 +1383,13 @@ paths:
         - lang: JavaScript
           label: JavaScript (fetch)
           source: |
-            const token = "<BEARER_TOKEN>";
+            const apiKey = "<API_KEY>";
             const suid = "sess_abc123xyz";
 
             const response = await fetch(`https://api.synvo.ai/history/delete/${suid}`, {
               method: "DELETE",
               headers: {
-                "X-API-Key": `${token}`,
+                "X-API-Key": apiKey,
               },
             });
 
@@ -1441,10 +1441,10 @@ paths:
           source: |
             import requests
 
-            token = "<BEARER_TOKEN>"
+            api_key = "<API_KEY>"
             cuid = "msg_abc123xyz"
             url = f"https://api.synvo.ai/ai/like/{cuid}"
-            headers = {"X-API-Key": f"{token}"}
+            headers = {"X-API-Key": api_key}
 
             response = requests.post(url, headers=headers, timeout=30)
             response.raise_for_status()
@@ -1452,13 +1452,13 @@ paths:
         - lang: JavaScript
           label: JavaScript (fetch)
           source: |
-            const token = "<BEARER_TOKEN>";
+            const apiKey = "<API_KEY>";
             const cuid = "msg_abc123xyz";
 
             const response = await fetch(`https://api.synvo.ai/ai/like/${cuid}`, {
               method: "POST",
               headers: {
-                "X-API-Key": `${token}`,
+                "X-API-Key": apiKey,
               },
             });
 
@@ -1510,10 +1510,10 @@ paths:
           source: |
             import requests
 
-            token = "<BEARER_TOKEN>"
+            api_key = "<API_KEY>"
             cuid = "msg_abc123xyz"
             url = f"https://api.synvo.ai/ai/dislike/{cuid}"
-            headers = {"X-API-Key": f"{token}"}
+            headers = {"X-API-Key": api_key}
 
             response = requests.post(url, headers=headers, timeout=30)
             response.raise_for_status()
@@ -1521,13 +1521,13 @@ paths:
         - lang: JavaScript
           label: JavaScript (fetch)
           source: |
-            const token = "<BEARER_TOKEN>";
+            const apiKey = "<API_KEY>";
             const cuid = "msg_abc123xyz";
 
             const response = await fetch(`https://api.synvo.ai/ai/dislike/${cuid}`, {
               method: "POST",
               headers: {
-                "X-API-Key": `${token}`,
+                "X-API-Key": apiKey,
               },
             });
 
@@ -1587,10 +1587,10 @@ paths:
           source: |
             import requests
 
-            token = "<BEARER_TOKEN>"
+            api_key = "<API_KEY>"
             cuid = "msg_abc123xyz"
             url = f"https://api.synvo.ai/ai/feedback/{cuid}"
-            headers = {"X-API-Key": f"{token}"}
+            headers = {"X-API-Key": api_key}
 
             response = requests.get(url, headers=headers, timeout=30)
             response.raise_for_status()
@@ -1598,13 +1598,13 @@ paths:
         - lang: JavaScript
           label: JavaScript (fetch)
           source: |
-            const token = "<BEARER_TOKEN>";
+            const apiKey = "<API_KEY>";
             const cuid = "msg_abc123xyz";
 
             const response = await fetch(`https://api.synvo.ai/ai/feedback/${cuid}`, {
               method: "GET",
               headers: {
-                "X-API-Key": `${token}`,
+                "X-API-Key": apiKey,
               },
             });
 
@@ -1653,10 +1653,10 @@ paths:
           source: |
             import requests
 
-            token = "<BEARER_TOKEN>"
+            api_key = "<API_KEY>"
             cuid = "msg_abc123xyz"
             url = f"https://api.synvo.ai/ai/feedback/{cuid}"
-            headers = {"X-API-Key": f"{token}"}
+            headers = {"X-API-Key": api_key}
 
             response = requests.delete(url, headers=headers, timeout=30)
             response.raise_for_status()
@@ -1664,13 +1664,13 @@ paths:
         - lang: JavaScript
           label: JavaScript (fetch)
           source: |
-            const token = "<BEARER_TOKEN>";
+            const apiKey = "<API_KEY>";
             const cuid = "msg_abc123xyz";
 
             const response = await fetch(`https://api.synvo.ai/ai/feedback/${cuid}`, {
               method: "DELETE",
               headers: {
-                "X-API-Key": `${token}`,
+                "X-API-Key": apiKey,
               },
             });
 
@@ -1713,9 +1713,9 @@ paths:
           source: |
             import requests
 
-            token = "<BEARER_TOKEN>"
+            api_key = "<API_KEY>"
             url = "https://api.synvo.ai/user/api_keys/list"
-            headers = {"X-API-Key": f"{token}"}
+            headers = {"X-API-Key": api_key}
 
             response = requests.get(url, headers=headers, timeout=30)
             response.raise_for_status()
@@ -1723,12 +1723,12 @@ paths:
         - lang: JavaScript
           label: JavaScript (fetch)
           source: |
-            const token = "<BEARER_TOKEN>";
+            const apiKey = "<API_KEY>";
 
             const response = await fetch("https://api.synvo.ai/user/api_keys/list", {
               method: "GET",
               headers: {
-                "X-API-Key": `${token}`,
+                "X-API-Key": apiKey,
               },
             });
 
@@ -1786,10 +1786,10 @@ paths:
           source: |
             import requests
 
-            token = "<BEARER_TOKEN>"
+            api_key = "<API_KEY>"
             url = "https://api.synvo.ai/user/api_keys/create"
             data = {"name": "My API Key"}
-            headers = {"X-API-Key": f"{token}"}
+            headers = {"X-API-Key": api_key}
 
             response = requests.post(url, data=data, headers=headers, timeout=30)
             response.raise_for_status()
@@ -1800,13 +1800,13 @@ paths:
         - lang: JavaScript
           label: JavaScript (fetch)
           source: |
-            const token = "<BEARER_TOKEN>";
+            const apiKey = "<API_KEY>";
             const params = new URLSearchParams({ name: "My API Key" });
 
             const response = await fetch("https://api.synvo.ai/user/api_keys/create", {
               method: "POST",
               headers: {
-                "X-API-Key": `${token}`,
+                "X-API-Key": apiKey,
               },
               body: params,
             });

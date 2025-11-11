@@ -8,8 +8,7 @@ The Synvo API provides comprehensive conversation management capabilities, inclu
 
 ## Authentication
 
-All endpoints require authentication via either:
-- **Bearer Token**: `Authorization: Bearer <token>`
+All endpoints require authentication via:
 - **API Key**: `X-API-Key: <api_key>`
 
 ## Base URL
@@ -42,9 +41,9 @@ curl -X GET "https://api.synvo.ai/history" \
 ```python
 import requests
 
-token = "<BEARER_TOKEN>"
+api_key = "<API_KEY>"
 url = "https://api.synvo.ai/history"
-headers = {"X-API-Key": f"{token}"}
+headers = {"X-API-Key": api_key}
 
 response = requests.get(url, headers=headers, timeout=30)
 response.raise_for_status()
@@ -55,12 +54,12 @@ print(response.json())
   <Tab value="JavaScript">
 
 ```javascript
-const token = "<BEARER_TOKEN>";
+const api_key = "<API_KEY>";
 
 const response = await fetch("https://api.synvo.ai/history", {
   method: "GET",
   headers: {
-    "X-API-Key": `${token}`,
+    "X-API-Key": apiKey,
   },
 });
 
@@ -127,10 +126,10 @@ curl -X GET "https://api.synvo.ai/history/sess_abc123xyz" \
 ```python
 import requests
 
-token = "<BEARER_TOKEN>"
+api_key = "<API_KEY>"
 suid = "sess_abc123xyz"
 url = f"https://api.synvo.ai/history/{suid}"
-headers = {"X-API-Key": f"{token}"}
+headers = {"X-API-Key": api_key}
 
 response = requests.get(url, headers=headers, timeout=30)
 response.raise_for_status()
@@ -141,13 +140,13 @@ print(response.json())
   <Tab value="JavaScript">
 
 ```javascript
-const token = "<BEARER_TOKEN>";
+const api_key = "<API_KEY>";
 const suid = "sess_abc123xyz";
 
 const response = await fetch(`https://api.synvo.ai/history/${suid}`, {
   method: "GET",
   headers: {
-    "X-API-Key": `${token}`,
+    "X-API-Key": apiKey,
   },
 });
 
@@ -237,10 +236,10 @@ curl -X DELETE "https://api.synvo.ai/history/delete/sess_abc123xyz" \
 ```python
 import requests
 
-token = "<BEARER_TOKEN>"
+api_key = "<API_KEY>"
 suid = "sess_abc123xyz"
 url = f"https://api.synvo.ai/history/delete/{suid}"
-headers = {"X-API-Key": f"{token}"}
+headers = {"X-API-Key": api_key}
 
 response = requests.delete(url, headers=headers, timeout=30)
 response.raise_for_status()
@@ -251,13 +250,13 @@ print(response.json())
   <Tab value="JavaScript">
 
 ```javascript
-const token = "<BEARER_TOKEN>";
+const api_key = "<API_KEY>";
 const suid = "sess_abc123xyz";
 
 const response = await fetch(`https://api.synvo.ai/history/delete/${suid}`, {
   method: "DELETE",
   headers: {
-    "X-API-Key": `${token}`,
+    "X-API-Key": apiKey,
   },
 });
 
@@ -324,10 +323,10 @@ curl -X POST "https://api.synvo.ai/feedback" \
 ```python
 import requests
 
-token = "<BEARER_TOKEN>"
+api_key = "<API_KEY>"
 url = "https://api.synvo.ai/feedback"
 headers = {
-    "X-API-Key": f"{token}",
+    "X-API-Key": api_key,
     "Content-Type": "application/json"
 }
 data = {
@@ -344,12 +343,12 @@ print(response.json())
   <Tab value="JavaScript">
 
 ```javascript
-const token = "<BEARER_TOKEN>";
+const api_key = "<API_KEY>";
 
 const response = await fetch("https://api.synvo.ai/feedback", {
   method: "POST",
   headers: {
-    "X-API-Key": `${token}`,
+    "X-API-Key": apiKey,
     "Content-Type": "application/json"
   },
   body: JSON.stringify({
@@ -410,10 +409,10 @@ curl -X GET "https://api.synvo.ai/feedback/msg_asst456" \
 ```python
 import requests
 
-token = "<BEARER_TOKEN>"
+api_key = "<API_KEY>"
 cuid = "msg_asst456"
 url = f"https://api.synvo.ai/feedback/{cuid}"
-headers = {"X-API-Key": f"{token}"}
+headers = {"X-API-Key": api_key}
 
 response = requests.get(url, headers=headers, timeout=30)
 response.raise_for_status()
@@ -424,13 +423,13 @@ print(response.json())
   <Tab value="JavaScript">
 
 ```javascript
-const token = "<BEARER_TOKEN>";
+const api_key = "<API_KEY>";
 const cuid = "msg_asst456";
 
 const response = await fetch(`https://api.synvo.ai/feedback/${cuid}`, {
   method: "GET",
   headers: {
-    "X-API-Key": `${token}`,
+    "X-API-Key": apiKey,
   },
 });
 
@@ -486,10 +485,10 @@ curl -X DELETE "https://api.synvo.ai/feedback/msg_asst456" \
 ```python
 import requests
 
-token = "<BEARER_TOKEN>"
+api_key = "<API_KEY>"
 cuid = "msg_asst456"
 url = f"https://api.synvo.ai/feedback/{cuid}"
-headers = {"X-API-Key": f"{token}"}
+headers = {"X-API-Key": api_key}
 
 response = requests.delete(url, headers=headers, timeout=30)
 response.raise_for_status()
@@ -500,13 +499,13 @@ print(response.json())
   <Tab value="JavaScript">
 
 ```javascript
-const token = "<BEARER_TOKEN>";
+const api_key = "<API_KEY>";
 const cuid = "msg_asst456";
 
 const response = await fetch(`https://api.synvo.ai/feedback/${cuid}`, {
   method: "DELETE",
   headers: {
-    "X-API-Key": `${token}`,
+    "X-API-Key": apiKey,
   },
 });
 
@@ -561,10 +560,10 @@ curl -X POST "https://api.synvo.ai/feedback/batch" \
 ```python
 import requests
 
-token = "<BEARER_TOKEN>"
+api_key = "<API_KEY>"
 url = "https://api.synvo.ai/feedback/batch"
 headers = {
-    "X-API-Key": f"{token}",
+    "X-API-Key": api_key,
     "Content-Type": "application/json"
 }
 data = {
@@ -580,12 +579,12 @@ print(response.json())
   <Tab value="JavaScript">
 
 ```javascript
-const token = "<BEARER_TOKEN>";
+const api_key = "<API_KEY>";
 
 const response = await fetch("https://api.synvo.ai/feedback/batch", {
   method: "POST",
   headers: {
-    "X-API-Key": `${token}`,
+    "X-API-Key": apiKey,
     "Content-Type": "application/json"
   },
   body: JSON.stringify({
