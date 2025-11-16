@@ -6,6 +6,8 @@
     "../collect-user-context",
     "../synvo-api/query-retrieval",
     "../synvo-api/history-feedback",
-    "../synvo-api/user-isolation"
+    "../synvo-api/user-isolation",
+    "getmetadata"
+    
   ]
 }

@@ -1,0 +1,563 @@
+---
+id: profiling
+title: User Profile & User Events
+slug: /synvo-api/profiling
+---
+
+The Synvo API provides intelligent user profiling and event tracking capabilities. Transform raw user data into actionable intelligence through structured profiles and chronological event records.
+
+## Authentication
+
+All endpoints require authentication via:
+- **Bearer Token**: `Authorization: Bearer <token>`
+
+## Base URL
+
+```
+https://api.synvo.ai
+```
+
+## Get User Profile
+
+Retrieves comprehensive user profile with structured attributes across all categories.
+
+**Endpoint:** `GET /metadata/get_user_profile/`
+
+### Query Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `sub_user_name` | string | default | Optional sub-user name under the authenticated account |
+
+### Example Request
+
+<Tabs items={["cURL", "Python", "JavaScript"]}>
+  <Tab value="cURL">
+
+```bash
+curl -X GET "https://api.synvo.ai/metadata/get_user_profile/" \
+  -H "Authorization: Bearer ${API_TOKEN}" \
+  -H "Content-Type: application/json"
+```
+
+  </Tab>
+  <Tab value="Python">
+
+```python
+import requests
+
+api_token = "<API_TOKEN>"
+url = "https://api.synvo.ai/metadata/get_user_profile/"
+headers = {
+    "Authorization": f"Bearer {api_token}",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers, timeout=30)
+response.raise_for_status()
+print(response.json())
+```
+
+  </Tab>
+  <Tab value="JavaScript">
+
+```javascript
+const apiToken = "<API_TOKEN>";
+
+const response = await fetch("https://api.synvo.ai/metadata/get_user_profile/", {
+  method: "GET",
+  headers: {
+    "Authorization": `Bearer ${apiToken}`,
+    "Content-Type": "application/json"
+  }
+});
+
+if (!response.ok) {
+  throw new Error(`Request failed: ${response.status}`);
+}
+
+console.log(await response.json());
+```
+
+  </Tab>
+</Tabs>
+
+### Example Response
+
+```json
+{
+  "education": {
+    "sub_topics": {
+      "school": {
+        "value": "Nanyang Technological University (NTU)"
+      },
+      "major": {
+        "value": "Artificial Intelligence"
+      }
+    }
+  },
+  "psychological": {
+    "sub_topics": {
+      "values": {
+        "value": "Values leadership and service in education, emphasises interactive learning, and places strong weight on financial literacy for better long-term decision-making."
+      },
+      "motivations": {
+        "value": "Motivated by improving learning quality and gaining financial knowledge that supports accurate decisions."
+      }
+    }
+  },
+  "interest": {
+    "sub_topics": {
+      "sports": {
+        "value": "Shows interest in self-care and wellness activities from event materials."
+      },
+      "books": {
+        "value": "Reads technical and analytical material, such as neural network explanations and financial summaries."
+      }
+    }
+  },
+  "work": {
+    "sub_topics": {
+      "work_skills": {
+        "value": "Shows familiarity with machine learning concepts and financial analysis principles."
+      }
+    }
+  }
+}
+```
+
+### Response Codes
+
+- `200` - User profile retrieved successfully
+- `400` - Bad request
+- `401` - Unauthorized
+- `404` - User not found
+
+## Get User Events
+
+Retrieves chronological user events with flexible time-based filtering.
+
+**Endpoint:** `GET /metadata/get_user_event/`
+
+### Query Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `sub_user_name` | string | default | Optional sub-user name under the authenticated account |
+| `limit` | integer | 10 | Maximum number of events to return |
+| `start_time` | datetime | - | Start time of the time window (ISO 8601 format) |
+| `end_time` | datetime | - | End time of the time window (ISO 8601 format) |
+
+### Example Request
+
+<Tabs items={["cURL", "Python", "JavaScript"]}>
+  <Tab value="cURL">
+
+```bash
+curl -X GET "https://api.synvo.ai/metadata/get_user_event/?limit=5&start_time=2025-10-01T00:00:00Z" \
+  -H "Authorization: Bearer ${API_TOKEN}" \
+  -H "Content-Type: application/json"
+```
+
+  </Tab>
+  <Tab value="Python">
+
+```python
+import requests
+from datetime import datetime
+
+api_token = "<API_TOKEN>"
+url = "https://api.synvo.ai/metadata/get_user_event/"
+params = {
+    "limit": 5,
+    "start_time": "2025-10-01T00:00:00Z"
+}
+headers = {
+    "Authorization": f"Bearer {api_token}",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, params=params, headers=headers, timeout=30)
+response.raise_for_status()
+print(response.json())
+```
+
+  </Tab>
+  <Tab value="JavaScript">
+
+```javascript
+const apiToken = "<API_TOKEN>";
+const params = new URLSearchParams({
+  limit: "5",
+  start_time: "2025-10-01T00:00:00Z"
+});
+
+const response = await fetch(`https://api.synvo.ai/metadata/get_user_event/?${params}`, {
+  method: "GET",
+  headers: {
+    "Authorization": `Bearer ${apiToken}`,
+    "Content-Type": "application/json"
+  }
+});
+
+if (!response.ok) {
+  throw new Error(`Request failed: ${response.status}`);
+}
+
+console.log(await response.json());
+```
+
+  </Tab>
+</Tabs>
+
+### Example Response
+
+```json
+[
+  {
+    "event_type": "personal",
+    "content": "User uploaded Nanyang Technological University (NTU) Annual Report for 2024.",
+    "happen_time": "2025-11-16T00:00:00",
+    "mention_time": "2025-11-16T15:29:18.344000"
+  },
+  {
+    "event_type": "personal",
+    "content": "User uploaded a video lecture presented by Andrew Ng about neural networks.",
+    "happen_time": "2025-11-16T00:00:00",
+    "mention_time": "2025-11-16T15:31:00.890000"
+  },
+  {
+    "event_type": "personal",
+    "content": "User saved an audio lecture explaining operating profit margin.",
+    "happen_time": "2025-11-16T00:00:00",
+    "mention_time": "2025-11-16T15:32:40.555000"
+  },
+  {
+    "event_type": "personal",
+    "content": "User received an invitation for the October WellFest event at Nanyang Technological University.",
+    "happen_time": "2025-10-23T00:00:00",
+    "mention_time": "2025-11-16T15:34:06.326000"
+  },
+  {
+    "event_type": "personal",
+    "content": "User encouraged colleagues to join the WellFest event focused on self-care and well-being.",
+    "happen_time": "2025-10-23T00:00:00",
+    "mention_time": "2025-11-16T15:34:06.326000"
+  },
+  {
+    "event_type": "financial",
+    "content": "User plans to attend the October WellFest event on 23rd October 2025.",
+    "happen_time": "2025-10-23T00:00:00",
+    "mention_time": "2025-11-16T15:34:06.326000"
+  }
+]
+```
+
+### Response Codes
+
+- `200` - Events retrieved successfully
+- `400` - Invalid parameters
+- `401` - Unauthorized
+- `404` - User not found
+
+## Profile Schema
+
+The profiling system uses 8 main categories with 34 fine-grained subtopics, automatically populated when supporting evidence is found in user files.
+
+### Categories and Subtopics
+
+The Synvo profiling schema defines **8 top-level categories** and **34 subtopics**.  
+Each category stores different types of long-term signals extracted from user files.  
+Only entries supported by clear evidence are included in the final profile.
+
+<br/>
+
+<table style={{marginTop:"12px", fontSize:"15px"}}>
+  <thead>
+    <tr>
+      <th style={{textAlign:"center", padding:"8px"}}>Category</th>
+      <th style={{textAlign:"center", padding:"8px"}}>Subtopics Count</th>
+      <th style={{textAlign:"center", padding:"8px"}}>Subtopics</th>
+      <th style={{textAlign:"center", padding:"8px"}}>Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+    <tr>
+      <td style={{padding:"8px", textAlign:"center"}}><strong>basic_info</strong></td>
+      <td style={{padding:"8px", textAlign:"center"}}>7</td>
+      <td style={{padding:"8px"}}>Name, Age, Gender, birth_date, nationality, ethnicity, language_spoken</td>
+      <td style={{padding:"8px"}}>Core identity-related fields extracted only when explicitly present in files. These represent fundamental personal attributes.</td>
+    </tr>
+
+    <tr>
+      <td style={{padding:"8px", textAlign:"center"}}><strong>contact_info</strong></td>
+      <td style={{padding:"8px", textAlign:"center"}}>4</td>
+      <td style={{padding:"8px"}}>email, phone, city, country</td>
+      <td style={{padding:"8px"}}>Contact information derived from user-provided documents such as forms, resumes, or institutional material.</td>
+    </tr>
+
+    <tr>
+      <td style={{padding:"8px", textAlign:"center"}}><strong>education</strong></td>
+      <td style={{padding:"8px", textAlign:"center"}}>3</td>
+      <td style={{padding:"8px"}}>school, degree, major</td>
+      <td style={{padding:"8px"}}>Academic background and fields of study, inferred from certificates, lecture content, or university material.</td>
+    </tr>
+
+    <tr>
+      <td style={{padding:"8px", textAlign:"center"}}><strong>demographics</strong></td>
+      <td style={{padding:"8px", textAlign:"center"}}>3</td>
+      <td style={{padding:"8px"}}>marital_status, number_of_children, household_income</td>
+      <td style={{padding:"8px"}}>General demographic information included only when directly observable from the content.</td>
+    </tr>
+
+    <tr>
+      <td style={{padding:"8px", textAlign:"center"}}><strong>work</strong></td>
+      <td style={{padding:"8px", textAlign:"center"}}>5</td>
+      <td style={{padding:"8px"}}>company, title, working_industry, previous_projects, work_skills</td>
+      <td style={{padding:"8px"}}>Professional signals extracted from resumes, technical documents, project summaries, or workplace material.</td>
+    </tr>
+
+    <tr>
+      <td style={{padding:"8px", textAlign:"center"}}><strong>interest</strong></td>
+      <td style={{padding:"8px", textAlign:"center"}}>5</td>
+      <td style={{padding:"8px"}}>books, movies, music, foods, sports</td>
+      <td style={{padding:"8px"}}>Interests and preference patterns derived from media files, event posters, and activity-related content.</td>
+    </tr>
+
+    <tr>
+      <td style={{padding:"8px", textAlign:"center"}}><strong>psychological</strong></td>
+      <td style={{padding:"8px", textAlign:"center"}}>5</td>
+      <td style={{padding:"8px"}}>personality, values, beliefs, motivations, goals</td>
+      <td style={{padding:"8px"}}>Higher-level traits inferred from mission statements, reflective writing, or patterns across multiple documents.</td>
+    </tr>
+
+    <tr>
+      <td style={{padding:"8px", textAlign:"center"}}><strong>life_event</strong></td>
+      <td style={{padding:"8px", textAlign:"center"}}>3</td>
+      <td style={{padding:"8px"}}>marriage, relocation, retirement</td>
+      <td style={{padding:"8px"}}>Significant personal milestones extracted only when material explicitly describes a major event.</td>
+    </tr>
+
+    <tr style={{backgroundColor:"#f9fafb"}}>
+      <td style={{padding:"8px", textAlign:"center"}}><strong>Total</strong></td>
+      <td style={{padding:"8px", textAlign:"center"}}><strong>34</strong></td>
+      <td style={{padding:"8px", textAlign:"center", color:"#555"}}>—</td>
+      <td style={{padding:"8px", textAlign:"center", color:"#555"}}>—</td>
+    </tr>
+
+  </tbody>
+</table>
+
+
+## Event Types
+
+Events are categorized by type to provide context about user activities:
+
+- **personal** - Individual activities and preferences
+- **financial** - Finance-related activities and decisions
+- **professional** - Work and career-related events
+- **educational** - Learning and academic activities
+- **social** - Community and relationship interactions
+
+## Time Fields
+
+Each event contains two timestamp fields:
+
+- **happen_time**: When the event actually occurred (extracted from content)
+- **mention_time**: When the file was uploaded by user
+
+If no reliable date is found in the content, `happen_time` is set to `null`.
+
+## Complete Profile Workflow Example
+
+Here's a complete example showing how to upload files and retrieve the resulting profile data:
+
+<Tabs items={["Python", "JavaScript"]}>
+  <Tab value="Python">
+
+```python
+import requests
+import time
+
+api_token = "<API_TOKEN>"
+BASE_URL = "https://api.synvo.ai"
+
+# Step 1: Upload files (using File Upload API)
+print("📤 Uploading user documents...")
+files_to_upload = [
+    "/path/to/resume.pdf",
+    "/path/to/transcript.pdf",
+    "/path/to/portfolio.zip"
+]
+
+file_ids = []
+for file_path in files_to_upload:
+    with open(file_path, "rb") as f:
+        files = {"file": f}
+        response = requests.post(
+            f"{BASE_URL}/file/upload",
+            files=files,
+            headers={"Authorization": f"Bearer {api_token}"},
+            timeout=60
+        )
+        result = response.json()
+        file_ids.append(result["file_id"])
+        print(f"✓ Uploaded: {result['filename']}")
+
+# Step 2: Wait for processing (typically 30-60 seconds)
+print("\n⏳ Processing files...")
+time.sleep(45)
+
+# Step 3: Retrieve user profile
+print("\n📊 Fetching user profile...")
+profile_response = requests.get(
+    f"{BASE_URL}/metadata/get_user_profile/",
+    headers={"Authorization": f"Bearer {api_token}"},
+    timeout=30
+)
+profile = profile_response.json()
+
+print("\n✨ Profile Summary:")
+for category, data in profile.items():
+    if data:
+        print(f"\n{category.upper()}:")
+        for key, values in data.items():
+            if isinstance(values, list):
+                print(f"  • {key}: {', '.join(values)}")
+            else:
+                print(f"  • {key}: {values}")
+
+# Step 4: Retrieve recent events
+print("\n📅 Fetching recent events...")
+events_response = requests.get(
+    f"{BASE_URL}/metadata/get_user_event/?limit=10",
+    headers={"Authorization": f"Bearer {api_token}"},
+    timeout=30
+)
+events_data = events_response.json()
+
+print(f"\n📍 Found {events_data['total_count']} events:")
+for event in events_data["events"]:
+    time_str = event["happen_time"] or event["mention_time"]
+    print(f"  • [{event['event_type']}] {event['content'][:80]}...")
+    print(f"    Time: {time_str}")
+```
+
+  </Tab>
+  <Tab value="JavaScript">
+
+```javascript
+const apiToken = "<API_TOKEN>";
+const BASE_URL = "https://api.synvo.ai";
+
+async function profileWorkflow() {
+  // Step 1: Upload files (using File Upload API)
+  console.log("📤 Uploading user documents...");
+  const filesToUpload = [resumeFile, transcriptFile, portfolioFile]; // File objects
+  const fileIds = [];
+
+  for (const file of filesToUpload) {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await fetch(`${BASE_URL}/file/upload`, {
+      method: "POST",
+      headers: { "Authorization": `Bearer ${apiToken}` },
+      body: formData
+    });
+
+    const result = await response.json();
+    fileIds.push(result.file_id);
+    console.log(`✓ Uploaded: ${result.filename}`);
+  }
+
+  // Step 2: Wait for processing (typically 30-60 seconds)
+  console.log("\n⏳ Processing files...");
+  await new Promise(resolve => setTimeout(resolve, 45000));
+
+  // Step 3: Retrieve user profile
+  console.log("\n📊 Fetching user profile...");
+  const profileResponse = await fetch(
+    `${BASE_URL}/metadata/get_user_profile/`,
+    {
+      headers: { "Authorization": `Bearer ${apiToken}` }
+    }
+  );
+  const profile = await profileResponse.json();
+
+  console.log("\n✨ Profile Summary:");
+  for (const [category, data] of Object.entries(profile)) {
+    if (data && Object.keys(data).length > 0) {
+      console.log(`\n${category.toUpperCase()}:`);
+      for (const [key, values] of Object.entries(data)) {
+        if (Array.isArray(values)) {
+          console.log(`  • ${key}: ${values.join(", ")}`);
+        } else {
+          console.log(`  • ${key}: ${values}`);
+        }
+      }
+    }
+  }
+
+  // Step 4: Retrieve recent events
+  console.log("\n📅 Fetching recent events...");
+  const eventsResponse = await fetch(
+    `${BASE_URL}/metadata/get_user_event/?limit=10`,
+    {
+      headers: { "Authorization": `Bearer ${apiToken}` }
+    }
+  );
+  const eventsData = await eventsResponse.json();
+
+  console.log(`\n📍 Found ${eventsData.total_count} events:`);
+  for (const event of eventsData.events) {
+    const timeStr = event.happen_time || event.mention_time;
+    console.log(`  • [${event.event_type}] ${event.content.substring(0, 80)}...`);
+    console.log(`    Time: ${timeStr}`);
+  }
+}
+
+// Execute workflow
+profileWorkflow();
+```
+
+  </Tab>
+</Tabs>
+
+## Best Practices
+
+### Profile Building
+- **Multiple Files**: Upload diverse file types for comprehensive profiles
+- **Processing Time**: Allow 30-60 seconds for profile extraction
+- **Regular Updates**: Re-upload updated documents to keep profiles current
+
+### Event Tracking
+- **Time Windows**: Use `start_time` and `end_time` for specific periods
+- **Pagination**: Use `limit` parameter to control response size
+- **Event Types**: Filter by `event_type` in your application logic
+
+### Sub-Users
+- **Isolation**: Each sub-user has completely separate profile and events
+- **Naming**: Use consistent sub-user names across your application
+- **Default**: Omitting `sub_user_name` uses the default profile
+
+## Error Handling
+
+All endpoints return standard HTTP status codes. Error responses include a JSON object with error details:
+
+```json
+{
+  "error": "Error description",
+  "detail": "Additional context about the error"
+}
+```
+
+Common error codes:
+- `200` - Success: Request completed successfully
+- `400` - Bad Request: Invalid parameters or malformed request
+- `401` - Unauthorized: Missing or invalid authentication
+- `404` - Not Found: User or resource does not exist
+- `429` - Too Many Requests: Rate limit exceeded
+- `500` - Internal Server Error: Server-side error

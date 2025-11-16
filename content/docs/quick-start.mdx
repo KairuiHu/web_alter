@@ -283,6 +283,248 @@ echo "  Audio: $AUDIO_FILE_ID"
   </Tab>
 </Tabs>
 
+---
+
+## 2.1 Personalization Preview: Profile & User Events
+
+When files finish processing, Synvo also updates the user's **profile** and **user events**.  
+Both are created automatically during file ingestion.
+
+- **User profile** combines structured signals extracted from the new files with any profile information that already exists.  
+- **User events** track temporal information, including:  
+  - File **upload time**,  
+  - **Times mentioned in the file**,  
+  - **Time flow** of the described activity.  
+
+Together, these records give a clear **chronological trace** of what happened and when.
+
+This section shows a small preview based on the four demo files above. A full explanation of profile and event construction is available in the <a href="/docs/collect-user-context/profiling" style={{color: "#3b82f6", textDecoration: "none", backgroundColor: "rgba(59, 130, 246, 0.08)", padding: "2px 6px", borderRadius: "6px", fontWeight:"500"}}>Profile & User Event Tutorial</a>.
+
+
+---
+
+### A. User Profile Summary
+
+The table below summarises the profile signals Synvo extracted from the demo files in [section&nbsp;1.3](/docs/quick-start#13-download-demo-files).  
+
+Synvo organises profile information into **categories** and more fine-grained **subtopics**,  with a total of **8 categories** and **34 subtopics** defined in the current schema.  
+
+The entries shown here are only a small sample generated from this mini context set.
+
+
+<table style={{marginTop:"12px", fontSize:"15px"}}>
+  <thead>
+    <tr>
+      <th style={{textAlign:"center", padding:"8px"}}>Category</th>
+      <th style={{textAlign:"center", padding:"8px",minWidth:"120px"}}>Sub Topic</th>
+      <th style={{textAlign:"center", padding:"8px"}}>Extracted Signals</th>
+      <th style={{textAlign:"center", padding:"8px"}}>Source Files</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{padding:"8px",textAlign:"center"}}>
+        <strong>education</strong>
+      </td>
+      <td style={{padding:"8px",textAlign:"center"}}>
+        <strong>school</strong>
+      </td>
+      <td style={{padding:"8px"}}>
+        User may be a student at Nanyang Technological University (NTU).
+      </td>
+      <td style={{padding:"8px"}}>
+        NTU_Annual_Report_2024.pdf<br/>
+        poster.jpg<br/>
+        Finance_lecture.mp3
+      </td>
+    </tr>
+    <tr>
+      <td style={{padding:"8px",textAlign:"center"}}>
+        <strong>education</strong>
+      </td>
+      <td style={{padding:"8px",textAlign:"center"}}>
+        <strong>major</strong>
+      </td>
+      <td style={{padding:"8px"}}>
+        User may be studying artificial intelligence or a finance-related field.      
+      </td>
+      <td style={{padding:"8px"}}>
+        Andrew_lecture.mp4<br/>
+        Finance_lecture.mp3
+      </td>
+    </tr>
+    <tr>
+      <td style={{padding:"8px",textAlign:"center"}}>
+        <strong>psychological</strong>
+      </td>
+      <td style={{padding:"8px",textAlign:"center"}}>
+        <strong>motivations</strong>
+      </td>
+      <td style={{padding:"8px"}}>
+        The user is motivated by a desire to contribute to education through responsible leadership and meaningful service, while also aiming to improve financial literacy to make future decisions more accurate and less dependent on external guidance.
+      </td>
+      <td style={{padding:"8px"}}>
+        NTU_Annual_Report_2024.pdf<br/>
+        Finance_lecture.mp3
+      </td>
+    </tr>
+    <tr>
+      <td style={{padding:"8px",textAlign:"center"}}>
+        <strong>psychological</strong>
+      </td>
+      <td style={{padding:"8px",textAlign:"center"}}>
+        <strong>values</strong>
+      </td>
+      <td style={{padding:"8px"}}>
+        User values leadership and service in education (reflected in NTU's mission) and enhancing knowledge through interactive learning methods, as well as valuing financial literacy and aiming to improve financial decision-making.
+      </td>
+      <td style={{padding:"8px"}}>
+        NTU_Annual_Report_2024.pdf<br/>
+        poster.jpg<br/>
+        Andrew_lecture.mp4<br/>
+        Finance_lecture.mp3
+      </td>
+    </tr>
+<tr>
+  <td style={{padding:"8px", textAlign:"center", color:"#999"}}>…</td>
+  <td style={{padding:"8px", textAlign:"center", color:"#999"}}>…</td>
+  <td style={{padding:"8px", color:"#666"}}>
+    *Additional profile categories and subtopics are omitted here for brevity.*
+  </td>
+  <td style={{padding:"8px", color:"#999"}}>…</td>
+</tr>
+
+  </tbody>
+</table>
+
+---
+
+### B. User Event Summary (Per File)
+
+Each file also produces an event record.  
+
+These events describe the action, the content, and the related time information. The **happen_time** field is taken from explicit dates in the file; if no reliable date is found, it is set to **None**, shown as “—”. The **mention_time** field reflects when the information was processed, and the **file_path** identifies the source.
+
+<table style={{marginTop:"12px", fontSize:"15px"}}>
+  <thead>
+    <tr>
+      <th style={{textAlign:"center", padding:"8px"}}>Event Type</th>
+      <th style={{textAlign:"center", padding:"8px"}}>Content</th>
+      <th style={{textAlign:"center", padding:"8px"}}>Happen Time</th>
+      <th style={{textAlign:"center", padding:"8px"}}>Mention Time</th>
+      <th style={{textAlign:"center", padding:"8px"}}>File Path</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{padding:"8px", textAlign:"center"}}>
+        personal
+      </td>
+      <td style={{padding:"8px"}}>
+        User uploaded Nanyang Technological University (NTU) Singapore Annual Report for 2024.
+      </td>
+      <td style={{padding:"8px", textAlign:"center"}}>
+      —
+      </td>
+      <td style={{padding:"8px", textAlign:"center"}}>
+        2025-11-12 15:29:18 (UTC)
+      </td>
+      <td style={{padding:"8px"}}>
+        NTU_Annual_Report_2024.pdf
+      </td>
+    </tr>
+<tr>
+  <td style={{padding:"8px", textAlign:"center"}}>
+    personal
+  </td>
+  <td style={{padding:"8px"}}>
+    User uploaded a video lecture presented by Andrew Ng regarding neural networks.
+  </td>
+  <td style={{padding:"8px", textAlign:"center"}}>
+    —
+  </td>
+  <td style={{padding:"8px", textAlign:"center"}}>
+    2025-11-12 15:31:00 (UTC)
+  </td>
+  <td style={{padding:"8px"}}>
+    Andrew_lecture.mp4
+  </td>
+</tr>
+<tr>
+  <td style={{padding:"8px", textAlign:"center"}}>
+    personal
+  </td>
+  <td style={{padding:"8px"}}>
+    User recorded/saved audio lecture discussing operating profit margin.
+  </td>
+  <td style={{padding:"8px", textAlign:"center"}}>
+    —
+  </td>
+  <td style={{padding:"8px", textAlign:"center"}}>
+    2025-11-12 15:32:40 (UTC)
+  </td>
+  <td style={{padding:"8px"}}>
+    Finance_lecture.mp3
+  </td>
+</tr>
+<tr>
+  <td style={{padding:"8px", textAlign:"center"}}>
+    personal
+  </td>
+  <td style={{padding:"8px"}}>
+    User received an email invitation for the October WellFest event at Nanyang Auditorium.
+  </td>
+  <td style={{padding:"8px", textAlign:"center"}}>
+    2025-10-23 00:00:00 (UTC)
+  </td>
+  <td style={{padding:"8px", textAlign:"center"}}>
+    2025-11-12 15:34:06 (UTC)
+  </td>
+  <td style={{padding:"8px"}}>
+    poster.jpg
+  </td>
+</tr>
+<tr>
+  <td style={{padding:"8px", textAlign:"center"}}>
+    personal
+  </td>
+  <td style={{padding:"8px"}}>
+    User encouraged colleagues to participate in the October WellFest event focused on self-care activities.
+  </td>
+  <td style={{padding:"8px", textAlign:"center"}}>
+    2025-10-23 00:00:00 (UTC)
+  </td>
+  <td style={{padding:"8px", textAlign:"center"}}>
+    2025-11-12 15:34:06 (UTC)
+  </td>
+  <td style={{padding:"8px"}}>
+    poster.jpg
+  </td>
+</tr>
+<tr>
+  <td style={{padding:"8px", textAlign:"center"}}>
+    financial
+  </td>
+  <td style={{padding:"8px"}}>
+    User plans to attend the October WellFest event on 23rd October 2025.
+  </td>
+  <td style={{padding:"8px", textAlign:"center"}}>
+    2025-10-23 00:00:00 (UTC)
+  </td>
+  <td style={{padding:"8px", textAlign:"center"}}>
+    2025-11-12 15:34:06 (UTC)
+  </td>
+  <td style={{padding:"8px"}}>
+    poster.jpg
+  </td>
+</tr>
+
+  </tbody>
+</table>
+
+
+---
+
 ## Step 3: Query for User Context (Evidence-Backed)
 
 Queries search within the user’s context set, not the public web.

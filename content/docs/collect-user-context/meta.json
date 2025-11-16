@@ -3,6 +3,7 @@
   "defaultOpen": true,
   "pages": [
     "../synvo-api/file-upload-management",
-    "web-url"
+    "web-url",
+    "profiling"
   ]
 }

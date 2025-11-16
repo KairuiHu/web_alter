@@ -1,0 +1,468 @@
+---
+id: getmetadata
+title: File Metadata Extraction API
+slug: /synvo-api/metadata
+---
+
+The Synvo API provides intelligent metadata extraction from uploaded files. Extract structured summaries, content, and hashtags from documents, images, videos, and web pages to enable powerful search and discovery capabilities.
+
+## Authentication
+
+All endpoints require authentication via:
+- **Bearer Token**: `Authorization: Bearer <token>`
+
+## Base URL
+
+```
+https://api.synvo.ai
+```
+
+## Get Metadata by File ID
+
+Retrieves extracted metadata for a specific file using its unique identifier.
+
+**Endpoint:** `GET /metadata/search_by_id/{file_id}/`
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `file_id` | string | Yes | Unique file identifier returned from upload |
+
+### Query Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `sub_user_name` | string | default | Optional sub-user name under the authenticated account |
+
+### Example Request
+
+<Tabs items={["cURL", "Python", "JavaScript"]}>
+  <Tab value="cURL">
+
+```bash
+curl -X GET "https://api.synvo.ai/metadata/search_by_id/doc_abc123xyz/" \
+  -H "Authorization: Bearer ${API_TOKEN}" \
+  -H "Content-Type: application/json"
+```
+
+  </Tab>
+  <Tab value="Python">
+
+```python
+import requests
+
+api_token = "<API_TOKEN>"
+file_id = "doc_abc123xyz"
+url = f"https://api.synvo.ai/metadata/search_by_id/{file_id}/"
+headers = {
+    "Authorization": f"Bearer {api_token}",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers, timeout=30)
+response.raise_for_status()
+print(response.json())
+```
+
+  </Tab>
+  <Tab value="JavaScript">
+
+```javascript
+const apiToken = "<API_TOKEN>";
+const fileId = "doc_abc123xyz";
+
+const response = await fetch(
+  `https://api.synvo.ai/metadata/search_by_id/${fileId}/`,
+  {
+    method: "GET",
+    headers: {
+      "Authorization": `Bearer ${apiToken}`,
+      "Content-Type": "application/json"
+    }
+  }
+);
+
+if (!response.ok) {
+  throw new Error(`Request failed: ${response.status}`);
+}
+
+console.log(await response.json());
+```
+
+  </Tab>
+</Tabs>
+
+### Example Response
+
+```json
+{
+  "summary": "This research paper explores the implementation of RAG (Retrieval-Augmented Generation) systems in enterprise environments. The document covers architecture patterns, performance optimizations, and real-world case studies from Fortune 500 companies. Key findings include a 40% improvement in response accuracy and 60% reduction in hallucinations when implementing hybrid retrieval strategies.",
+  "content": "Title: Enterprise RAG Systems: Architecture and Implementation\nAuthor: Dr. Sarah Chen, Prof. Michael Zhang\nInstitution: Stanford AI Lab\nPublication Date: November 2024\nAbstract: Retrieval-Augmented Generation (RAG) has emerged as a critical technology for enterprise AI applications...\nKeywords: RAG, Enterprise AI, Vector Databases, Hybrid Search\n1. Introduction\nThe adoption of large language models in enterprise settings has accelerated dramatically...\n2. Architecture Overview\n2.1 Vector Database Selection\n2.2 Embedding Models\n2.3 Retrieval Strategies\n3. Performance Metrics\n- Latency: <100ms for 95th percentile\n- Accuracy: 92% on domain-specific benchmarks\n- Scalability: Tested up to 10M documents",
+  "hash_tags": [
+    "#RAG",
+    "#EnterpriseAI",
+    "#VectorDatabases",
+    "#MachineLearning",
+    "#NLP",
+    "#InformationRetrieval",
+    "#AIArchitecture",
+    "#PerformanceOptimization"
+  ]
+}
+```
+
+### Response Codes
+
+- `200` - Metadata retrieved successfully
+- `400` - Invalid request
+- `401` - Unauthorized
+- `404` - File ID not found
+
+## Get Metadata by File Path
+
+Retrieves extracted metadata for a specific file using its storage path.
+
+**Endpoint:** `GET /metadata/search_by_path/{file_path}/`
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `file_path` | string | Yes | URL-encoded file path (e.g., `/documents/report.pdf`) |
+
+### Query Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `sub_user_name` | string | default | Optional sub-user name under the authenticated account |
+
+### Example Request
+
+<Tabs items={["cURL", "Python", "JavaScript"]}>
+  <Tab value="cURL">
+
+```bash
+# Note: File path should be URL-encoded
+curl -X GET "https://api.synvo.ai/metadata/search_by_path/%2Fdocuments%2Fresearch%2FRAG_paper.pdf/" \
+  -H "Authorization: Bearer ${API_TOKEN}" \
+  -H "Content-Type: application/json"
+```
+
+  </Tab>
+  <Tab value="Python">
+
+```python
+import requests
+from urllib.parse import quote
+
+api_token = "<API_TOKEN>"
+file_path = "/documents/research/RAG_paper.pdf"
+encoded_path = quote(file_path, safe="/")
+url = f"https://api.synvo.ai/metadata/search_by_path/{encoded_path}/"
+headers = {
+    "Authorization": f"Bearer {api_token}",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers, timeout=30)
+response.raise_for_status()
+print(response.json())
+```
+
+  </Tab>
+  <Tab value="JavaScript">
+
+```javascript
+const apiToken = "<API_TOKEN>";
+const filePath = "/documents/research/RAG_paper.pdf";
+const encodedPath = encodeURIComponent(filePath);
+
+const response = await fetch(
+  `https://api.synvo.ai/metadata/search_by_path/${encodedPath}/`,
+  {
+    method: "GET",
+    headers: {
+      "Authorization": `Bearer ${apiToken}`,
+      "Content-Type": "application/json"
+    }
+  }
+);
+
+if (!response.ok) {
+  throw new Error(`Request failed: ${response.status}`);
+}
+
+console.log(await response.json());
+```
+
+  </Tab>
+</Tabs>
+
+### Example Response
+
+```json
+{
+  "summary": "This research paper explores the implementation of RAG (Retrieval-Augmented Generation) systems in enterprise environments. The document covers architecture patterns, performance optimizations, and real-world case studies from Fortune 500 companies. Key findings include a 40% improvement in response accuracy and 60% reduction in hallucinations when implementing hybrid retrieval strategies.",
+  "content": "Title: Enterprise RAG Systems: Architecture and Implementation\nAuthor: Dr. Sarah Chen, Prof. Michael Zhang\nInstitution: Stanford AI Lab\nPublication Date: November 2024\nAbstract: Retrieval-Augmented Generation (RAG) has emerged as a critical technology for enterprise AI applications...\nKeywords: RAG, Enterprise AI, Vector Databases, Hybrid Search\n1. Introduction\nThe adoption of large language models in enterprise settings has accelerated dramatically...\n2. Architecture Overview\n2.1 Vector Database Selection\n2.2 Embedding Models\n2.3 Retrieval Strategies\n3. Performance Metrics\n- Latency: <100ms for 95th percentile\n- Accuracy: 92% on domain-specific benchmarks\n- Scalability: Tested up to 10M documents",
+  "hash_tags": [
+    "#RAG",
+    "#EnterpriseAI",
+    "#VectorDatabases",
+    "#MachineLearning",
+    "#NLP",
+    "#InformationRetrieval",
+    "#AIArchitecture",
+    "#PerformanceOptimization"
+  ]
+}
+```
+
+### Response Codes
+
+- `200` - Metadata retrieved successfully
+- `400` - Invalid path format
+- `401` - Unauthorized
+- `404` - File path not found
+
+## Metadata Structure
+
+The metadata extraction system analyzes files and returns three key components:
+
+### Response Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| **summary** | string | AI-generated concise summary of the document's main content and insights |
+| **content** | string | Structured extraction of key information including title, author, sections, and important data points |
+| **hash_tags** | array | Automatically generated hashtags for categorization and discovery |
+
+### Content Extraction Types
+
+Different file types yield different metadata structures:
+
+- **Documents (PDF, DOCX)**: Title, author, abstract, sections, key findings
+- **Images**: Caption, OCR text, visual elements, detected objects
+- **Videos**: Transcript, key moments, topics discussed
+- **Web Pages**: URL, title, main content, publication info
+
+## Complete Metadata Workflow Example
+
+Here's a complete example showing how to upload a file and retrieve its metadata:
+
+<Tabs items={["Python", "JavaScript"]}>
+  <Tab value="Python">
+
+```python
+import requests
+import time
+
+api_token = "<API_TOKEN>"
+BASE_URL = "https://api.synvo.ai"
+
+# Step 1: Upload a document
+print("📤 Uploading document...")
+with open("/path/to/research_paper.pdf", "rb") as f:
+    files = {"file": f}
+    upload_response = requests.post(
+        f"{BASE_URL}/file/upload",
+        files=files,
+        headers={"Authorization": f"Bearer {api_token}"},
+        timeout=60
+    )
+    upload_result = upload_response.json()
+    file_id = upload_result["file_id"]
+    file_path = upload_result["path"] + upload_result["filename"]
+    print(f"✓ Uploaded: {upload_result['filename']} (ID: {file_id})")
+
+# Step 2: Wait for processing to complete
+print("\n⏳ Processing document...")
+max_attempts = 30
+for attempt in range(max_attempts):
+    status_response = requests.get(
+        f"{BASE_URL}/file/status/{file_id}",
+        headers={"Authorization": f"Bearer {api_token}"},
+        timeout=10
+    )
+    status = status_response.json()["status"]
+    
+    if status == "COMPLETED":
+        print("✅ Processing complete!")
+        break
+    elif status == "FAILED":
+        print("❌ Processing failed!")
+        exit(1)
+    
+    time.sleep(2)
+
+# Step 3: Retrieve metadata using file ID
+print("\n📊 Fetching metadata by ID...")
+metadata_response = requests.get(
+    f"{BASE_URL}/metadata/search_by_id/{file_id}/",
+    headers={"Authorization": f"Bearer {api_token}"},
+    timeout=30
+)
+metadata = metadata_response.json()
+
+print("\n✨ Metadata Summary:")
+print(f"\n📝 Summary:\n{metadata['summary'][:500]}...")
+print(f"\n📑 Content Preview:\n{metadata['content'][:500]}...")
+print(f"\n🏷️ Hashtags: {', '.join(metadata['hash_tags'])}")
+
+# Step 4: Alternative - Retrieve metadata using file path
+print(f"\n📁 Fetching metadata by path: {file_path}")
+from urllib.parse import quote
+encoded_path = quote(file_path, safe="/")
+
+path_response = requests.get(
+    f"{BASE_URL}/metadata/search_by_path/{encoded_path}/",
+    headers={"Authorization": f"Bearer {api_token}"},
+    timeout=30
+)
+path_metadata = path_response.json()
+
+# Both methods return the same metadata
+assert metadata == path_metadata
+print("✓ Metadata retrieved successfully via both methods!")
+```
+
+  </Tab>
+  <Tab value="JavaScript">
+
+```javascript
+const apiToken = "<API_TOKEN>";
+const BASE_URL = "https://api.synvo.ai";
+
+async function metadataWorkflow() {
+  // Step 1: Upload a document
+  console.log("📤 Uploading document...");
+  const fileInput = document.querySelector('input[type="file"]');
+  const file = fileInput.files[0];
+  
+  const formData = new FormData();
+  formData.append("file", file);
+  
+  const uploadResponse = await fetch(`${BASE_URL}/file/upload`, {
+    method: "POST",
+    headers: { "Authorization": `Bearer ${apiToken}` },
+    body: formData
+  });
+  
+  const uploadResult = await uploadResponse.json();
+  const fileId = uploadResult.file_id;
+  const filePath = uploadResult.path + uploadResult.filename;
+  console.log(`✓ Uploaded: ${uploadResult.filename} (ID: ${fileId})`);
+  
+  // Step 2: Wait for processing to complete
+  console.log("\n⏳ Processing document...");
+  let status = "PENDING";
+  const maxAttempts = 30;
+  
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    const statusResponse = await fetch(
+      `${BASE_URL}/file/status/${fileId}`,
+      {
+        headers: { "Authorization": `Bearer ${apiToken}` }
+      }
+    );
+    
+    const statusData = await statusResponse.json();
+    status = statusData.status;
+    
+    if (status === "COMPLETED") {
+      console.log("✅ Processing complete!");
+      break;
+    } else if (status === "FAILED") {
+      console.log("❌ Processing failed!");
+      return;
+    }
+    
+    await new Promise(resolve => setTimeout(resolve, 2000));
+  }
+  
+  // Step 3: Retrieve metadata using file ID
+  console.log("\n📊 Fetching metadata by ID...");
+  const metadataResponse = await fetch(
+    `${BASE_URL}/metadata/search_by_id/${fileId}/`,
+    {
+      headers: { "Authorization": `Bearer ${apiToken}` }
+    }
+  );
+  
+  const metadata = await metadataResponse.json();
+  
+  console.log("\n✨ Metadata Summary:");
+  console.log(`\n📝 Summary:\n${metadata.summary.substring(0, 500)}...`);
+  console.log(`\n📑 Content Preview:\n${metadata.content.substring(0, 500)}...`);
+  console.log(`\n🏷️ Hashtags: ${metadata.hash_tags.join(", ")}`);
+  
+  // Step 4: Alternative - Retrieve metadata using file path
+  console.log(`\n📁 Fetching metadata by path: ${filePath}`);
+  const encodedPath = encodeURIComponent(filePath);
+  
+  const pathResponse = await fetch(
+    `${BASE_URL}/metadata/search_by_path/${encodedPath}/`,
+    {
+      headers: { "Authorization": `Bearer ${apiToken}` }
+    }
+  );
+  
+  const pathMetadata = await pathResponse.json();
+  
+  // Both methods return the same metadata
+  console.log("✓ Metadata retrieved successfully via both methods!");
+}
+
+// Execute workflow
+metadataWorkflow();
+```
+
+  </Tab>
+</Tabs>
+
+## Use Cases
+
+### Document Intelligence
+Extract key insights, authors, and topics from research papers, reports, and technical documentation for intelligent search and discovery.
+
+### Content Categorization
+Automatically generate hashtags and summaries to organize large document repositories and improve findability.
+
+### Knowledge Management
+Build comprehensive knowledge graphs by extracting structured information from unstructured documents across your organization.
+
+## Best Practices
+
+### File Processing
+- **Wait for Completion**: Always verify file processing status before requesting metadata
+- **Batch Processing**: Process multiple files in parallel for better throughput
+- **Error Handling**: Implement retry logic for transient failures
+
+### Path Encoding
+- **URL Encoding**: Always URL-encode file paths when using the path-based endpoint
+- **Special Characters**: Handle spaces and special characters properly in paths
+- **Path Format**: Use forward slashes (/) for path separators
+
+### Metadata Usage
+- **Caching**: Cache metadata locally to reduce API calls
+- **Search Integration**: Use extracted hashtags for faceted search
+- **Summary Display**: Show AI summaries in search results for better UX
+
+## Error Handling
+
+All endpoints return standard HTTP status codes. Error responses include a JSON object with error details:
+
+```json
+{
+  "message": "File ID not found",
+  "error": "The specified file does not exist or has not been processed"
+}
+```
+
+Common error codes:
+- `200` - Success: Metadata retrieved successfully
+- `400` - Bad Request: Invalid parameters or malformed request
+- `401` - Unauthorized: Missing or invalid authentication
+- `404` - Not Found: File ID or path does not exist
+- `429` - Too Many Requests: Rate limit exceeded
+- `500` - Internal Server Error: Server-side processing error
