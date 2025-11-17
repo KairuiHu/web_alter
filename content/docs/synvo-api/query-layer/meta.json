@@ -3,7 +3,11 @@
   "defaultOpen": false,
   "pages": [
     "../file-search",
-    "../query-ai"
+    "../query-ai",
+    "../get-metadata-by-id",
+    "../get-metadata-by-path",
+    "../get-profile",
+    "../get-event"
   ]
 }
 

@@ -1188,6 +1188,390 @@ paths:
 
             console.log(await response.json());
 
+  /metadata/search_by_id/{file_id}:
+    get:
+      tags: [Metadata]
+      summary: Get metadata by file ID
+      description: Retrieves extracted metadata for a specific file using its unique identifier.
+      operationId: getMetadataById
+      parameters:
+        - name: file_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unique file identifier returned from upload
+        - name: sub_user_name
+          in: query
+          required: false
+          schema:
+            type: string
+            default: default
+          description: Optional sub-user name under the authenticated account
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Metadata retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  summary:
+                    type: string
+                  content:
+                    type: string
+                  hash_tags:
+                    type: array
+                    items:
+                      type: string
+        '400':
+          description: Invalid request
+        '401':
+          description: Unauthorized
+        '404':
+          description: File ID not found
+      x-codeSamples:
+        - lang: cURL
+          label: curl
+          source: |
+            curl -X GET "https://api.synvo.ai/metadata/search_by_id/doc_abc123xyz/" \
+              -H "Authorization: Bearer ${API_TOKEN}" \
+              -H "Content-Type: application/json"
+        - lang: Python
+          label: Python (requests)
+          source: |
+            import requests
+
+            api_token = "<API_TOKEN>"
+            file_id = "doc_abc123xyz"
+            url = f"https://api.synvo.ai/metadata/search_by_id/{file_id}/"
+            headers = {
+                "Authorization": f"Bearer {api_token}",
+                "Content-Type": "application/json"
+            }
+
+            response = requests.get(url, headers=headers, timeout=30)
+            response.raise_for_status()
+            print(response.json())
+        - lang: JavaScript
+          label: JavaScript (fetch)
+          source: |
+            const apiToken = "<API_TOKEN>";
+            const fileId = "doc_abc123xyz";
+
+            const response = await fetch(
+              `https://api.synvo.ai/metadata/search_by_id/${fileId}/`,
+              {
+                method: "GET",
+                headers: {
+                  "Authorization": `Bearer ${apiToken}`,
+                  "Content-Type": "application/json"
+                }
+              }
+            );
+
+            if (!response.ok) {
+              throw new Error(`Request failed: ${response.status}`);
+            }
+
+            console.log(await response.json());
+
+  /metadata/search_by_path/{file_path}:
+    get:
+      tags: [Metadata]
+      summary: Get metadata by file path
+      description: Retrieves extracted metadata for a specific file using its storage path.
+      operationId: getMetadataByPath
+      parameters:
+        - name: file_path
+          in: path
+          required: true
+          schema:
+            type: string
+          description: URL-encoded file path (e.g., `/documents/report.pdf`)
+        - name: sub_user_name
+          in: query
+          required: false
+          schema:
+            type: string
+            default: default
+          description: Optional sub-user name under the authenticated account
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Metadata retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  summary:
+                    type: string
+                  content:
+                    type: string
+                  hash_tags:
+                    type: array
+                    items:
+                      type: string
+        '400':
+          description: Invalid path format
+        '401':
+          description: Unauthorized
+        '404':
+          description: File path not found
+      x-codeSamples:
+        - lang: cURL
+          label: curl
+          source: |
+            curl -X GET "https://api.synvo.ai/metadata/search_by_path/%2Fdocuments%2Fresearch%2FRAG_paper.pdf/" \
+              -H "Authorization: Bearer ${API_TOKEN}" \
+              -H "Content-Type: application/json"
+        - lang: Python
+          label: Python (requests)
+          source: |
+            import requests
+            from urllib.parse import quote
+
+            api_token = "<API_TOKEN>"
+            file_path = "/documents/research/RAG_paper.pdf"
+            encoded_path = quote(file_path, safe="/")
+            url = f"https://api.synvo.ai/metadata/search_by_path/{encoded_path}/"
+            headers = {
+                "Authorization": f"Bearer {api_token}",
+                "Content-Type": "application/json"
+            }
+
+            response = requests.get(url, headers=headers, timeout=30)
+            response.raise_for_status()
+            print(response.json())
+        - lang: JavaScript
+          label: JavaScript (fetch)
+          source: |
+            const apiToken = "<API_TOKEN>";
+            const filePath = "/documents/research/RAG_paper.pdf";
+            const encodedPath = encodeURIComponent(filePath);
+
+            const response = await fetch(
+              `https://api.synvo.ai/metadata/search_by_path/${encodedPath}/`,
+              {
+                method: "GET",
+                headers: {
+                  "Authorization": `Bearer ${apiToken}`,
+                  "Content-Type": "application/json"
+                }
+              }
+            );
+
+            if (!response.ok) {
+              throw new Error(`Request failed: ${response.status}`);
+            }
+
+            console.log(await response.json());
+
+  /metadata/get_user_profile:
+    get:
+      tags: [Metadata]
+      summary: Get user profile
+      description: Retrieves a comprehensive user profile consisting of structured attributes across categories.
+      operationId: getUserProfile
+      parameters:
+        - name: sub_user_name
+          in: query
+          required: false
+          schema:
+            type: string
+            default: default
+          description: Optional sub-user name under the authenticated account
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  properties:
+                    sub_topics:
+                      type: object
+                      additionalProperties:
+                        type: object
+                        properties:
+                          value:
+                            type: string
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '404':
+          description: User not found
+      x-codeSamples:
+        - lang: cURL
+          label: curl
+          source: |
+            curl -X GET "https://api.synvo.ai/metadata/get_user_profile/" \
+              -H "Authorization: Bearer ${API_TOKEN}" \
+              -H "Content-Type: application/json"
+        - lang: Python
+          label: Python (requests)
+          source: |
+            import requests
+
+            api_token = "<API_TOKEN>"
+            url = "https://api.synvo.ai/metadata/get_user_profile/"
+            headers = {
+                "Authorization": f"Bearer {api_token}",
+                "Content-Type": "application/json"
+            }
+
+            response = requests.get(url, headers=headers, timeout=30)
+            response.raise_for_status()
+            print(response.json())
+        - lang: JavaScript
+          label: JavaScript (fetch)
+          source: |
+            const apiToken = "<API_TOKEN>";
+
+            const response = await fetch("https://api.synvo.ai/metadata/get_user_profile/", {
+              method: "GET",
+              headers: {
+                "Authorization": `Bearer ${apiToken}`,
+                "Content-Type": "application/json"
+              }
+            });
+
+            if (!response.ok) {
+              throw new Error(`Request failed: ${response.status}`);
+            }
+
+            console.log(await response.json());
+
+  /metadata/get_user_event:
+    get:
+      tags: [Metadata]
+      summary: Get user events
+      description: Retrieves chronological user events with flexible time-based filtering.
+      operationId: getUserEvent
+      parameters:
+        - name: sub_user_name
+          in: query
+          required: false
+          schema:
+            type: string
+            default: default
+          description: Optional sub-user name under the authenticated account
+
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+          description: Maximum number of events to return
+
+        - name: start_time
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+          description: Start time of the time window (ISO 8601)
+
+        - name: end_time
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+          description: End time of the time window (ISO 8601)
+
+      security:
+        - bearerAuth: []
+
+      responses:
+        '200':
+          description: Events retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    event_type:
+                      type: string
+                    content:
+                      type: string
+                    happen_time:
+                      type: string
+                      format: date-time
+                    mention_time:
+                      type: string
+                      format: date-time
+        '400':
+          description: Invalid parameters
+        '401':
+          description: Unauthorized
+        '404':
+          description: User not found
+
+      x-codeSamples:
+        - lang: cURL
+          label: curl
+          source: |
+            curl -X GET "https://api.synvo.ai/metadata/get_user_event/?limit=5&start_time=2025-10-01T00:00:00Z" \
+              -H "Authorization: Bearer ${API_TOKEN}" \
+              -H "Content-Type: application/json"
+
+        - lang: Python
+          label: Python (requests)
+          source: |
+            import requests
+
+            api_token = "<API_TOKEN>"
+            url = "https://api.synvo.ai/metadata/get_user_event/"
+            params = {
+                "limit": 5,
+                "start_time": "2025-10-01T00:00:00Z"
+            }
+            headers = {
+                "Authorization": f"Bearer {api_token}",
+                "Content-Type": "application/json"
+            }
+
+            response = requests.get(url, params=params, headers=headers, timeout=30)
+            response.raise_for_status()
+            print(response.json())
+
+        - lang: JavaScript
+          label: JavaScript (fetch)
+          source: |
+            const apiToken = "<API_TOKEN>";
+            const params = new URLSearchParams({
+              limit: "5",
+              start_time: "2025-10-01T00:00:00Z"
+            });
+
+            const response = await fetch(`https://api.synvo.ai/metadata/get_user_event/?${params}`, {
+              method: "GET",
+              headers: {
+                "Authorization": `Bearer ${apiToken}`,
+                "Content-Type": "application/json"
+              }
+            });
+
+            if (!response.ok) {
+              throw new Error(`Request failed: ${response.status}`);
+            }
+
+            console.log(await response.json());
+
   /history:
     get:
       tags: [History]
