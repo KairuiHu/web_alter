@@ -1,6 +1,7 @@
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import Link from "next/link";
 import Image from "next/image";
+import { Zap } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 import { ThemeAwareImage } from "@/components/theme-aware-image";
@@ -93,7 +94,14 @@ export default function HomePage() {
           <div className="flex flex-col h-full">
             <div className="rounded-xl border border-fd-border bg-fd-card p-6 shadow-sm flex-1 flex flex-col">
               <div className="mb-2">
-                <h3 className="text-xl font-semibold mb-1">Understand your user NOW!</h3>
+                <h3 className="text-xl font-semibold mb-1">
+                  Understand your users{" "}
+                  <span className="inline-flex items-center gap-1 text-blue-500 dark:text-blue-400">
+                    NOW
+                    <Zap className="w-5 h-5" fill="currentColor" />
+                  </span>
+                  !
+                </h3>
                 <p className="text-sm text-fd-muted-foreground">
                   First upload the files with the API, then query the API to get the facts.
                 </p>

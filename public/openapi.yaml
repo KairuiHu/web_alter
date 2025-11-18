@@ -1237,7 +1237,7 @@ paths:
           label: curl
           source: |
             curl -X GET "https://api.synvo.ai/metadata/search_by_id/doc_abc123xyz/" \
-              -H "Authorization: Bearer ${API_TOKEN}" \
+              -H "X-API-Key: ${API_TOKEN}" \
               -H "Content-Type: application/json"
         - lang: Python
           label: Python (requests)
@@ -1248,7 +1248,7 @@ paths:
             file_id = "doc_abc123xyz"
             url = f"https://api.synvo.ai/metadata/search_by_id/{file_id}/"
             headers = {
-                "Authorization": f"Bearer {api_token}",
+                "X-API-Key": api_token,
                 "Content-Type": "application/json"
             }
 
@@ -1266,7 +1266,7 @@ paths:
               {
                 method: "GET",
                 headers: {
-                  "Authorization": `Bearer ${apiToken}`,
+                  "X-API-Key": apiToken,
                   "Content-Type": "application/json"
                 }
               }
@@ -1327,7 +1327,7 @@ paths:
           label: curl
           source: |
             curl -X GET "https://api.synvo.ai/metadata/search_by_path/%2Fdocuments%2Fresearch%2FRAG_paper.pdf/" \
-              -H "Authorization: Bearer ${API_TOKEN}" \
+              -H "X-API-Key: ${API_TOKEN}" \
               -H "Content-Type: application/json"
         - lang: Python
           label: Python (requests)
@@ -1340,7 +1340,7 @@ paths:
             encoded_path = quote(file_path, safe="/")
             url = f"https://api.synvo.ai/metadata/search_by_path/{encoded_path}/"
             headers = {
-                "Authorization": f"Bearer {api_token}",
+                "X-API-Key": api_token,
                 "Content-Type": "application/json"
             }
 
@@ -1359,7 +1359,7 @@ paths:
               {
                 method: "GET",
                 headers: {
-                  "Authorization": `Bearer ${apiToken}`,
+                  "X-API-Key": apiToken,
                   "Content-Type": "application/json"
                 }
               }
@@ -1415,7 +1415,7 @@ paths:
           label: curl
           source: |
             curl -X GET "https://api.synvo.ai/metadata/get_user_profile/" \
-              -H "Authorization: Bearer ${API_TOKEN}" \
+              -H "X-API-Key: ${API_TOKEN}" \
               -H "Content-Type: application/json"
         - lang: Python
           label: Python (requests)
@@ -1425,7 +1425,7 @@ paths:
             api_token = "<API_TOKEN>"
             url = "https://api.synvo.ai/metadata/get_user_profile/"
             headers = {
-                "Authorization": f"Bearer {api_token}",
+                "X-API-Key": api_token,
                 "Content-Type": "application/json"
             }
 
@@ -1440,7 +1440,7 @@ paths:
             const response = await fetch("https://api.synvo.ai/metadata/get_user_profile/", {
               method: "GET",
               headers: {
-                "Authorization": `Bearer ${apiToken}`,
+                "X-API-Key": apiToken,
                 "Content-Type": "application/json"
               }
             });
@@ -1526,7 +1526,7 @@ paths:
           label: curl
           source: |
             curl -X GET "https://api.synvo.ai/metadata/get_user_event/?limit=5&start_time=2025-10-01T00:00:00Z" \
-              -H "Authorization: Bearer ${API_TOKEN}" \
+              -H "X-API-Key: ${API_TOKEN}" \
               -H "Content-Type: application/json"
 
         - lang: Python
@@ -1541,7 +1541,7 @@ paths:
                 "start_time": "2025-10-01T00:00:00Z"
             }
             headers = {
-                "Authorization": f"Bearer {api_token}",
+                "X-API-Key": api_token,
                 "Content-Type": "application/json"
             }
 
@@ -1561,7 +1561,7 @@ paths:
             const response = await fetch(`https://api.synvo.ai/metadata/get_user_event/?${params}`, {
               method: "GET",
               headers: {
-                "Authorization": `Bearer ${apiToken}`,
+                "X-API-Key": apiToken,
                 "Content-Type": "application/json"
               }
             });

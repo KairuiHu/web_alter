@@ -9,7 +9,7 @@ The Synvo API provides intelligent metadata extraction from uploaded files. Extr
 ## Authentication
 
 All endpoints require authentication via:
-- **Bearer Token**: `Authorization: Bearer <token>`
+- **API Key**: `X-API-Key: <token>`
 
 ## Base URL
 
@@ -42,7 +42,7 @@ Retrieves extracted metadata for a specific file using its unique identifier.
 
 ```bash
 curl -X GET "https://api.synvo.ai/metadata/search_by_id/doc_abc123xyz/" \
-  -H "Authorization: Bearer ${API_TOKEN}" \
+  -H "X-API-Key: ${API_TOKEN}" \
   -H "Content-Type: application/json"
 ```
 
@@ -56,7 +56,7 @@ api_token = "<API_TOKEN>"
 file_id = "doc_abc123xyz"
 url = f"https://api.synvo.ai/metadata/search_by_id/{file_id}/"
 headers = {
-    "Authorization": f"Bearer {api_token}",
+    "X-API-Key": api_token,
     "Content-Type": "application/json"
 }
 
@@ -77,7 +77,7 @@ const response = await fetch(
   {
     method: "GET",
     headers: {
-      "Authorization": `Bearer ${apiToken}`,
+      "X-API-Key": apiToken,
       "Content-Type": "application/json"
     }
   }
@@ -145,7 +145,7 @@ Retrieves extracted metadata for a specific file using its storage path.
 ```bash
 # Note: File path should be URL-encoded
 curl -X GET "https://api.synvo.ai/metadata/search_by_path/%2Fdocuments%2Fresearch%2FRAG_paper.pdf/" \
-  -H "Authorization: Bearer ${API_TOKEN}" \
+  -H "X-API-Key: ${API_TOKEN}" \
   -H "Content-Type: application/json"
 ```
 
@@ -161,7 +161,7 @@ file_path = "/documents/research/RAG_paper.pdf"
 encoded_path = quote(file_path, safe="/")
 url = f"https://api.synvo.ai/metadata/search_by_path/{encoded_path}/"
 headers = {
-    "Authorization": f"Bearer {api_token}",
+    "X-API-Key": api_token,
     "Content-Type": "application/json"
 }
 
@@ -183,7 +183,7 @@ const response = await fetch(
   {
     method: "GET",
     headers: {
-      "Authorization": `Bearer ${apiToken}`,
+      "X-API-Key": apiToken,
       "Content-Type": "application/json"
     }
   }
@@ -267,7 +267,7 @@ with open("/path/to/research_paper.pdf", "rb") as f:
     upload_response = requests.post(
         f"{BASE_URL}/file/upload",
         files=files,
-        headers={"Authorization": f"Bearer {api_token}"},
+        headers={"X-API-Key": api_token},
         timeout=60
     )
     upload_result = upload_response.json()
@@ -281,7 +281,7 @@ max_attempts = 30
 for attempt in range(max_attempts):
     status_response = requests.get(
         f"{BASE_URL}/file/status/{file_id}",
-        headers={"Authorization": f"Bearer {api_token}"},
+        headers={"X-API-Key": api_token},
         timeout=10
     )
     status = status_response.json()["status"]
@@ -299,7 +299,7 @@ for attempt in range(max_attempts):
 print("\n📊 Fetching metadata by ID...")
 metadata_response = requests.get(
     f"{BASE_URL}/metadata/search_by_id/{file_id}/",
-    headers={"Authorization": f"Bearer {api_token}"},
+    headers={"X-API-Key": api_token},
     timeout=30
 )
 metadata = metadata_response.json()
@@ -316,7 +316,7 @@ encoded_path = quote(file_path, safe="/")
 
 path_response = requests.get(
     f"{BASE_URL}/metadata/search_by_path/{encoded_path}/",
-    headers={"Authorization": f"Bearer {api_token}"},
+    headers={"X-API-Key": api_token},
     timeout=30
 )
 path_metadata = path_response.json()
@@ -344,7 +344,7 @@ async function metadataWorkflow() {
   
   const uploadResponse = await fetch(`${BASE_URL}/file/upload`, {
     method: "POST",
-    headers: { "Authorization": `Bearer ${apiToken}` },
+      headers: { "X-API-Key": apiToken },
     body: formData
   });
   
@@ -362,7 +362,7 @@ async function metadataWorkflow() {
     const statusResponse = await fetch(
       `${BASE_URL}/file/status/${fileId}`,
       {
-        headers: { "Authorization": `Bearer ${apiToken}` }
+        headers: { "X-API-Key": apiToken }
       }
     );
     
@@ -385,7 +385,7 @@ async function metadataWorkflow() {
   const metadataResponse = await fetch(
     `${BASE_URL}/metadata/search_by_id/${fileId}/`,
     {
-      headers: { "Authorization": `Bearer ${apiToken}` }
+      headers: { "X-API-Key": apiToken }
     }
   );
   
@@ -403,7 +403,7 @@ async function metadataWorkflow() {
   const pathResponse = await fetch(
     `${BASE_URL}/metadata/search_by_path/${encodedPath}/`,
     {
-      headers: { "Authorization": `Bearer ${apiToken}` }
+      headers: { "X-API-Key": apiToken }
     }
   );
   
